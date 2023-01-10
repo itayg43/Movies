@@ -32,6 +32,9 @@ local.properties
 *.hprof
 .cxx/
 
+# env
+.env
+
 # node.js
 #
 node_modules/
