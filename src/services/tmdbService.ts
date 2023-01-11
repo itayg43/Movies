@@ -26,14 +26,14 @@ const getMoviesByCategory = async (category: ContentCategory) => {
   const {data} = await tmdbClient.get<MoviesJSON>(
     `/movie/${category}?api_key=${tmdbApiKey}&language=en-US&page=1`,
   );
-  return data.results?.map(movieJSON => new Movie(movieJSON));
+  return data.results.map(movieJSON => new Movie(movieJSON));
 };
 
 const getMoviesByQuery = async (query: string) => {
   const {data} = await tmdbClient.get<MoviesJSON>(
     `/search/movie?api_key=${tmdbApiKey}&query=${query}&language=en-US&page=1`,
   );
-  return data.results?.map(movieJSON => new Movie(movieJSON));
+  return data.results.map(movieJSON => new Movie(movieJSON));
 };
 
 export default {
