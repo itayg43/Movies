@@ -22,9 +22,12 @@ export interface MoviesJSON {
   results: MovieJSON[];
 }
 
-const getMoviesByCategory = async (category: ContentCategory) => {
+const getMoviesByCategory = async (
+  category: ContentCategory,
+  page: string = '1',
+) => {
   const {data} = await tmdbClient.get<MoviesJSON>(
-    `/movie/${category}?api_key=${tmdbApiKey}&language=en-US&page=1`,
+    `/movie/${category}?api_key=${tmdbApiKey}&language=en-US&page=${page}`,
   );
   return data.results.map(movieJSON => new Movie(movieJSON));
 };

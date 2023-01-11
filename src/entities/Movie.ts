@@ -4,7 +4,7 @@ import {GenreJSON, MovieJSON} from '../services/tmdbService';
 
 export class Movie {
   id: string = uuid();
-  movieID: number | null;
+  mid: number | null;
   posterURL: string | null;
   title: string | null;
   releaseDate: Date | null;
@@ -13,7 +13,7 @@ export class Movie {
   overview: string;
 
   constructor(movieJSON: MovieJSON) {
-    this.movieID = movieJSON.id || null;
+    this.mid = movieJSON.id || null;
     this.posterURL = movieJSON.backdrop_path || movieJSON.poster_path || null;
     this.title = movieJSON.title || movieJSON.original_title || null;
     this.releaseDate = this._initReleaseDate(movieJSON.release_date);

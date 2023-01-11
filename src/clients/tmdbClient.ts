@@ -11,7 +11,7 @@ export enum ContentCategory {
 
 export enum BaseURL {
   api = 'https://api.themoviedb.org/3',
-  image = 'https://image.tmdb.org/t/p/w500',
+  image = 'https://image.tmdb.org/t/p/original',
 }
 
 export const tmdbApiKey = TMDB_API_KEY;

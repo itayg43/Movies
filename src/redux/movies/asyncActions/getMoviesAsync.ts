@@ -8,9 +8,9 @@ export const getMoviesAsync = () => async (dispatch: AppDispatch) => {
     dispatch(getMovies());
     const movies = await Promise.all([
       tmdbService.getMoviesByCategory(ContentCategory.nowPlaying),
-      tmdbService.getMoviesByCategory(ContentCategory.popular),
+      tmdbService.getMoviesByCategory(ContentCategory.popular, '2'),
       tmdbService.getMoviesByCategory(ContentCategory.topRated),
-      tmdbService.getMoviesByCategory(ContentCategory.upcoming),
+      tmdbService.getMoviesByCategory(ContentCategory.upcoming, '3'),
     ]);
     dispatch(
       getMoviesSuccess({
