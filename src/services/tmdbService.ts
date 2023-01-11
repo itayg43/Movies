@@ -19,7 +19,7 @@ export interface MovieJSON {
 }
 
 export interface MoviesJSON {
-  results?: MovieJSON[];
+  results: MovieJSON[];
 }
 
 const getMoviesByCategory = async (category: ContentCategory) => {
