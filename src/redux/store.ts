@@ -1,9 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 
+import appReducer from './app/appSlice';
 import moviesReducer from './movies/moviesSlice';
 
 const reducer = {
+  app: appReducer,
   movies: moviesReducer,
 };
 
