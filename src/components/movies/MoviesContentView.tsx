@@ -1,13 +1,13 @@
 import React from 'react';
 import {StyleSheet, ScrollView} from 'react-native';
 
-import {useAppSelector} from '../hooks/useAppSelector';
+import {useAppSelector} from '../../hooks/useAppSelector';
 import {
   selectEntities,
   selectSearchQuery,
   selectSearchResults,
-} from '../redux/movies/moviesSelectors';
-import SafeView from './SafeView';
+} from '../../redux/movies/moviesSelectors';
+import SafeView from '../SafeView';
 import MoviesCategoryList from './MoviesCategoryList';
 import MoviesSearchResultsList from './MoviesSearchResultsList';
 

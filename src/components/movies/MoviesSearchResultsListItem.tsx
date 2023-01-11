@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, View, Text, Image} from 'react-native';
 
-import {BaseURL} from '../clients/tmdbClient';
-import {Movie} from '../entities/Movie';
+import {Movie} from '../../entities/Movie';
+import {BaseURL} from '../../clients/tmdbClient';
 
 interface Props {
   item: Movie;

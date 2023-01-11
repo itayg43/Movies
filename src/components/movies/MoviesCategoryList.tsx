@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text, FlatList} from 'react-native';
 
-import {Movie} from '../entities/Movie';
+import {Movie} from '../../entities/Movie';
 import MoviesCategoryListItem from './MoviesCategoryListItem';
 
 interface Props {

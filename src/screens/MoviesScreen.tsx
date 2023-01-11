@@ -16,7 +16,7 @@ import {MoviesStatus} from '../redux/movies/moviesSlice';
 import {MoviesScreenNavigationProp} from '../navigation/MoviesStackNavigator';
 import LoadingView from '../components/LoadingView';
 import ErrorView from '../components/ErrorView';
-import MoviesContentView from '../components/MoviesContentView';
+import MoviesContentView from '../components/movies/MoviesContentView';
 
 const MoviesScreen = () => {
   const dispatch = useAppDispatch();
