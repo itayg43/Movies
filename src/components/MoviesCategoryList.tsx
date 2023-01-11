@@ -39,7 +39,7 @@ export default MoviesCategoryList;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
 
   category: {

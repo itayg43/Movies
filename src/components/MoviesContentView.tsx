@@ -1,23 +1,27 @@
 import React from 'react';
 import {StyleSheet, ScrollView} from 'react-native';
 
-import {useAppDispatch} from '../hooks/useAppDispatch';
 import {useAppSelector} from '../hooks/useAppSelector';
-import {selectEntities} from '../redux/movies/moviesSelectors';
+import {
+  selectEntities,
+  selectSearchQuery,
+  selectSearchResults,
+} from '../redux/movies/moviesSelectors';
 import SafeView from './SafeView';
 import MoviesCategoryList from './MoviesCategoryList';
 
 const MoviesContentView = () => {
-  const dispatch = useAppDispatch();
-
   const entities = useAppSelector(selectEntities);
+  const searchQuery = useAppSelector(selectSearchQuery);
+  const searchResults = useAppSelector(selectSearchResults);
 
   return (
     <SafeView>
-      {entities && (
+      {searchQuery === '' && entities && (
         <ScrollView
           style={styles.container}
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+          contentInsetAdjustmentBehavior="automatic">
           <MoviesCategoryList
             category="Now Playing"
             entities={entities.nowPlaying}
@@ -34,6 +38,9 @@ const MoviesContentView = () => {
           />
         </ScrollView>
       )}
+
+      {/** search results */}
+      {searchQuery !== '' && searchResults && <></>}
     </SafeView>
   );
 };

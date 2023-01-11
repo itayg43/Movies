@@ -7,7 +7,7 @@ import {selectStatus, selectErrorMessage} from './src/redux/app/appSelectors';
 import {AppStatus} from './src/redux/app/appSlice';
 import LoadingView from './src/components/LoadingView';
 import ErrorView from './src/components/ErrorView';
-import MoviesScreen from './src/screens/MoviesScreen';
+import MoviesStackNavigator from './src/navigation/MoviesStackNavigator';
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -36,7 +36,7 @@ const App = () => {
       )}
 
       {/** content */}
-      {status === AppStatus.ready && <MoviesScreen />}
+      {status === AppStatus.ready && <MoviesStackNavigator />}
     </>
   );
 };
