@@ -9,6 +9,7 @@ import {
 } from '../redux/movies/moviesSelectors';
 import SafeView from './SafeView';
 import MoviesCategoryList from './MoviesCategoryList';
+import MoviesSearchResultsList from './MoviesSearchResultsList';
 
 const MoviesContentView = () => {
   const entities = useAppSelector(selectEntities);
@@ -40,7 +41,9 @@ const MoviesContentView = () => {
       )}
 
       {/** search results */}
-      {searchQuery !== '' && searchResults && <></>}
+      {searchQuery !== '' && searchResults && (
+        <MoviesSearchResultsList results={searchResults} />
+      )}
     </SafeView>
   );
 };
