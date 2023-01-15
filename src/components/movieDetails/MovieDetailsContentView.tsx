@@ -58,7 +58,7 @@ const MovieDetailsContentView = () => {
                 name="dots-vertical"
               />
 
-              {/** vote avg */}
+              {/** rating */}
               <View style={styles.ratingContainer}>
                 {/** value */}
                 <Text style={styles.rating}>{entity.rating}</Text>

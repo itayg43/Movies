@@ -1,6 +1,7 @@
 import React, {useCallback} from 'react';
 import {StyleSheet, View, ImageBackground, Text, Pressable} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Movie} from '../../entities/Movie';
 import {BaseURL} from '../../clients/tmdbClient';
@@ -36,8 +37,26 @@ const MoviesCategoryListItem = ({item, isLargeImage = false}: Props) => {
             {item.title}
           </Text>
 
-          {/** year */}
-          <Text style={styles.year}>{item.getReleaseYear()}</Text>
+          {/** year && rating */}
+          <View style={styles.yearAndRatingContainer}>
+            {/** year */}
+            <Text style={styles.year}>{item.getReleaseYear()}</Text>
+
+            {/** dot spacer */}
+            <MaterialCommunityIcons
+              style={styles.dotSpacer}
+              name="dots-vertical"
+            />
+
+            {/** rating */}
+            <View style={styles.ratingContainer}>
+              {/** value */}
+              <Text style={styles.rating}>{item.rating}</Text>
+
+              {/** star icon */}
+              <MaterialCommunityIcons name="star" color="#ff8000" />
+            </View>
+          </View>
         </View>
       </ImageBackground>
     </Pressable>
@@ -62,11 +81,29 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#eee',
   },
+
   title: {
     fontWeight: 'bold',
   },
-  year: {
+
+  yearAndRatingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 5,
+  },
+  year: {
     color: 'gray',
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  rating: {
+    color: 'gray',
+    marginEnd: 3,
+  },
+
+  dotSpacer: {
+    marginHorizontal: 3,
   },
 });
