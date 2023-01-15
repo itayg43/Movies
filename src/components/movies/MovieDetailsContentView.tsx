@@ -111,7 +111,7 @@ const MovieDetailsContentView = () => {
           </View>
 
           {/** recommendations */}
-          {recommendedEntities && (
+          {recommendedEntities && recommendedEntities.length > 0 && (
             <View style={styles.recommendationsContainer}>
               <MoviesCategoryList
                 category="Recommendations"
