@@ -10,7 +10,7 @@ export class Movie {
   title: string | null;
   releaseDate: Date | null;
   genres: Genre[] | null;
-  voteAvg: string;
+  rating: string;
   overview: string;
 
   constructor(movieJSON: MovieJSON) {
@@ -19,7 +19,7 @@ export class Movie {
     this.title = movieJSON.title || movieJSON.original_title || null;
     this.releaseDate = this._initReleaseDate(movieJSON.release_date);
     this.genres = this._initGenres(movieJSON.genres);
-    this.voteAvg = this._initVoteAvg(movieJSON.vote_average);
+    this.rating = this._initRating(movieJSON.vote_average);
     this.overview = movieJSON.overview || '';
   }
 
@@ -31,8 +31,8 @@ export class Movie {
     return genres ? genres.map(genre => new Genre(genre)) : null;
   }
 
-  private _initVoteAvg(avg: number | undefined) {
-    return avg ? avg.toFixed(1) : '0';
+  private _initRating(rating: number | undefined) {
+    return rating ? rating.toFixed(1) : '0';
   }
 
   getReleaseYear() {

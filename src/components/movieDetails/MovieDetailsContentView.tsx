@@ -47,8 +47,8 @@ const MovieDetailsContentView = () => {
             {/** title */}
             <Text style={styles.title}>{entity.title}</Text>
 
-            {/** year && vote avg */}
-            <View style={styles.yearAndVoteAvgContainer}>
+            {/** year && rating */}
+            <View style={styles.yearAndRatingContainer}>
               {/** year */}
               <Text style={styles.year}>{entity.getReleaseYear()}</Text>
 
@@ -59,9 +59,9 @@ const MovieDetailsContentView = () => {
               />
 
               {/** vote avg */}
-              <View style={styles.voteAvgContainer}>
+              <View style={styles.ratingContainer}>
                 {/** value */}
-                <Text style={styles.voteAvg}>{entity.voteAvg}</Text>
+                <Text style={styles.rating}>{entity.rating}</Text>
 
                 {/** star icon */}
                 <MaterialCommunityIcons name="star" color="#ff8000" />
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
-  yearAndVoteAvgContainer: {
+  yearAndRatingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
@@ -124,11 +124,11 @@ const styles = StyleSheet.create({
   year: {
     color: 'gray',
   },
-  voteAvgContainer: {
+  ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  voteAvg: {
+  rating: {
     color: 'gray',
     marginEnd: 3,
   },
