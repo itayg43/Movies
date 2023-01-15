@@ -45,9 +45,7 @@ const MovieDetailsContentView = () => {
           {/** details */}
           <View style={styles.detailsContainer}>
             {/** title */}
-            <Text style={styles.title} numberOfLines={1}>
-              {entity.title}
-            </Text>
+            <Text style={styles.title}>{entity.title}</Text>
 
             {/** year && vote avg */}
             <View style={styles.yearAndVoteAvgContainer}>
