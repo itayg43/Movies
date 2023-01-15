@@ -33,10 +33,6 @@ const MoviesContentView = () => {
             category="Top Rated"
             entities={entities.topRated}
           />
-          <MoviesCategoryList
-            category="Upcoming"
-            entities={entities.upcoming}
-          />
         </ScrollView>
       )}
 

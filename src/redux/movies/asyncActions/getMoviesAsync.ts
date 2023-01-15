@@ -11,14 +11,12 @@ export const getMoviesAsync = () => async (dispatch: AppDispatch) => {
       tmdbService.getMoviesByCategory(ContentCategory.nowPlaying),
       tmdbService.getMoviesByCategory(ContentCategory.popular, '2'),
       tmdbService.getMoviesByCategory(ContentCategory.topRated),
-      tmdbService.getMoviesByCategory(ContentCategory.upcoming, '2'),
     ]);
     dispatch(
       getMoviesSuccess({
         nowPlaying: movies[0],
         popular: movies[1],
         topRated: movies[2],
-        upcoming: movies[3],
       }),
     );
   } catch (error) {

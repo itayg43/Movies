@@ -13,7 +13,6 @@ export interface MoviesEntities {
   nowPlaying: Movie[];
   popular: Movie[];
   topRated: Movie[];
-  upcoming: Movie[];
 }
 
 interface MoviesState {

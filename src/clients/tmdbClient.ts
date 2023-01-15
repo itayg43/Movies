@@ -6,7 +6,6 @@ export enum ContentCategory {
   nowPlaying = 'now_playing',
   popular = 'popular',
   topRated = 'top_rated',
-  upcoming = 'upcoming',
 }
 
 export enum BaseURL {
