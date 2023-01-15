@@ -6,6 +6,15 @@ export interface GenreJSON {
   name: string;
 }
 
+export interface VideoJSON {
+  key: string;
+  type: string;
+}
+
+export interface VideosJSON {
+  results: VideoJSON[];
+}
+
 export interface MovieJSON {
   id?: number;
   backdrop_path?: string;
@@ -16,6 +25,7 @@ export interface MovieJSON {
   genres?: GenreJSON[];
   vote_average?: number;
   overview?: string;
+  videos?: VideosJSON;
 }
 
 export interface MoviesJSON {
@@ -41,7 +51,7 @@ const getMoviesByQuery = async (query: string) => {
 
 const getMovieDetailsById = async (id: number) => {
   const {data} = await tmdbClient.get<MovieJSON>(
-    `/movie/${id}?api_key=${tmdbApiKey}&language=en-US`,
+    `/movie/${id}?api_key=${tmdbApiKey}&language=en-US&append_to_response=videos`,
   );
   return new Movie(data);
 };

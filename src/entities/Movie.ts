@@ -1,6 +1,6 @@
 import {v4 as uuid} from 'uuid';
 
-import {GenreJSON, MovieJSON} from '../services/tmdbService';
+import {GenreJSON, MovieJSON, VideosJSON} from '../services/tmdbService';
 import {Genre} from './Genre';
 
 export class Movie {
@@ -12,6 +12,7 @@ export class Movie {
   genres: Genre[] | null;
   rating: string;
   overview: string;
+  trailerKey: string | null;
 
   constructor(movieJSON: MovieJSON) {
     this.mid = movieJSON.id || null;
@@ -21,6 +22,7 @@ export class Movie {
     this.genres = this._initGenres(movieJSON.genres);
     this.rating = this._initRating(movieJSON.vote_average);
     this.overview = movieJSON.overview || '';
+    this.trailerKey = this._initTrailerKey(movieJSON.videos);
   }
 
   private _initReleaseDate(date: string | undefined) {
@@ -33,6 +35,11 @@ export class Movie {
 
   private _initRating(rating: number | undefined) {
     return rating ? rating.toFixed(1) : '0';
+  }
+
+  private _initTrailerKey(videos: VideosJSON | undefined) {
+    const trailer = videos?.results.find(video => video.type === 'Trailer');
+    return trailer ? trailer.key : null;
   }
 
   getReleaseYear() {

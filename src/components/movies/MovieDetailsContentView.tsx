@@ -7,6 +7,7 @@ import {
   Text,
   Pressable,
   FlatList,
+  Linking,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
@@ -22,6 +23,8 @@ import SafeView from '../SafeView';
 import Chip from '../Chip';
 import MoviesCategoryList from './MoviesCategoryList';
 
+const youtubeBaseURL = 'https://www.youtube.com/watch?v=';
+
 const MovieDetailsContentView = () => {
   const navigation = useNavigation<MovieDetailsNavigationProp>();
 
@@ -31,6 +34,10 @@ const MovieDetailsContentView = () => {
   const handleClose = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
+
+  const handleLinking = useCallback(() => {
+    Linking.openURL(`${youtubeBaseURL}${entity?.trailerKey}`);
+  }, []);
 
   return (
     <SafeView>
@@ -52,8 +59,8 @@ const MovieDetailsContentView = () => {
             {/** title */}
             <Text style={styles.title}>{entity.title}</Text>
 
-            {/** year && rating */}
-            <View style={styles.yearAndRatingContainer}>
+            {/** year && rating && trailer */}
+            <View style={styles.yearAndRatingAndTrailerContainer}>
               {/** year */}
               <Text style={styles.year}>{entity.getReleaseYear()}</Text>
 
@@ -71,6 +78,21 @@ const MovieDetailsContentView = () => {
                 {/** star icon */}
                 <MaterialCommunityIcons name="star" color="#ff8000" />
               </View>
+
+              {/** dot spacer */}
+              <MaterialCommunityIcons
+                style={styles.dotSpacer}
+                name="dots-vertical"
+              />
+
+              {/** trailer link */}
+              <Pressable onPress={handleLinking}>
+                <MaterialCommunityIcons
+                  name="youtube"
+                  size={24}
+                  color="#FF0000"
+                />
+              </Pressable>
             </View>
 
             {/** genres */}
@@ -85,7 +107,7 @@ const MovieDetailsContentView = () => {
             </View>
 
             {/** overview */}
-            <Text style={styles.overview}>{entity.overview}</Text>
+            <Text>{entity.overview}</Text>
           </View>
 
           {/** recommendations */}
@@ -133,7 +155,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
-  yearAndRatingContainer: {
+  yearAndRatingAndTrailerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
@@ -155,8 +177,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginBottom: 10,
   },
-
-  overview: {},
 
   recommendationsContainer: {
     padding: 10,
