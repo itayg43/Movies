@@ -1,6 +1,7 @@
 import {v4 as uuid} from 'uuid';
 
 import {GenreJSON, MovieJSON} from '../services/tmdbService';
+import {Genre} from './Genre';
 
 export class Movie {
   id: string = uuid();
@@ -8,8 +9,8 @@ export class Movie {
   posterURL: string | null;
   title: string | null;
   releaseDate: Date | null;
-  genres: string[] | null;
-  voteAvg: number;
+  genres: Genre[] | null;
+  voteAvg: string;
   overview: string;
 
   constructor(movieJSON: MovieJSON) {
@@ -18,7 +19,7 @@ export class Movie {
     this.title = movieJSON.title || movieJSON.original_title || null;
     this.releaseDate = this._initReleaseDate(movieJSON.release_date);
     this.genres = this._initGenres(movieJSON.genres);
-    this.voteAvg = movieJSON.vote_average || 0;
+    this.voteAvg = this._initVoteAvg(movieJSON.vote_average);
     this.overview = movieJSON.overview || '';
   }
 
@@ -27,7 +28,11 @@ export class Movie {
   }
 
   private _initGenres(genres: GenreJSON[] | undefined) {
-    return genres ? genres.map(genre => genre.name) : null;
+    return genres ? genres.map(genre => new Genre(genre)) : null;
+  }
+
+  private _initVoteAvg(avg: number | undefined) {
+    return avg ? avg.toFixed(1) : '0';
   }
 
   getReleaseYear() {

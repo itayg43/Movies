@@ -1,8 +1,10 @@
-import React from 'react';
-import {StyleSheet, View, ImageBackground, Text} from 'react-native';
+import React, {useCallback} from 'react';
+import {StyleSheet, View, ImageBackground, Text, Pressable} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import {Movie} from '../../entities/Movie';
 import {BaseURL} from '../../clients/tmdbClient';
+import {MoviesScreenNavigationProp} from '../../navigation/MoviesStackNavigator';
 
 interface Props {
   item: Movie;
@@ -10,23 +12,35 @@ interface Props {
 }
 
 const MoviesCategoryListItem = ({item, isLargeImage = false}: Props) => {
-  return (
-    <ImageBackground
-      style={[styles.image, isLargeImage && {height: 400}]}
-      source={{
-        uri: `${BaseURL.image}${item.posterURL}`,
-      }}>
-      {/** details */}
-      <View style={styles.detailsContainer}>
-        {/** title */}
-        <Text style={styles.title} numberOfLines={1}>
-          {item.title}
-        </Text>
+  const navigation = useNavigation<MoviesScreenNavigationProp>();
 
-        {/** year */}
-        <Text style={styles.year}>{item.getReleaseYear()}</Text>
-      </View>
-    </ImageBackground>
+  const handleSelection = useCallback(() => {
+    navigation.navigate('movieDetailsScreen', {
+      id: item.mid ?? 0,
+    });
+  }, [navigation]);
+
+  return (
+    <Pressable onPress={handleSelection}>
+      <ImageBackground
+        style={[styles.image, isLargeImage && {height: 400}]}
+        source={{
+          uri: `${isLargeImage ? BaseURL.originalImage : BaseURL.resizedImage}${
+            item.posterURL
+          }`,
+        }}>
+        {/** details */}
+        <View style={styles.detailsContainer}>
+          {/** title */}
+          <Text style={styles.title} numberOfLines={1}>
+            {item.title}
+          </Text>
+
+          {/** year */}
+          <Text style={styles.year}>{item.getReleaseYear()}</Text>
+        </View>
+      </ImageBackground>
+    </Pressable>
   );
 };
 

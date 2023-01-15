@@ -1,31 +1,43 @@
-import React from 'react';
-import {StyleSheet, View, Text, Image} from 'react-native';
+import React, {useCallback} from 'react';
+import {StyleSheet, View, Text, Image, Pressable} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import {Movie} from '../../entities/Movie';
 import {BaseURL} from '../../clients/tmdbClient';
+import {MoviesScreenNavigationProp} from '../../navigation/MoviesStackNavigator';
 
 interface Props {
   item: Movie;
 }
 
 const MoviesSearchResultsListItem = ({item}: Props) => {
+  const navigation = useNavigation<MoviesScreenNavigationProp>();
+
+  const handleSelection = useCallback(() => {
+    navigation.navigate('movieDetailsScreen', {
+      id: item.mid ?? 0,
+    });
+  }, [navigation]);
+
   return (
-    <View style={styles.container}>
-      {/** image */}
-      <Image
-        style={styles.image}
-        source={{uri: `${BaseURL.image}${item.posterURL}`}}
-      />
+    <Pressable onPress={handleSelection}>
+      <View style={styles.container}>
+        {/** image */}
+        <Image
+          style={styles.image}
+          source={{uri: `${BaseURL.resizedImage}${item.posterURL}`}}
+        />
 
-      {/** details */}
-      <View style={styles.detailsContainer}>
-        {/** title */}
-        <Text style={styles.title}>{item.title}</Text>
+        {/** details */}
+        <View style={styles.detailsContainer}>
+          {/** title */}
+          <Text style={styles.title}>{item.title}</Text>
 
-        {/** year */}
-        <Text style={styles.year}>{item.getReleaseYear()}</Text>
+          {/** year */}
+          <Text style={styles.year}>{item.getReleaseYear()}</Text>
+        </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

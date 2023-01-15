@@ -39,7 +39,15 @@ const getMoviesByQuery = async (query: string) => {
   return data.results.map(movieJSON => new Movie(movieJSON));
 };
 
+const getMovieDetailsById = async (id: number) => {
+  const {data} = await tmdbClient.get<MovieJSON>(
+    `/movie/${id}?api_key=${tmdbApiKey}&language=en-US`,
+  );
+  return new Movie(data);
+};
+
 export default {
   getMoviesByCategory,
   getMoviesByQuery,
+  getMovieDetailsById,
 };

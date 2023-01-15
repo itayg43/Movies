@@ -3,10 +3,12 @@ import logger from 'redux-logger';
 
 import appReducer from './app/appSlice';
 import moviesReducer from './movies/moviesSlice';
+import movieReducer from './movie/movieSlice';
 
 const reducer = {
   app: appReducer,
   movies: moviesReducer,
+  movie: movieReducer,
 };
 
 const additionalMiddlewares: any[] = [];
