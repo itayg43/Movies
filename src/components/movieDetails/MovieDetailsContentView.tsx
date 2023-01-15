@@ -103,6 +103,8 @@ const styles = StyleSheet.create({
     padding: 3,
     borderRadius: 4,
     backgroundColor: '#eee',
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
 
   detailsContainer: {
