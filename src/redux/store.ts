@@ -9,12 +9,17 @@ const reducer = {
   movies: moviesReducer,
 };
 
+const additionalMiddlewares: any[] = [];
+if (process.env.NODE_ENV === 'development') {
+  additionalMiddlewares.push(logger);
+}
+
 export const store = configureStore({
   reducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(logger),
+    }).concat(additionalMiddlewares),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
