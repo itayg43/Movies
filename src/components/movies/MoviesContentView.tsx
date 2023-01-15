@@ -26,7 +26,7 @@ const MoviesContentView = () => {
           <MoviesCategoryList
             category="Now Playing"
             entities={entities.nowPlaying}
-            isLargeImages
+            showLargeImages
           />
           <MoviesCategoryList category="Popular" entities={entities.popular} />
           <MoviesCategoryList

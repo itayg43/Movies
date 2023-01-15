@@ -9,10 +9,10 @@ import {MoviesScreenNavigationProp} from '../../navigation/MoviesStackNavigator'
 
 interface Props {
   item: Movie;
-  isLargeImage?: boolean;
+  showLargeImage?: boolean;
 }
 
-const MoviesCategoryListItem = ({item, isLargeImage = false}: Props) => {
+const MoviesCategoryListItem = ({item, showLargeImage = false}: Props) => {
   const navigation = useNavigation<MoviesScreenNavigationProp>();
 
   const handleSelection = useCallback(() => {
@@ -24,11 +24,11 @@ const MoviesCategoryListItem = ({item, isLargeImage = false}: Props) => {
   return (
     <Pressable onPress={handleSelection}>
       <ImageBackground
-        style={[styles.image, isLargeImage && {height: 400}]}
+        style={[styles.image, showLargeImage && {height: 400}]}
         source={{
-          uri: `${isLargeImage ? BaseURL.originalImage : BaseURL.resizedImage}${
-            item.posterURL
-          }`,
+          uri: `${
+            showLargeImage ? BaseURL.originalImage : BaseURL.resizedImage
+          }${item.posterURL}`,
         }}>
         {/** details */}
         <View style={styles.detailsContainer}>

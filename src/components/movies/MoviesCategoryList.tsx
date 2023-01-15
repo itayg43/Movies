@@ -7,13 +7,13 @@ import MoviesCategoryListItem from './MoviesCategoryListItem';
 interface Props {
   category: string;
   entities: Movie[];
-  isLargeImages?: boolean;
+  showLargeImages?: boolean;
 }
 
 const MoviesCategoryList = ({
   category,
   entities,
-  isLargeImages = false,
+  showLargeImages = false,
 }: Props) => {
   return (
     <View style={styles.container}>
@@ -24,7 +24,10 @@ const MoviesCategoryList = ({
       <FlatList
         data={entities}
         renderItem={({item}) => (
-          <MoviesCategoryListItem item={item} isLargeImage={isLargeImages} />
+          <MoviesCategoryListItem
+            item={item}
+            showLargeImage={showLargeImages}
+          />
         )}
         keyExtractor={item => item.id}
         horizontal
