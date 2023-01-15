@@ -5,6 +5,7 @@ import {
   getSearchResultsFail,
 } from '../moviesSlice';
 import tmdbService from '../../../services/tmdbService';
+import {Logger} from '../../../helpers/Logger';
 
 export const getSearchResultsAsync =
   () => async (dispatch: AppDispatch, getState: any) => {
@@ -14,7 +15,7 @@ export const getSearchResultsAsync =
       const results = await tmdbService.getMoviesByQuery(query);
       dispatch(getSearchResultsSuccess(results));
     } catch (error) {
-      console.error(error);
+      Logger.error(error);
       dispatch(getSearchResultsFail('Could not get search results.'));
     }
   };

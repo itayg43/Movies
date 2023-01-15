@@ -1,6 +1,7 @@
 import {AppDispatch} from '../../store';
 import {getData, getDataSuccess, getDataFail} from '../appSlice';
 import {getMoviesAsync} from '../../movies/asyncActions/getMoviesAsync';
+import {Logger} from '../../../helpers/Logger';
 
 export const getDataAsync = () => async (dispatch: AppDispatch) => {
   try {
@@ -8,7 +9,7 @@ export const getDataAsync = () => async (dispatch: AppDispatch) => {
     await Promise.all([dispatch(getMoviesAsync())]);
     dispatch(getDataSuccess());
   } catch (error) {
-    console.error(error);
+    Logger.error(error);
     dispatch(getDataFail('Could not get data.'));
   }
 };

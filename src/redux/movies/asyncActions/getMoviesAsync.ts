@@ -2,6 +2,7 @@ import {AppDispatch} from '../../store';
 import {getMovies, getMoviesSuccess, getMoviesFail} from '../moviesSlice';
 import tmdbService from '../../../services/tmdbService';
 import {ContentCategory} from '../../../clients/tmdbClient';
+import {Logger} from '../../../helpers/Logger';
 
 export const getMoviesAsync = () => async (dispatch: AppDispatch) => {
   try {
@@ -21,7 +22,7 @@ export const getMoviesAsync = () => async (dispatch: AppDispatch) => {
       }),
     );
   } catch (error) {
-    console.error(error);
+    Logger.error(error);
     dispatch(getMoviesFail('Could not get movies.'));
   }
 };
