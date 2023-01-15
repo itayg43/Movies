@@ -29,7 +29,7 @@ const MoviesCategoryList = ({
         keyExtractor={item => item.id}
         horizontal
         showsHorizontalScrollIndicator={false}
-        initialNumToRender={2}
+        initialNumToRender={3}
       />
     </View>
   );

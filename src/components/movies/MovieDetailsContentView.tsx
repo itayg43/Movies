@@ -12,16 +12,21 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useNavigation} from '@react-navigation/native';
 
 import {useAppSelector} from '../../hooks/useAppSelector';
-import {selectEntity} from '../../redux/movie/movieSelectors';
+import {
+  selectEntity,
+  selectRecommendedEntities,
+} from '../../redux/movie/movieSelectors';
 import {BaseURL} from '../../clients/tmdbClient';
 import {MovieDetailsNavigationProp} from '../../navigation/MoviesStackNavigator';
 import SafeView from '../SafeView';
 import Chip from '../Chip';
+import MoviesCategoryList from './MoviesCategoryList';
 
 const MovieDetailsContentView = () => {
   const navigation = useNavigation<MovieDetailsNavigationProp>();
 
   const entity = useAppSelector(selectEntity);
+  const recommendedEntities = useAppSelector(selectRecommendedEntities);
 
   const handleClose = useCallback(() => {
     navigation.goBack();
@@ -82,6 +87,16 @@ const MovieDetailsContentView = () => {
             {/** overview */}
             <Text style={styles.overview}>{entity.overview}</Text>
           </View>
+
+          {/** recommendations */}
+          {recommendedEntities && (
+            <View style={styles.recommendationsContainer}>
+              <MoviesCategoryList
+                category="Recommendations"
+                entities={recommendedEntities}
+              />
+            </View>
+          )}
         </ScrollView>
       )}
     </SafeView>
@@ -113,7 +128,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
   },
@@ -142,6 +157,10 @@ const styles = StyleSheet.create({
   },
 
   overview: {},
+
+  recommendationsContainer: {
+    padding: 10,
+  },
 
   dotSpacer: {
     marginHorizontal: 3,

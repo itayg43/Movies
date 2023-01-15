@@ -46,8 +46,16 @@ const getMovieDetailsById = async (id: number) => {
   return new Movie(data);
 };
 
+const getMovieRecommendationsById = async (id: number) => {
+  const {data} = await tmdbClient.get<MoviesJSON>(
+    `/movie/${id}/recommendations?api_key=${tmdbApiKey}&language=en-US&page=1`,
+  );
+  return data.results.map(movieJSON => new Movie(movieJSON));
+};
+
 export default {
   getMoviesByCategory,
   getMoviesByQuery,
   getMovieDetailsById,
+  getMovieRecommendationsById,
 };

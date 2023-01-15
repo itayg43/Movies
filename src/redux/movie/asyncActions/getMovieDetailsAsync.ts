@@ -15,8 +15,16 @@ export const getMovieDetailsAsync =
     }
     try {
       dispatch(getMovieDetails());
-      const movie = await tmdbService.getMovieDetailsById(id);
-      dispatch(getMovieDetailsSuccess(movie));
+      const results = await Promise.all([
+        tmdbService.getMovieDetailsById(id),
+        tmdbService.getMovieRecommendationsById(id),
+      ]);
+      dispatch(
+        getMovieDetailsSuccess({
+          entity: results[0],
+          recommendedEntities: results[1],
+        }),
+      );
     } catch (error) {
       Logger.error(error);
       dispatch(getMovieDetailsFail('Could not get movie details.'));

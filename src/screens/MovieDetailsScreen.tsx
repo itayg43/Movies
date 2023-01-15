@@ -9,7 +9,7 @@ import {selectErrorMessage, selectStatus} from '../redux/movie/movieSelectors';
 import {MovieStatus} from '../redux/movie/movieSlice';
 import LoadingView from '../components/LoadingView';
 import ErrorView from '../components/ErrorView';
-import MovieDetailsContentView from '../components/movieDetails/MovieDetailsContentView';
+import MovieDetailsContentView from '../components/movies/MovieDetailsContentView';
 
 const MovieDetailsScreen = () => {
   const dispatch = useAppDispatch();

@@ -6,3 +6,6 @@ export const selectErrorMessage = (state: RootState) =>
   state.movie.errorMessage;
 
 export const selectEntity = (state: RootState) => state.movie.entity;
+
+export const selectRecommendedEntities = (state: RootState) =>
+  state.movie.recommendedEntities;
