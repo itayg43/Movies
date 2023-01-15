@@ -109,11 +109,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 10,
   },
+
   title: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
   },
+
   yearAndVoteAvgContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -130,12 +132,15 @@ const styles = StyleSheet.create({
     color: 'gray',
     marginEnd: 3,
   },
+
   genresContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginBottom: 10,
   },
+
   overview: {},
+
   dotSpacer: {
     marginHorizontal: 3,
   },
