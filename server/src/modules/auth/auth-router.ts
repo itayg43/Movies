@@ -1,7 +1,7 @@
 import express from "express";
 import asyncHandler from "express-async-handler";
 
-import validateResource from "../../middlewares/validate-resource";
+import validateSchema from "../../middlewares/validate-schema";
 import { registerUserSchema, loginUserSchema } from "./auth-schemas";
 import authController from "./auth-controller";
 
@@ -9,13 +9,13 @@ const authRouter = express.Router();
 
 authRouter.post(
   "/register",
-  [validateResource(registerUserSchema)],
+  [validateSchema(registerUserSchema)],
   asyncHandler(authController.registerUser)
 );
 
 authRouter.post(
   "/login",
-  [validateResource(loginUserSchema)],
+  [validateSchema(loginUserSchema)],
   asyncHandler(authController.loginUser)
 );
 

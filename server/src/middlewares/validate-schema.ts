@@ -3,7 +3,7 @@ import { AnyZodObject } from "zod";
 
 import { statusCode } from "../constants";
 
-const validateResource =
+const validateSchema =
   (schema: AnyZodObject) =>
   (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -18,4 +18,4 @@ const validateResource =
     }
   };
 
-export default validateResource;
+export default validateSchema;
