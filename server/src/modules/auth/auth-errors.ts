@@ -1,6 +1,6 @@
-import { BadRequestError } from "../../errors";
+import { BadRequestError, ConflictError } from "../../errors";
 
-export class EmailAddressAlreadyInUseError extends BadRequestError {
+export class EmailAddressAlreadyInUseError extends ConflictError {
   constructor() {
     super("Email address already in use");
   }

@@ -26,3 +26,9 @@ export class ForbiddenError extends CustomError {
     super(statusCode.forbidden, message);
   }
 }
+
+export class ConflictError extends CustomError {
+  constructor(message: string) {
+    super(statusCode.conflict, message);
+  }
+}
