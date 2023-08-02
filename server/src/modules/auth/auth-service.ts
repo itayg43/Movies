@@ -10,7 +10,7 @@ import jwtUtils from "./utils/jwt-utils";
 
 const registerUser = async (email: string, password: string) => {
   const hashedPassword = await bcryptUtils.hashPassword(password);
-  const user = await authDataAccess.registerUser(email, hashedPassword);
+  const user = await authDataAccess.createUser(email, hashedPassword);
 
   return {
     user,
@@ -19,7 +19,7 @@ const registerUser = async (email: string, password: string) => {
 };
 
 const loginUser = async (email: string, password: string) => {
-  const user = await authDataAccess.getUserByEmail(email);
+  const user = await authDataAccess.findUserByEmail(email);
 
   if (!user) {
     throw new InvalidCredentialsError();

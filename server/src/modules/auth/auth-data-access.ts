@@ -6,7 +6,7 @@ const UNIQUE_ERROR_CODE = "P2002";
 
 const prismaClient = new PrismaClient();
 
-const registerUser = async (email: string, hashedPassword: string) => {
+const createUser = async (email: string, hashedPassword: string) => {
   try {
     return await prismaClient.user.create({
       data: {
@@ -26,7 +26,7 @@ const registerUser = async (email: string, hashedPassword: string) => {
   }
 };
 
-const getUserByEmail = async (email: string) => {
+const findUserByEmail = async (email: string) => {
   return await prismaClient.user.findUnique({
     where: {
       email,
@@ -35,6 +35,6 @@ const getUserByEmail = async (email: string) => {
 };
 
 export default {
-  registerUser,
-  getUserByEmail,
+  createUser,
+  findUserByEmail,
 };
