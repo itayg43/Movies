@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
-import { statusCode } from "../constants";
-import jwtUtils from "../modules/auth/utils/jwt-utils";
+import { statusCode } from "../../../constants";
+import jwtUtils from "../utils/jwt-utils";
 
 const validateRefreshToken = async (
   req: Request,

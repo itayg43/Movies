@@ -2,16 +2,13 @@ import authDataAccess from "./auth-data-access";
 import { InvalidCredentialsError } from "./auth-errors";
 import bcryptUtils from "./utils/bcrypt-utils";
 import authUtils from "./auth-utils";
-import { AuthDtoMapper } from "./auth-dto";
-
-const authDtoMapper = new AuthDtoMapper();
 
 const registerUser = async (email: string, password: string) => {
   const hashedPassword = await bcryptUtils.hashPassword(password);
   const user = await authDataAccess.registerUser(email, hashedPassword);
 
   return {
-    ...authDtoMapper.map(user),
+    user,
     tokens: authUtils.generateTokens({ id: user.id }),
   };
 };
@@ -33,7 +30,7 @@ const loginUser = async (email: string, password: string) => {
   }
 
   return {
-    ...authDtoMapper.map(user),
+    user,
     tokens: authUtils.generateTokens({ id: user.id }),
   };
 };
