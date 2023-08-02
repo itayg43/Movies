@@ -2,10 +2,18 @@ import { Request, Response } from "express";
 
 import { statusCode } from "../../constants";
 import authService from "./auth-service";
+<<<<<<< HEAD
 import { RegisterUserInput, LoginUserInput } from "./auth-schemas";
 import { UserDtoMapper } from "./auth-dto";
 
 const userDtoMapper = new UserDtoMapper();
+=======
+import {
+  RegisterUserInput,
+  LoginUserInput,
+  ReissueUserTokensInput,
+} from "./auth-schemas";
+>>>>>>> parent of b1e69a2 (edit: reissue tokens flow)
 
 const registerUser = async (
   req: Request<{}, {}, RegisterUserInput>,
@@ -31,9 +39,12 @@ const loginUser = async (
   });
 };
 
-const reissueUserTokens = async (_: Request, res: Response) => {
-  const { id } = res.locals.user;
-  const tokens = authService.reissueUserTokens({ id });
+const reissueUserTokens = async (
+  req: Request<{}, {}, ReissueUserTokensInput>,
+  res: Response
+) => {
+  const { refreshToken } = req.body;
+  const tokens = authService.reissueUserTokens(refreshToken);
   res.status(statusCode.ok).json(tokens);
 };
 
