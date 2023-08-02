@@ -1,13 +1,8 @@
 import authDataAccess from "./auth-data-access";
-import {
-  InvalidCredentialsError,
-  InvalidRefreshTokenError,
-  ExpiredRefreshTokenError,
-} from "./auth-errors";
+import { InvalidCredentialsError } from "./auth-errors";
 import bcryptUtils from "./utils/bcrypt-utils";
 import authUtils from "./auth-utils";
 import { AuthDtoMapper } from "./auth-dto";
-import jwtUtils from "./utils/jwt-utils";
 
 const authDtoMapper = new AuthDtoMapper();
 
@@ -43,23 +38,8 @@ const loginUser = async (email: string, password: string) => {
   };
 };
 
-const reissueUserTokens = (refreshToken: string) => {
-  const { isValid, isExpired, payload } = jwtUtils.validateToken(
-    refreshToken,
-    process.env.REFRESH_TOKEN_PUBLIC_KEY as string
-  );
-
-  if (!isValid) {
-    if (isExpired) {
-      throw new ExpiredRefreshTokenError();
-    }
-
-    throw new InvalidRefreshTokenError();
-  }
-
-  const p = payload as any;
-
-  return authUtils.generateTokens({ id: p.id });
+const reissueUserTokens = (payload: object) => {
+  return authUtils.generateTokens(payload);
 };
 
 export default {

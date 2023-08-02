@@ -2,11 +2,7 @@ import { Request, Response } from "express";
 
 import { statusCode } from "../../constants";
 import authService from "./auth-service";
-import {
-  RegisterUserInput,
-  LoginUserInput,
-  ReissueUserTokensInput,
-} from "./auth-schemas";
+import { RegisterUserInput, LoginUserInput } from "./auth-schemas";
 
 const registerUser = async (
   req: Request<{}, {}, RegisterUserInput>,
@@ -26,12 +22,9 @@ const loginUser = async (
   res.status(statusCode.ok).json(user);
 };
 
-const reissueUserTokens = async (
-  req: Request<{}, {}, ReissueUserTokensInput>,
-  res: Response
-) => {
-  const { refreshToken } = req.body;
-  const tokens = authService.reissueUserTokens(refreshToken);
+const reissueUserTokens = async (_: Request, res: Response) => {
+  const { id } = res.locals.user;
+  const tokens = authService.reissueUserTokens({ id });
   res.status(statusCode.ok).json(tokens);
 };
 
