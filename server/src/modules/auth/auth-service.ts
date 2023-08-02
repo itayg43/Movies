@@ -6,6 +6,7 @@ import {
 } from "./auth-errors";
 import bcryptUtils from "./utils/bcrypt-utils";
 import authUtils from "./auth-utils";
+import jwtUtils from "./utils/jwt-utils";
 
 const registerUser = async (email: string, password: string) => {
   const hashedPassword = await bcryptUtils.hashPassword(password);
