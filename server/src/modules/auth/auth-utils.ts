@@ -1,24 +1,30 @@
 import jwtUtils from "./utils/jwt-utils";
 
-const generateTokens = (payload: object) => {
-  const accessToken = jwtUtils.generateToken(
+const generateAccessToken = (payload: object) => {
+  return jwtUtils.generateToken(
     payload,
     process.env.ACCESS_TOKEN_PRIVATE_KEY as string,
     { expiresIn: process.env.ACCESS_TOKEN_TTL }
   );
+};
 
-  const refreshToken = jwtUtils.generateToken(
+const generateRefreshToken = (payload: object) => {
+  return jwtUtils.generateToken(
     payload,
     process.env.REFRESH_TOKEN_PRIVATE_KEY as string,
     { expiresIn: process.env.REFRESH_TOKEN_TTL }
   );
+};
 
+const generateTokens = (payload: object) => {
   return {
-    accessToken,
-    refreshToken,
+    accessToken: generateAccessToken(payload),
+    refreshToken: generateRefreshToken(payload),
   };
 };
 
 export default {
+  generateAccessToken,
+  generateRefreshToken,
   generateTokens,
 };

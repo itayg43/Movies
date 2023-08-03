@@ -1,7 +1,9 @@
 import bcryptjs from "bcryptjs";
 
+const DEFAULT_ROUNDS = 10;
+
 const hashPassword = async (plainPassword: string) => {
-  const salt = await bcryptjs.genSalt(10);
+  const salt = await bcryptjs.genSalt(DEFAULT_ROUNDS);
   return await bcryptjs.hash(plainPassword, salt);
 };
 

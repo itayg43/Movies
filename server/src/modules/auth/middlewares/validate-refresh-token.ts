@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 
-import { statusCode } from "../constants";
-import jwtUtils from "../modules/auth/utils/jwt-utils";
+import { statusCode } from "../../../constants";
+import jwtUtils from "../utils/jwt-utils";
 
-const validateAccessToken = async (
+const validateRefreshToken = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -13,28 +13,28 @@ const validateAccessToken = async (
   if (!token) {
     return res
       .status(statusCode.unauthorized)
-      .json({ message: "Please provide access token" });
+      .json({ message: "Please provide refresh token" });
   }
 
   const { isValid, isExpired, payload } = jwtUtils.validateToken(
     token,
-    process.env.ACCESS_TOKEN_PUBLIC_KEY as string
+    process.env.REFRESH_TOKEN_PUBLIC_KEY as string
   );
 
   if (!isValid) {
     if (isExpired) {
       return res
         .status(statusCode.unauthorized)
-        .json({ message: "Please provide an unexpired access token" });
+        .json({ message: "Please provide an unexpired refresh token" });
     }
 
     return res
       .status(statusCode.unauthorized)
-      .json({ message: "Please provide a valid access token" });
+      .json({ message: "Please provide a valid refresh token" });
   }
 
   res.locals.user = payload;
   next();
 };
 
-export default validateAccessToken;
+export default validateRefreshToken;
