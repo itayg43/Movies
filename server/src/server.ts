@@ -1,8 +1,9 @@
 import * as dotenv from "dotenv";
-dotenv.config();
 import http from "http";
 
 import app from "./app";
+
+dotenv.config();
 
 if (!process.env.PORT) {
   console.log("PORT was not provided");
