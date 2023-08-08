@@ -1,21 +1,20 @@
 import React from 'react';
-import {StyleSheet, SafeAreaView, View} from 'react-native';
+import {StyleSheet} from 'react-native';
+
+import SafeView from '../components/SafeView';
 
 const LoginScreen = () => {
   return (
-    <SafeAreaView style={styles.safeContainer}>
-      <View style={styles.contentContainer}></View>
-    </SafeAreaView>
+    <SafeView contentContainerStyle={styles.container}>
+      <></>
+    </SafeView>
   );
 };
 
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  safeContainer: {
-    flex: 1,
-  },
-  contentContainer: {
-    flex: 1,
+  container: {
+    padding: 10,
   },
 });
