@@ -1,13 +1,14 @@
 import React, {useCallback} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {TextInput, HelperText, Button} from 'react-native-paper';
-import {useForm, Controller} from 'react-hook-form';
+import {StyleSheet} from 'react-native';
+import {Button} from 'react-native-paper';
+import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 import authService from '../services/authService';
 import errorHandlerUtil from '../utils/errorHandlerUtil';
 import SafeView from '../components/SafeView';
+import FormTextInput from '../components/FormTextInput';
 
 const loginFormSchema = z.object({
   email: z
@@ -25,7 +26,7 @@ const LoginScreen = () => {
   const {
     control,
     handleSubmit,
-    formState: {isDirty, isValid, errors},
+    formState: {isValid},
   } = useForm<LoginFormData>({resolver: zodResolver(loginFormSchema)});
 
   const handleLoginUser = useCallback(async (formData: LoginFormData) => {
@@ -44,55 +45,31 @@ const LoginScreen = () => {
   return (
     <SafeView contentContainerStyle={styles.container}>
       {/** email */}
-      <View style={styles.inputContainer}>
-        <Controller
-          control={control}
-          name="email"
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              style={styles.input}
-              label="Email"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              autoCapitalize="none"
-              keyboardType="email-address"
-            />
-          )}
-        />
-
-        {errors.email?.message && (
-          <HelperText type="error">{errors.email?.message}</HelperText>
-        )}
-      </View>
+      <FormTextInput
+        inputContainerStyle={styles.inputContainer}
+        style={styles.input}
+        control={control}
+        name="email"
+        label="Email"
+        autoCapitalize="none"
+        keyboardType="email-address"
+      />
 
       {/** password */}
-      <View style={styles.inputContainer}>
-        <Controller
-          control={control}
-          name="password"
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              style={styles.input}
-              label="Password"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              autoCapitalize="none"
-              secureTextEntry
-            />
-          )}
-        />
-
-        {errors.password?.message && (
-          <HelperText type="error">{errors.password?.message}</HelperText>
-        )}
-      </View>
+      <FormTextInput
+        inputContainerStyle={styles.inputContainer}
+        style={styles.input}
+        control={control}
+        name="password"
+        label="Password"
+        autoCapitalize="none"
+        secureTextEntry
+      />
 
       {/** submit */}
       <Button
         mode="contained"
-        disabled={!isDirty || !isValid}
+        disabled={!isValid}
         onPress={handleSubmit(handleLoginUser)}>
         Submit
       </Button>
