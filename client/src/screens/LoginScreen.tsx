@@ -1,6 +1,6 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {StyleSheet} from 'react-native';
-import {Button} from 'react-native-paper';
+import {Button, TextInput} from 'react-native-paper';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -28,6 +28,12 @@ const LoginScreen = () => {
     handleSubmit,
     formState: {isValid},
   } = useForm<LoginFormData>({resolver: zodResolver(loginFormSchema)});
+
+  const [hidePassword, setHidePassword] = useState<boolean>(true);
+
+  const handleToggleHidePassword = useCallback(() => {
+    setHidePassword(currState => !currState);
+  }, [setHidePassword]);
 
   const handleLoginUser = useCallback(async (formData: LoginFormData) => {
     try {
@@ -63,7 +69,8 @@ const LoginScreen = () => {
         name="password"
         label="Password"
         autoCapitalize="none"
-        secureTextEntry
+        secureTextEntry={hidePassword}
+        right={<TextInput.Icon icon="eye" onPress={handleToggleHidePassword} />}
       />
 
       {/** submit */}
