@@ -3,7 +3,7 @@ import apiClient, {ApiRoute} from '../clients/apiClient';
 interface LoginUserResponse {
   id: number;
   email: string;
-  createdAt: Date;
+  createdAt: string;
   tokens: {
     accessToken: string;
     refreshToken: string;
