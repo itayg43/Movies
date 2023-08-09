@@ -46,7 +46,7 @@ const LoginScreen = () => {
     <SafeView contentContainerStyle={styles.container}>
       {/** email */}
       <FormTextInput
-        inputContainerStyle={styles.inputContainer}
+        contentContainerStyle={styles.inputContainer}
         style={styles.input}
         control={control}
         name="email"
@@ -57,7 +57,7 @@ const LoginScreen = () => {
 
       {/** password */}
       <FormTextInput
-        inputContainerStyle={styles.inputContainer}
+        contentContainerStyle={styles.inputContainer}
         style={styles.input}
         control={control}
         name="password"

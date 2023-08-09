@@ -4,13 +4,13 @@ import {TextInput, TextInputProps, HelperText} from 'react-native-paper';
 import {useController} from 'react-hook-form';
 
 interface Props extends TextInputProps {
-  inputContainerStyle?: StyleProp<ViewStyle>;
+  contentContainerStyle?: StyleProp<ViewStyle>;
   control: any;
   name: string;
 }
 
 const FormTextInput = ({
-  inputContainerStyle,
+  contentContainerStyle,
   control,
   name,
   ...restProps
@@ -18,7 +18,7 @@ const FormTextInput = ({
   const {field, fieldState} = useController({control, name});
 
   return (
-    <View style={inputContainerStyle}>
+    <View style={contentContainerStyle}>
       <TextInput
         value={field.value}
         error={fieldState.error?.message ? true : false}
