@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Alert} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -37,14 +37,9 @@ const LoginScreen = () => {
 
   const handleLoginUser = useCallback(async (formData: LoginFormData) => {
     try {
-      const data = await authService.loginUser(
-        formData.email,
-        formData.password,
-      );
-      console.log(data);
+      await authService.loginUser(formData.email, formData.password);
     } catch (error) {
-      const message = errorHandlerUtil.extractMessage(error);
-      console.log(message);
+      Alert.alert('Error', errorHandlerUtil.extractMessage(error));
     }
   }, []);
 
