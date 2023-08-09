@@ -5,6 +5,8 @@ import {useForm, Controller} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
+import authService from '../services/authService';
+import errorHandlerUtil from '../utils/errorHandlerUtil';
 import SafeView from '../components/SafeView';
 
 const loginFormSchema = z.object({
@@ -27,7 +29,16 @@ const LoginScreen = () => {
   } = useForm<LoginFormData>({resolver: zodResolver(loginFormSchema)});
 
   const handleLoginUser = useCallback(async (formData: LoginFormData) => {
-    console.log(formData);
+    try {
+      const data = await authService.loginUser(
+        formData.email,
+        formData.password,
+      );
+      console.log(data);
+    } catch (error) {
+      const message = errorHandlerUtil.extractMessage(error);
+      console.log(message);
+    }
   }, []);
 
   return (
