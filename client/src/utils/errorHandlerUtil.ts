@@ -1,6 +1,7 @@
 import {AxiosError} from 'axios';
 
-const DEFAULT_MESSAGE = 'Something went wrong';
+const DEFAULT_MESSAGE =
+  'Something went wrong, please try again in a few minutes or contact support';
 
 const extractMessage = (error: any): string => {
   const message =
