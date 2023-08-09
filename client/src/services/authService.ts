@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import apiClient, {ApiRoute} from '../clients/apiClient';
 
 interface LoginUserResponse {
@@ -18,7 +20,7 @@ const loginUser = async (email: string, password: string) => {
       password,
     },
   );
-  return data;
+  return _.omit(data, ['tokens']);
 };
 
 export default {
