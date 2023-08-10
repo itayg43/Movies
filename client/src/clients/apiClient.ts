@@ -4,7 +4,7 @@ import {BACKEND_BASE_URL} from '@env';
 import tokenStorage from '../storage/tokenStorage';
 
 export enum ApiRoute {
-  AUTH = '/auth',
+  Auth = '/auth',
 }
 
 const apiClient = axios.create({
