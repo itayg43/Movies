@@ -5,6 +5,7 @@ import tokenStorage from '../storage/tokenStorage';
 
 interface LoginUserResponse {
   id: number;
+  name: string;
   email: string;
   createdAt: string;
   updatedAt: string;
