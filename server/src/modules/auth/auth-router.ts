@@ -2,8 +2,11 @@ import express from "express";
 import asyncHandler from "express-async-handler";
 
 import validateSchema from "../../middlewares/validate-schema";
-import validateRefreshToken from "./middlewares/validate-refresh-token";
-import { registerUserSchema, loginUserSchema } from "./auth-schemas";
+import {
+  registerUserSchema,
+  loginUserSchema,
+  reissueUserAccessTokenSchema,
+} from "./auth-schemas";
 import authController from "./auth-controller";
 
 const authRouter = express.Router();
@@ -20,9 +23,9 @@ authRouter.post(
   asyncHandler(authController.loginUser)
 );
 
-authRouter.get(
+authRouter.post(
   "/reissue-access-token",
-  [validateRefreshToken],
+  [validateSchema(reissueUserAccessTokenSchema)],
   asyncHandler(authController.reissueUserAccessToken)
 );
 

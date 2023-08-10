@@ -2,7 +2,11 @@ import { Request, Response } from "express";
 
 import { statusCode } from "../../constants";
 import authService from "./auth-service";
-import { RegisterUserInput, LoginUserInput } from "./auth-schemas";
+import {
+  RegisterUserInput,
+  LoginUserInput,
+  ReissueUserAccessTokenInput,
+} from "./auth-schemas";
 import { UserDtoMapper } from "./auth-dto";
 
 const userDtoMapper = new UserDtoMapper();
@@ -33,9 +37,12 @@ const loginUser = async (
   });
 };
 
-const reissueUserAccessToken = async (_: Request, res: Response) => {
-  const { id } = res.locals.user;
-  const accessToken = authService.reissueUserAccessToken(id);
+const reissueUserAccessToken = async (
+  req: Request<{}, {}, ReissueUserAccessTokenInput>,
+  res: Response
+) => {
+  const { refreshToken } = req.body;
+  const accessToken = authService.reissueUserAccessToken(refreshToken);
 
   res.status(statusCode.ok).json({ accessToken });
 };

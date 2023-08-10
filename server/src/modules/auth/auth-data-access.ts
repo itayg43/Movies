@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 
-import { EmailAddressAlreadyInUseError } from "./auth-errors";
+import { ConflictEmailError } from "./auth-errors";
 
 const UNIQUE_ERROR_CODE = "P2002";
 
@@ -19,7 +19,7 @@ const createUser = async (email: string, hashedPassword: string) => {
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === UNIQUE_ERROR_CODE
     ) {
-      throw new EmailAddressAlreadyInUseError();
+      throw new ConflictEmailError();
     }
 
     throw error;

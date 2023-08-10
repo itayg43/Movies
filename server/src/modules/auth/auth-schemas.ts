@@ -25,3 +25,14 @@ export const loginUserSchema = object({
   }),
 });
 export type LoginUserInput = TypeOf<typeof loginUserSchema>["body"];
+
+export const reissueUserAccessTokenSchema = object({
+  body: object({
+    refreshToken: string({
+      required_error: "Refresh token is required",
+    }),
+  }),
+});
+export type ReissueUserAccessTokenInput = TypeOf<
+  typeof reissueUserAccessTokenSchema
+>["body"];
