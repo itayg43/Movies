@@ -15,21 +15,22 @@ const FormTextInput = ({
   name,
   ...restProps
 }: Props) => {
-  const {field, fieldState} = useController({control, name});
+  const {
+    field: {value, onChange, onBlur},
+    fieldState: {invalid, error},
+  } = useController({control, name});
 
   return (
     <View style={contentContainerStyle}>
       <TextInput
-        value={field.value}
-        error={fieldState.error?.message ? true : false}
-        onChangeText={field.onChange}
-        onBlur={field.onBlur}
+        value={value}
+        error={invalid}
+        onChangeText={onChange}
+        onBlur={onBlur}
         {...restProps}
       />
 
-      {fieldState.error?.message && (
-        <HelperText type="error">{fieldState.error.message}</HelperText>
-      )}
+      {invalid && <HelperText type="error">{error?.message}</HelperText>}
     </View>
   );
 };
