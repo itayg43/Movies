@@ -106,6 +106,7 @@ const RegisterForm = ({contentContainerStyle, onSubmit}: Props) => {
 
       {/** submit */}
       <Button
+        style={styles.button}
         mode="contained"
         disabled={!isValid}
         onPress={handleSubmit(onSubmit)}>
@@ -123,5 +124,9 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 5,
+  },
+
+  button: {
+    borderRadius: 4,
   },
 });
