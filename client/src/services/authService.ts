@@ -7,6 +7,7 @@ interface LoginUserResponse {
   id: number;
   email: string;
   createdAt: string;
+  updatedAt: string;
   tokens: {
     accessToken: string;
     refreshToken: string;
