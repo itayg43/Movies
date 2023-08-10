@@ -15,8 +15,12 @@ const registerUser = async (
   req: Request<{}, {}, RegisterUserInput>,
   res: Response
 ) => {
-  const { email, password } = req.body;
-  const { user, tokens } = await authService.registerUser(email, password);
+  const { name, email, password } = req.body;
+  const { user, tokens } = await authService.registerUser(
+    name,
+    email,
+    password
+  );
 
   res.status(statusCode.created).json({
     ...userDtoMapper.map(user),

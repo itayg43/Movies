@@ -6,10 +6,15 @@ const UNIQUE_ERROR_CODE = "P2002";
 
 const prismaClient = new PrismaClient();
 
-const createUser = async (email: string, hashedPassword: string) => {
+const createUser = async (
+  name: string,
+  email: string,
+  hashedPassword: string
+) => {
   try {
     return await prismaClient.user.create({
       data: {
+        name,
         email,
         password: hashedPassword,
       },

@@ -8,9 +8,9 @@ import bcryptUtils from "./utils/bcrypt-utils";
 import jwtUtils from "./utils/jwt-utils";
 import authUtils from "./auth-utils";
 
-const registerUser = async (email: string, password: string) => {
+const registerUser = async (name: string, email: string, password: string) => {
   const hashedPassword = await bcryptUtils.hashPassword(password);
-  const user = await authDataAccess.createUser(email, hashedPassword);
+  const user = await authDataAccess.createUser(name, email, hashedPassword);
 
   return {
     user,
