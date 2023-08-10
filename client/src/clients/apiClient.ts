@@ -16,7 +16,7 @@ apiClient.interceptors.request.use(
     const token = await tokenStorage.get('access');
 
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
