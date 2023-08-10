@@ -3,20 +3,25 @@ import _ from 'lodash';
 import apiClient, {ApiRoute} from '../clients/apiClient';
 import tokenStorage from '../storage/tokenStorage';
 
-interface LoginAndRegisterUserDataResponse {
+type User = {
   id: number;
   name: string;
   email: string;
   createdAt: string;
   updatedAt: string;
-  tokens: {
-    accessToken: string;
-    refreshToken: string;
-  };
-}
+};
+
+type UserTokens = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+type LoginRegisterResponseData = User & {
+  tokens: UserTokens;
+};
 
 const loginUser = async (email: string, password: string) => {
-  const {data} = await apiClient.post<LoginAndRegisterUserDataResponse>(
+  const {data} = await apiClient.post<LoginRegisterResponseData>(
     `${ApiRoute.Auth}/login`,
     {
       email,
@@ -33,7 +38,7 @@ const loginUser = async (email: string, password: string) => {
 };
 
 const registerUser = async (name: string, email: string, password: string) => {
-  const {data} = await apiClient.post<LoginAndRegisterUserDataResponse>(
+  const {data} = await apiClient.post<LoginRegisterResponseData>(
     `${ApiRoute.Auth}/register`,
     {
       name,
