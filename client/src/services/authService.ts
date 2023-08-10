@@ -2,6 +2,8 @@ import _ from 'lodash';
 
 import apiClient, {ApiRoute} from '../clients/apiClient';
 import tokenStorage from '../storage/tokenStorage';
+import {LoginFormData} from '../components/LoginForm';
+import {RegisterFormData} from '../components/RegisterForm';
 
 type User = {
   id: number;
@@ -20,13 +22,10 @@ type LoginRegisterResponseData = User & {
   tokens: UserTokens;
 };
 
-const loginUser = async (email: string, password: string) => {
+const loginUser = async (loginFormData: LoginFormData) => {
   const {data} = await apiClient.post<LoginRegisterResponseData>(
     `${ApiRoute.Auth}/login`,
-    {
-      email,
-      password,
-    },
+    loginFormData,
   );
 
   await Promise.all([
@@ -37,14 +36,10 @@ const loginUser = async (email: string, password: string) => {
   return _.omit(data, ['tokens']);
 };
 
-const registerUser = async (name: string, email: string, password: string) => {
+const registerUser = async (registerFormData: RegisterFormData) => {
   const {data} = await apiClient.post<LoginRegisterResponseData>(
     `${ApiRoute.Auth}/register`,
-    {
-      name,
-      email,
-      password,
-    },
+    _.omit(registerFormData, ['confirmPassword']),
   );
 
   await Promise.all([

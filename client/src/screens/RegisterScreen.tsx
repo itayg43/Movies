@@ -9,11 +9,7 @@ import RegisterForm, {RegisterFormData} from '../components/RegisterForm';
 const RegisterScreen = () => {
   const handleRegisterUser = useCallback(async (formData: RegisterFormData) => {
     try {
-      await authService.registerUser(
-        formData.name,
-        formData.email,
-        formData.password,
-      );
+      await authService.registerUser(formData);
     } catch (error) {
       Alert.alert('Error', errorHandlerUtil.extractMessage(error));
     }

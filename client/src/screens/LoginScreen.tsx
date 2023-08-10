@@ -17,7 +17,7 @@ const LoginScreen = () => {
 
   const handleLoginUser = useCallback(async (formData: LoginFormData) => {
     try {
-      await authService.loginUser(formData.email, formData.password);
+      await authService.loginUser(formData);
     } catch (error) {
       Alert.alert('Error', errorHandlerUtil.extractMessage(error));
     }
