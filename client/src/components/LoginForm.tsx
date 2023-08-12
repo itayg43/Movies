@@ -25,11 +25,9 @@ const loginFormSchema = z.object({
 export type LoginFormData = z.infer<typeof loginFormSchema>;
 
 const LoginForm = ({contentContainerStyle, onSubmit}: Props) => {
-  const {
-    control,
-    handleSubmit,
-    formState: {isValid},
-  } = useForm<LoginFormData>({resolver: zodResolver(loginFormSchema)});
+  const {control, handleSubmit} = useForm<LoginFormData>({
+    resolver: zodResolver(loginFormSchema),
+  });
 
   const [hidePassword, setHidePassword] = useState<boolean>(true);
 
@@ -63,10 +61,7 @@ const LoginForm = ({contentContainerStyle, onSubmit}: Props) => {
       />
 
       {/** submit */}
-      <Button
-        mode="contained"
-        disabled={!isValid}
-        onPress={handleSubmit(onSubmit)}>
+      <Button mode="contained" onPress={handleSubmit(onSubmit)}>
         Submit
       </Button>
     </View>

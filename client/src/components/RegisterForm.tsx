@@ -36,11 +36,9 @@ const registerFormSchema = z
 export type RegisterFormData = z.infer<typeof registerFormSchema>;
 
 const RegisterForm = ({contentContainerStyle, onSubmit}: Props) => {
-  const {
-    control,
-    handleSubmit,
-    formState: {isValid},
-  } = useForm<RegisterFormData>({resolver: zodResolver(registerFormSchema)});
+  const {control, handleSubmit} = useForm<RegisterFormData>({
+    resolver: zodResolver(registerFormSchema),
+  });
 
   const [hidePassword, setHidePassword] = useState<boolean>(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState<boolean>(true);
@@ -105,10 +103,7 @@ const RegisterForm = ({contentContainerStyle, onSubmit}: Props) => {
       />
 
       {/** submit */}
-      <Button
-        mode="contained"
-        disabled={!isValid}
-        onPress={handleSubmit(onSubmit)}>
+      <Button mode="contained" onPress={handleSubmit(onSubmit)}>
         Submit
       </Button>
     </View>
