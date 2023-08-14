@@ -45,7 +45,7 @@ apiClient.interceptors.response.use(
             },
           );
 
-          tokenStorage.set('access', data.accessToken);
+          await tokenStorage.set('access', data.accessToken);
 
           return apiClient(originalConfig);
         } catch (_error) {
