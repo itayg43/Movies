@@ -2,21 +2,7 @@ import _ from 'lodash';
 
 import apiClient, {ApiRoute} from '../clients/apiClient';
 import tokenStorage from '../storage/tokenStorage';
-import {LoginFormData} from '../components/LoginForm';
-import {RegisterFormData} from '../components/RegisterForm';
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-type UserTokens = {
-  accessToken: string;
-  refreshToken: string;
-};
+import {LoginFormData, RegisterFormData, User, UserTokens} from '../types';
 
 type LoginRegisterResponseData = User & {
   tokens: UserTokens;

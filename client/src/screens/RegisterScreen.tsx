@@ -4,7 +4,8 @@ import {StyleSheet, Alert} from 'react-native';
 import authService from '../services/authService';
 import errorHandlerUtil from '../utils/errorHandlerUtil';
 import SafeView from '../components/SafeView';
-import RegisterForm, {RegisterFormData} from '../components/RegisterForm';
+import RegisterForm from '../components/RegisterForm';
+import {RegisterFormData} from '../types';
 
 const RegisterScreen = () => {
   const handleRegisterUser = useCallback(async (formData: RegisterFormData) => {

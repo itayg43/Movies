@@ -5,7 +5,8 @@ import {useNavigation} from '@react-navigation/native';
 import authService from '../services/authService';
 import errorHandlerUtil from '../utils/errorHandlerUtil';
 import SafeView from '../components/SafeView';
-import LoginForm, {LoginFormData} from '../components/LoginForm';
+import LoginForm from '../components/LoginForm';
+import {LoginFormData} from '../types';
 import {LoginScreenNavigationProp} from '../navigators/AuthStackNavigator';
 
 const LoginScreen = () => {
