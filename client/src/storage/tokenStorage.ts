@@ -1,10 +1,12 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-const set = async (key: 'access' | 'refresh', value: string) => {
+type TokenKey = 'access' | 'refresh';
+
+const set = async (key: TokenKey, value: string) => {
   await EncryptedStorage.setItem(key, value);
 };
 
-const get = async (key: 'access' | 'refresh') => {
+const get = async (key: TokenKey) => {
   return await EncryptedStorage.getItem(key);
 };
 
