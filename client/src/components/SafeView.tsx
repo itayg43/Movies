@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropsWithChildren} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -7,10 +7,9 @@ import {
   ViewStyle,
 } from 'react-native';
 
-interface Props {
+type Props = {
   contentContainerStyle?: StyleProp<ViewStyle>;
-  children: React.ReactNode;
-}
+} & PropsWithChildren;
 
 const SafeView = ({contentContainerStyle, children}: Props) => {
   return (
