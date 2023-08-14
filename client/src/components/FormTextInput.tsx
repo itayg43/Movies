@@ -3,17 +3,17 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 import {TextInput, TextInputProps, HelperText} from 'react-native-paper';
 import {useController} from 'react-hook-form';
 
-interface Props extends TextInputProps {
+type Props = {
   contentContainerStyle?: StyleProp<ViewStyle>;
   control: any;
   name: string;
-}
+} & TextInputProps;
 
 const FormTextInput = ({
   contentContainerStyle,
   control,
   name,
-  ...restProps
+  ...otherProps
 }: Props) => {
   const {
     field: {value, onChange, onBlur},
@@ -27,7 +27,7 @@ const FormTextInput = ({
         error={invalid}
         onChangeText={onChange}
         onBlur={onBlur}
-        {...restProps}
+        {...otherProps}
       />
 
       {invalid && <HelperText type="error">{error?.message}</HelperText>}
