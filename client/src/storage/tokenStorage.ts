@@ -1,21 +1,31 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-type TokenKey = 'access' | 'refresh';
+import {UserTokens} from '../types';
 
-const set = async (key: TokenKey, value: string) => {
+type Key = 'access' | 'refresh';
+
+const set = async (key: Key, value: string) => {
   await EncryptedStorage.setItem(key, value);
 };
 
-const get = async (key: TokenKey) => {
+const setBoth = async (values: UserTokens) => {
+  await Promise.all([
+    set('access', values.accessToken),
+    set('refresh', values.refreshToken),
+  ]);
+};
+
+const get = async (key: Key) => {
   return await EncryptedStorage.getItem(key);
 };
 
-const clear = async () => {
+const clearBoth = async () => {
   await EncryptedStorage.clear();
 };
 
 export default {
   set,
+  setBoth,
   get,
-  clear,
+  clearBoth,
 };

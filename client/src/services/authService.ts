@@ -14,10 +14,7 @@ const loginUser = async (loginFormData: LoginFormData) => {
     loginFormData,
   );
 
-  await Promise.all([
-    tokenStorage.set('access', data.tokens.accessToken),
-    tokenStorage.set('refresh', data.tokens.refreshToken),
-  ]);
+  await tokenStorage.setBoth(data.tokens);
 
   return _.omit(data, ['tokens']);
 };
@@ -28,20 +25,12 @@ const registerUser = async (registerFormData: RegisterFormData) => {
     _.omit(registerFormData, ['confirmPassword']),
   );
 
-  await Promise.all([
-    tokenStorage.set('access', data.tokens.accessToken),
-    tokenStorage.set('refresh', data.tokens.refreshToken),
-  ]);
+  await tokenStorage.setBoth(data.tokens);
 
   return _.omit(data, ['tokens']);
-};
-
-const logoutUser = async () => {
-  await tokenStorage.clear();
 };
 
 export default {
   loginUser,
   registerUser,
-  logoutUser,
 };
