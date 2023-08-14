@@ -3,26 +3,15 @@ import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import * as z from 'zod';
 
+import {loginFormSchema} from '../schemas';
+import {LoginFormData} from '../types';
 import FormTextInput from '../components/FormTextInput';
 
-interface Props {
+type Props = {
   contentContainerStyle?: StyleProp<ViewStyle>;
   onSubmit: (formData: LoginFormData) => void;
-}
-
-const loginFormSchema = z.object({
-  email: z
-    .string({required_error: 'Required'})
-    .email('Please enter a valid email address'),
-
-  password: z
-    .string({required_error: 'Required'})
-    .min(4, 'Password should be at least 4 characters long'),
-});
-
-export type LoginFormData = z.infer<typeof loginFormSchema>;
+};
 
 const LoginForm = ({contentContainerStyle, onSubmit}: Props) => {
   const {control, handleSubmit} = useForm<LoginFormData>({
