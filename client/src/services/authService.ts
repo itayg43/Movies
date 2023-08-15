@@ -1,11 +1,13 @@
 import _ from 'lodash';
 
 import apiClient, {ApiRoute} from '../clients/apiClient';
+import userStorage from '../storage/userStorage';
 import tokensStorage from '../storage/tokensStorage';
 import {LoginFormData, RegisterFormData, User, UserTokens} from '../types';
 
-type LoginRegisterResponseData = User & {
-  tokens: UserTokens;
+type LoginRegisterResponseData = {
+  user: User;
+  userTokens: UserTokens;
 };
 
 const loginUser = async (loginFormData: LoginFormData) => {
@@ -14,9 +16,12 @@ const loginUser = async (loginFormData: LoginFormData) => {
     loginFormData,
   );
 
-  await tokensStorage.setBoth(data.tokens);
+  await Promise.all([
+    userStorage.set(data.user),
+    tokensStorage.setBoth(data.userTokens),
+  ]);
 
-  return _.omit(data, ['tokens']);
+  return data.user;
 };
 
 const registerUser = async (registerFormData: RegisterFormData) => {
@@ -25,9 +30,12 @@ const registerUser = async (registerFormData: RegisterFormData) => {
     _.omit(registerFormData, ['confirmPassword']),
   );
 
-  await tokensStorage.setBoth(data.tokens);
+  await Promise.all([
+    userStorage.set(data.user),
+    tokensStorage.setBoth(data.userTokens),
+  ]);
 
-  return _.omit(data, ['tokens']);
+  return data.user;
 };
 
 export default {
