@@ -23,8 +23,8 @@ const registerUser = async (
   );
 
   res.status(statusCode.created).json({
-    ...userDtoMapper.map(user),
-    tokens,
+    user: userDtoMapper.map(user),
+    userTokens: tokens,
   });
 };
 
@@ -36,8 +36,8 @@ const loginUser = async (
   const { user, tokens } = await authService.loginUser(email, password);
 
   res.status(statusCode.ok).json({
-    ...userDtoMapper.map(user),
-    tokens,
+    user: userDtoMapper.map(user),
+    userTokens: tokens,
   });
 };
 
