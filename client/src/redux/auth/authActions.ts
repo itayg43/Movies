@@ -28,7 +28,20 @@ const registerUser = createAsyncThunk(
   },
 );
 
+const logoutUser = createAsyncThunk(
+  'auth/logoutUser',
+  async (_, {rejectWithValue}) => {
+    try {
+      await authService.logoutUser();
+    } catch (error) {
+      const message = errorHandlerUtil.extractMessage(error);
+      return rejectWithValue(message);
+    }
+  },
+);
+
 export default {
   loginUser,
   registerUser,
+  logoutUser,
 };

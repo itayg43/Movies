@@ -38,7 +38,12 @@ const registerUser = async (registerFormData: RegisterFormData) => {
   return data.user;
 };
 
+const logoutUser = async () => {
+  await Promise.all([userStorage.remove(), tokensStorage.clearBoth()]);
+};
+
 export default {
   loginUser,
   registerUser,
+  logoutUser,
 };

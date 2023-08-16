@@ -31,6 +31,13 @@ const authSlice = createSlice({
       })
       .addCase(authActions.registerUser.rejected, (state, action) => {
         state.message = action.payload as string;
+      })
+
+      .addCase(authActions.logoutUser.fulfilled, state => {
+        state.user = null;
+      })
+      .addCase(authActions.logoutUser.rejected, (state, action) => {
+        state.message = action.payload as string;
       });
   },
 });
