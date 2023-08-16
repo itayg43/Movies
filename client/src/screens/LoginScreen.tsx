@@ -1,28 +1,33 @@
 import React, {useCallback} from 'react';
-import {StyleSheet, Alert, TouchableOpacity, Text} from 'react-native';
+import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import authService from '../services/authService';
-import errorHandlerUtil from '../utils/errorHandlerUtil';
-import SafeView from '../components/SafeView';
-import LoginForm from '../components/LoginForm';
+import {useAppDispatch} from '../hooks/useAppDispatch';
+import {useAppSelector} from '../hooks/useAppSelector';
+import authActions from '../redux/auth/authActions';
+import {selectAuthStatus, selectAuthMessage} from '../redux/auth/authSelectors';
 import {LoginFormData} from '../types';
 import {LoginScreenNavigationProp} from '../navigators/AuthStackNavigator';
+import SafeView from '../components/SafeView';
+import LoginForm from '../components/LoginForm';
 
 const LoginScreen = () => {
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<LoginScreenNavigationProp>();
+
+  const authStatus = useAppSelector(selectAuthStatus);
+  const authMessage = useAppSelector(selectAuthMessage);
 
   const handleNavigation = useCallback(() => {
     navigation.navigate('register');
   }, [navigation]);
 
-  const handleLoginUser = useCallback(async (formData: LoginFormData) => {
-    try {
-      await authService.loginUser(formData);
-    } catch (error) {
-      Alert.alert('Error', errorHandlerUtil.extractMessage(error));
-    }
-  }, []);
+  const handleLoginUser = useCallback(
+    (formData: LoginFormData) => {
+      dispatch(authActions.loginUserAsync(formData));
+    },
+    [dispatch],
+  );
 
   return (
     <SafeView contentContainerStyle={styles.container}>
