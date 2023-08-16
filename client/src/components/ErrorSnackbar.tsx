@@ -5,15 +5,16 @@ const DEFAULT_DURATION_IN_MILLIS = 3 * 1000;
 
 type Props = {
   isVisible: boolean;
+  duration?: number;
   message: string;
   onDismiss: () => void;
 };
 
-const ErrorSnackbar = ({isVisible, message, onDismiss}: Props) => {
+const ErrorSnackbar = ({isVisible, duration, message, onDismiss}: Props) => {
   return isVisible ? (
     <Snackbar
       visible={isVisible}
-      duration={DEFAULT_DURATION_IN_MILLIS}
+      duration={duration ?? DEFAULT_DURATION_IN_MILLIS}
       onDismiss={onDismiss}>
       {message}
     </Snackbar>
