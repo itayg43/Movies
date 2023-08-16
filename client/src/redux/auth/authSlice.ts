@@ -29,6 +29,11 @@ const authSlice = createSlice({
       state.status = 'failed';
       state.message = action.payload;
     },
+
+    resetAuthStatusAndMessage: state => {
+      state.status = 'idle';
+      state.message = '';
+    },
   },
 });
 
@@ -36,6 +41,7 @@ export const {
   loginUserRequest,
   loginUserRequestSucceded,
   loginUserRequestFailed,
+  resetAuthStatusAndMessage,
 } = authSlice.actions;
 
 export default authSlice.reducer;
