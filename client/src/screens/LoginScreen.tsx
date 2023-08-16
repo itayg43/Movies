@@ -1,59 +1,67 @@
-import React, {useCallback} from 'react';
-import {StyleSheet, TouchableOpacity, Text} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {StyleSheet, Pressable, Text} from 'react-native';
+import {Snackbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
 import {useAppDispatch} from '../hooks/useAppDispatch';
+import {RequestStatus} from '../types';
 import {useAppSelector} from '../hooks/useAppSelector';
 import authActions from '../redux/auth/authActions';
-import {resetAuthStatusAndMessage} from '../redux/auth/authSlice';
-import {selectAuthStatus, selectAuthMessage} from '../redux/auth/authSelectors';
+import {selectAuthMessage} from '../redux/auth/authSelectors';
 import {LoginFormData} from '../types';
 import {LoginScreenNavigationProp} from '../navigators/AuthStackNavigator';
 import SafeView from '../components/SafeView';
 import LoginForm from '../components/LoginForm';
-import ErrorSnackbar from '../components/ErrorSnackbar';
 
 const LoginScreen = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
-  const authStatus = useAppSelector(selectAuthStatus);
-  const authMessage = useAppSelector(selectAuthMessage);
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
+  const requestMessage = useAppSelector(selectAuthMessage);
 
   const handleNavigation = useCallback(() => {
     navigation.navigate('register');
   }, [navigation]);
 
-  const handleLoginUser = useCallback(
-    (formData: LoginFormData) => {
-      dispatch(authActions.loginUserAsync(formData));
+  const handleDismissSnackbar = useCallback(() => {
+    setRequestStatus('idle');
+  }, [setRequestStatus]);
+
+  const handleSubmitForm = useCallback(
+    async (formData: LoginFormData) => {
+      try {
+        setRequestStatus('loading');
+        await dispatch(authActions.loginUser(formData)).unwrap();
+        setRequestStatus('succeded');
+      } catch (error) {
+        setRequestStatus('failed');
+      }
     },
     [dispatch],
   );
 
-  const handleDismissSnackbar = useCallback(() => {
-    dispatch(resetAuthStatusAndMessage());
-  }, [dispatch]);
-
   return (
-    <SafeView contentContainerStyle={styles.container}>
-      <LoginForm
-        isSubmitting={authStatus === 'loading'}
-        onSubmit={handleLoginUser}
-      />
+    <>
+      <SafeView contentContainerStyle={styles.container}>
+        <LoginForm
+          isSubmitting={requestStatus === 'loading'}
+          onSubmit={handleSubmitForm}
+        />
 
-      <TouchableOpacity
-        style={styles.navigationLinkContainer}
-        onPress={handleNavigation}>
-        <Text>Need to register? Press here!</Text>
-      </TouchableOpacity>
+        <Pressable
+          style={styles.navigationLinkContainer}
+          onPress={handleNavigation}>
+          <Text>Need to register? Press here!</Text>
+        </Pressable>
+      </SafeView>
 
-      <ErrorSnackbar
-        isVisible={authStatus === 'failed'}
-        message={authMessage}
-        onDismiss={handleDismissSnackbar}
-      />
-    </SafeView>
+      {requestStatus === 'failed' && (
+        <Snackbar visible duration={3000} onDismiss={handleDismissSnackbar}>
+          {requestMessage}
+        </Snackbar>
+      )}
+    </>
   );
 };
 

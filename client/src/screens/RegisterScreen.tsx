@@ -1,46 +1,53 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {StyleSheet} from 'react-native';
+import {Snackbar} from 'react-native-paper';
 
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import {useAppSelector} from '../hooks/useAppSelector';
 import authActions from '../redux/auth/authActions';
-import {resetAuthStatusAndMessage} from '../redux/auth/authSlice';
-import {selectAuthStatus, selectAuthMessage} from '../redux/auth/authSelectors';
-import {RegisterFormData} from '../types';
+import {selectAuthMessage} from '../redux/auth/authSelectors';
+import {RegisterFormData, RequestStatus} from '../types';
 import SafeView from '../components/SafeView';
 import RegisterForm from '../components/RegisterForm';
-import ErrorSnackbar from '../components/ErrorSnackbar';
 
 const RegisterScreen = () => {
   const dispatch = useAppDispatch();
 
-  const authStatus = useAppSelector(selectAuthStatus);
-  const authMessage = useAppSelector(selectAuthMessage);
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
+  const requestMessage = useAppSelector(selectAuthMessage);
 
-  const handleRegisterUser = useCallback(
-    (formData: RegisterFormData) => {
-      dispatch(authActions.registerUserAsync(formData));
+  const handleDismissSnackbar = useCallback(() => {
+    setRequestStatus('idle');
+  }, [setRequestStatus]);
+
+  const handleSubmitForm = useCallback(
+    async (formData: RegisterFormData) => {
+      try {
+        setRequestStatus('loading');
+        await dispatch(authActions.registerUser(formData)).unwrap();
+        setRequestStatus('succeded');
+      } catch (error) {
+        setRequestStatus('failed');
+      }
     },
     [dispatch],
   );
 
-  const handleDismissSnackbar = useCallback(() => {
-    dispatch(resetAuthStatusAndMessage());
-  }, [dispatch]);
-
   return (
-    <SafeView contentContainerStyle={styles.container}>
-      <RegisterForm
-        isSubmitting={authStatus === 'loading'}
-        onSubmit={handleRegisterUser}
-      />
+    <>
+      <SafeView contentContainerStyle={styles.container}>
+        <RegisterForm
+          isSubmitting={requestStatus === 'loading'}
+          onSubmit={handleSubmitForm}
+        />
+      </SafeView>
 
-      <ErrorSnackbar
-        isVisible={authStatus === 'failed'}
-        message={authMessage}
-        onDismiss={handleDismissSnackbar}
-      />
-    </SafeView>
+      {requestStatus === 'failed' && (
+        <Snackbar visible duration={3000} onDismiss={handleDismissSnackbar}>
+          {requestMessage}
+        </Snackbar>
+      )}
+    </>
   );
 };
 
