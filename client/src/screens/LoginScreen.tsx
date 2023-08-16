@@ -5,11 +5,13 @@ import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import {useAppSelector} from '../hooks/useAppSelector';
 import authActions from '../redux/auth/authActions';
+import {resetAuthStatusAndMessage} from '../redux/auth/authSlice';
 import {selectAuthStatus, selectAuthMessage} from '../redux/auth/authSelectors';
 import {LoginFormData} from '../types';
 import {LoginScreenNavigationProp} from '../navigators/AuthStackNavigator';
 import SafeView from '../components/SafeView';
 import LoginForm from '../components/LoginForm';
+import ErrorSnackbar from '../components/ErrorSnackbar';
 
 const LoginScreen = () => {
   const dispatch = useAppDispatch();
@@ -29,15 +31,28 @@ const LoginScreen = () => {
     [dispatch],
   );
 
+  const handleDismissSnackbar = useCallback(() => {
+    dispatch(resetAuthStatusAndMessage());
+  }, [dispatch]);
+
   return (
     <SafeView contentContainerStyle={styles.container}>
-      <LoginForm onSubmit={handleLoginUser} />
+      <LoginForm
+        isSubmitting={authStatus === 'loading'}
+        onSubmit={handleLoginUser}
+      />
 
       <TouchableOpacity
         style={styles.navigationLinkContainer}
         onPress={handleNavigation}>
         <Text>Need to register? Press here!</Text>
       </TouchableOpacity>
+
+      <ErrorSnackbar
+        isVisible={authStatus === 'failed'}
+        message={authMessage}
+        onDismiss={handleDismissSnackbar}
+      />
     </SafeView>
   );
 };
