@@ -10,10 +10,15 @@ import FormTextInput from './FormTextInput';
 
 type Props = {
   contentContainerStyle?: StyleProp<ViewStyle>;
+  isSubmitting: boolean;
   onSubmit: (formData: RegisterFormData) => void;
 };
 
-const RegisterForm = ({contentContainerStyle, onSubmit}: Props) => {
+const RegisterForm = ({
+  contentContainerStyle,
+  isSubmitting,
+  onSubmit,
+}: Props) => {
   const {control, handleSubmit} = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
   });
@@ -81,7 +86,11 @@ const RegisterForm = ({contentContainerStyle, onSubmit}: Props) => {
       />
 
       {/** submit */}
-      <Button mode="contained" onPress={handleSubmit(onSubmit)}>
+      <Button
+        mode="contained"
+        loading={isSubmitting}
+        disabled={isSubmitting}
+        onPress={handleSubmit(onSubmit)}>
         Submit
       </Button>
     </View>
