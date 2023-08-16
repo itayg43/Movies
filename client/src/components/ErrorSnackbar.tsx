@@ -1,7 +1,7 @@
 import React from 'react';
 import {Snackbar} from 'react-native-paper';
 
-const DEFAULT_DURATION_IN_MILLIS = 5 * 1000;
+const DEFAULT_DURATION_IN_MILLIS = 3 * 1000;
 
 type Props = {
   isVisible: boolean;
@@ -10,14 +10,14 @@ type Props = {
 };
 
 const ErrorSnackbar = ({isVisible, message, onDismiss}: Props) => {
-  return (
+  return isVisible ? (
     <Snackbar
       visible={isVisible}
       duration={DEFAULT_DURATION_IN_MILLIS}
       onDismiss={onDismiss}>
       {message}
     </Snackbar>
-  );
+  ) : null;
 };
 
 export default ErrorSnackbar;
