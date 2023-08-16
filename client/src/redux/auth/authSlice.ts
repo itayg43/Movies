@@ -30,6 +30,18 @@ const authSlice = createSlice({
       state.message = action.payload;
     },
 
+    registerUserRequest: state => {
+      state.status = 'loading';
+    },
+    registerUserRequestSucceded: (state, action: PayloadAction<User>) => {
+      state.status = 'succeded';
+      state.user = action.payload;
+    },
+    registerUserRequestFailed: (state, action: PayloadAction<string>) => {
+      state.status = 'failed';
+      state.message = action.payload;
+    },
+
     resetAuthStatusAndMessage: state => {
       state.status = 'idle';
       state.message = '';
@@ -41,6 +53,9 @@ export const {
   loginUserRequest,
   loginUserRequestSucceded,
   loginUserRequestFailed,
+  registerUserRequest,
+  registerUserRequestSucceded,
+  registerUserRequestFailed,
   resetAuthStatusAndMessage,
 } = authSlice.actions;
 
