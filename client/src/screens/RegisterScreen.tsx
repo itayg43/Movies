@@ -2,8 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {Snackbar} from 'react-native-paper';
 
-import {useAppDispatch} from '../hooks/useAppDispatch';
-import {useAppSelector} from '../hooks/useAppSelector';
+import {useAppDispatch, useAppSelector} from '../hooks';
 import authActions from '../redux/auth/authActions';
 import {selectAuthMessage} from '../redux/auth/authSelectors';
 import {RegisterFormData, RequestStatus} from '../types';

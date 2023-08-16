@@ -3,12 +3,10 @@ import {StyleSheet, Pressable, Text} from 'react-native';
 import {Snackbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
-import {useAppDispatch} from '../hooks/useAppDispatch';
-import {RequestStatus} from '../types';
-import {useAppSelector} from '../hooks/useAppSelector';
+import {useAppDispatch, useAppSelector} from '../hooks';
+import {RequestStatus, LoginFormData} from '../types';
 import authActions from '../redux/auth/authActions';
 import {selectAuthMessage} from '../redux/auth/authSelectors';
-import {LoginFormData} from '../types';
 import {LoginScreenNavigationProp} from '../navigators/AuthStackNavigator';
 import SafeView from '../components/SafeView';
 import LoginForm from '../components/LoginForm';
