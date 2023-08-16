@@ -1,24 +1,45 @@
 import React, {useCallback} from 'react';
-import {StyleSheet, Alert} from 'react-native';
+import {StyleSheet} from 'react-native';
 
-import authService from '../services/authService';
-import errorHandlerUtil from '../utils/errorHandlerUtil';
+import {useAppDispatch} from '../hooks/useAppDispatch';
+import {useAppSelector} from '../hooks/useAppSelector';
+import authActions from '../redux/auth/authActions';
+import {resetAuthStatusAndMessage} from '../redux/auth/authSlice';
+import {selectAuthStatus, selectAuthMessage} from '../redux/auth/authSelectors';
+import {RegisterFormData} from '../types';
 import SafeView from '../components/SafeView';
 import RegisterForm from '../components/RegisterForm';
-import {RegisterFormData} from '../types';
+import ErrorSnackbar from '../components/ErrorSnackbar';
 
 const RegisterScreen = () => {
-  const handleRegisterUser = useCallback(async (formData: RegisterFormData) => {
-    try {
-      await authService.registerUser(formData);
-    } catch (error) {
-      Alert.alert('Error', errorHandlerUtil.extractMessage(error));
-    }
-  }, []);
+  const dispatch = useAppDispatch();
+
+  const authStatus = useAppSelector(selectAuthStatus);
+  const authMessage = useAppSelector(selectAuthMessage);
+
+  const handleRegisterUser = useCallback(
+    (formData: RegisterFormData) => {
+      dispatch(authActions.registerUserAsync(formData));
+    },
+    [dispatch],
+  );
+
+  const handleDismissSnackbar = useCallback(() => {
+    dispatch(resetAuthStatusAndMessage());
+  }, [dispatch]);
 
   return (
     <SafeView contentContainerStyle={styles.container}>
-      <RegisterForm onSubmit={handleRegisterUser} />
+      <RegisterForm
+        isSubmitting={authStatus === 'loading'}
+        onSubmit={handleRegisterUser}
+      />
+
+      <ErrorSnackbar
+        isVisible={authStatus === 'failed'}
+        message={authMessage}
+        onDismiss={handleDismissSnackbar}
+      />
     </SafeView>
   );
 };
