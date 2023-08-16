@@ -1,62 +1,38 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 import {User} from '../../types';
+import authActions from './authActions';
 
 type AuthState = {
-  status: 'idle' | 'loading' | 'succeded' | 'failed';
-  message: string;
   user: User | null;
+  message: string;
 };
 
 const initialState: AuthState = {
-  status: 'idle',
-  message: '',
   user: null,
+  message: '',
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    loginUserRequest: state => {
-      state.status = 'loading';
-    },
-    loginUserRequestSucceded: (state, action: PayloadAction<User>) => {
-      state.status = 'succeded';
-      state.user = action.payload;
-    },
-    loginUserRequestFailed: (state, action: PayloadAction<string>) => {
-      state.status = 'failed';
-      state.message = action.payload;
-    },
+  reducers: {},
+  extraReducers: builder => {
+    builder
+      .addCase(authActions.loginUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+      })
+      .addCase(authActions.loginUser.rejected, (state, action) => {
+        state.message = action.payload as string;
+      })
 
-    registerUserRequest: state => {
-      state.status = 'loading';
-    },
-    registerUserRequestSucceded: (state, action: PayloadAction<User>) => {
-      state.status = 'succeded';
-      state.user = action.payload;
-    },
-    registerUserRequestFailed: (state, action: PayloadAction<string>) => {
-      state.status = 'failed';
-      state.message = action.payload;
-    },
-
-    resetAuthStatusAndMessage: state => {
-      state.status = 'idle';
-      state.message = '';
-    },
+      .addCase(authActions.registerUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+      })
+      .addCase(authActions.registerUser.rejected, (state, action) => {
+        state.message = action.payload as string;
+      });
   },
 });
-
-export const {
-  loginUserRequest,
-  loginUserRequestSucceded,
-  loginUserRequestFailed,
-  registerUserRequest,
-  registerUserRequestSucceded,
-  registerUserRequestFailed,
-  resetAuthStatusAndMessage,
-} = authSlice.actions;
 
 export default authSlice.reducer;
