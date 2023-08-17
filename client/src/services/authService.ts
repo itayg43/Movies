@@ -8,6 +8,7 @@ import {
   RegisterFormData,
   LoginRegisterResponseData,
   ReissueTokenResponseData,
+  UserTokenType,
 } from '../types';
 
 const loginUser = async (loginFormData: LoginFormData) => {
@@ -53,9 +54,19 @@ const reissueUserAccessToken = async () => {
   await tokensStorage.set('accessToken', data.accessToken);
 };
 
+const setUserToken = async (type: UserTokenType, value: string) => {
+  await tokensStorage.set(type, value);
+};
+
+const getUserToken = async (type: UserTokenType) => {
+  return await tokensStorage.get(type);
+};
+
 export default {
   loginUser,
   registerUser,
   logoutUser,
   reissueUserAccessToken,
+  setUserToken,
+  getUserToken,
 };

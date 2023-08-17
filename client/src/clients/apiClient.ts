@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import {BACKEND_BASE_URL} from '@env';
-import tokensStorage from '../storage/tokensStorage';
+import authService from '../services/authService';
 import {ReissueTokenResponseData} from '../types';
 
 export enum ApiRoute {
@@ -14,7 +14,7 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   async config => {
-    const token = await tokensStorage.get('accessToken');
+    const token = await authService.getUserToken('accessToken');
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -43,11 +43,11 @@ apiClient.interceptors.response.use(
         const {data} = await apiClient.post<ReissueTokenResponseData>(
           '/auth/reissue-access-token',
           {
-            refreshToken: await tokensStorage.get('refreshToken'),
+            refreshToken: await authService.getUserToken('refreshToken'),
           },
         );
 
-        await tokensStorage.set('accessToken', data.accessToken);
+        await authService.setUserToken('accessToken', data.accessToken);
 
         return apiClient(originalConfig);
       } catch (_error) {

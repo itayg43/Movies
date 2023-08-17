@@ -1,11 +1,9 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-import {UserTokens} from '../types';
+import {UserTokens, UserTokenType} from '../types';
 
-type Key = 'accessToken' | 'refreshToken';
-
-const set = async (key: Key, value: string) => {
-  await EncryptedStorage.setItem(key, value);
+const set = async (type: UserTokenType, value: string) => {
+  await EncryptedStorage.setItem(type, value);
 };
 
 const setBoth = async (values: UserTokens) => {
@@ -15,8 +13,8 @@ const setBoth = async (values: UserTokens) => {
   ]);
 };
 
-const get = async (key: Key) => {
-  return await EncryptedStorage.getItem(key);
+const get = async (type: UserTokenType) => {
+  return await EncryptedStorage.getItem(type);
 };
 
 const clearBoth = async () => {
