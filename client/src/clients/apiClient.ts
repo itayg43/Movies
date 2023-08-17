@@ -12,6 +12,9 @@ const apiClient = axios.create({
   baseURL: `${BACKEND_BASE_URL}/api`,
 });
 
+// interceptors
+
+// request
 apiClient.interceptors.request.use(
   async config => {
     const token = await authService.getUserToken('accessToken');
@@ -28,6 +31,7 @@ apiClient.interceptors.request.use(
   },
 );
 
+// response
 apiClient.interceptors.response.use(
   res => {
     return res;
