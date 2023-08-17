@@ -3,16 +3,12 @@ import _ from 'lodash';
 import apiClient, {ApiRoute} from '../clients/apiClient';
 import userStorage from '../storage/userStorage';
 import tokensStorage from '../storage/tokensStorage';
-import {LoginFormData, RegisterFormData, User, UserTokens} from '../types';
-
-type LoginRegisterResponseData = {
-  user: User;
-  userTokens: UserTokens;
-};
-
-type ReissueTokenResponseData = {
-  accessToken: string;
-};
+import {
+  LoginFormData,
+  RegisterFormData,
+  LoginRegisterResponseData,
+  ReissueTokenResponseData,
+} from '../types';
 
 const loginUser = async (loginFormData: LoginFormData) => {
   const {data} = await apiClient.post<LoginRegisterResponseData>(

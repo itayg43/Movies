@@ -20,3 +20,12 @@ export type UserTokens = {
   accessToken: string;
   refreshToken: string;
 };
+
+export type LoginRegisterResponseData = {
+  user: User;
+  userTokens: UserTokens;
+};
+
+export type ReissueTokenResponseData = {
+  accessToken: string;
+};
