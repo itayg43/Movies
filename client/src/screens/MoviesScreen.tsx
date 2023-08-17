@@ -1,14 +1,10 @@
 import React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import SafeView from '../components/SafeView';
 
 const MoviesScreen = () => {
-  return (
-    <SafeView contentContainerStyle={styles.container}>
-      <Text>Movies</Text>
-    </SafeView>
-  );
+  return <SafeView contentContainerStyle={styles.container}></SafeView>;
 };
 
 export default MoviesScreen;
