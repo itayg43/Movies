@@ -36,24 +36,22 @@ apiClient.interceptors.response.use(
   async err => {
     const originalConfig = err.config;
 
-    if (originalConfig.url !== '/auth/login' && err.response) {
-      if (err.response.status === 401 && !originalConfig._retry) {
-        originalConfig._retry = true;
+    if (err.response?.status === 401 && !originalConfig._retry) {
+      originalConfig._retry = true;
 
-        try {
-          const {data} = await apiClient.post<ReissueTokenResponseData>(
-            '/auth/reissue-access-token',
-            {
-              refreshToken: await tokensStorage.get('refreshToken'),
-            },
-          );
+      try {
+        const {data} = await apiClient.post<ReissueTokenResponseData>(
+          '/auth/reissue-access-token',
+          {
+            refreshToken: await tokensStorage.get('refreshToken'),
+          },
+        );
 
-          await tokensStorage.set('accessToken', data.accessToken);
+        await tokensStorage.set('accessToken', data.accessToken);
 
-          return apiClient(originalConfig);
-        } catch (_error) {
-          return Promise.reject(_error);
-        }
+        return apiClient(originalConfig);
+      } catch (_error) {
+        return Promise.reject(_error);
       }
     }
 
