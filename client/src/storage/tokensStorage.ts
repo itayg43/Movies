@@ -2,7 +2,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 
 import {UserTokens} from '../types';
 
-type Key = 'access' | 'refresh';
+type Key = 'accessToken' | 'refreshToken';
 
 const set = async (key: Key, value: string) => {
   await EncryptedStorage.setItem(key, value);
@@ -10,8 +10,8 @@ const set = async (key: Key, value: string) => {
 
 const setBoth = async (values: UserTokens) => {
   await Promise.all([
-    set('access', values.accessToken),
-    set('refresh', values.refreshToken),
+    set('accessToken', values.accessToken),
+    set('refreshToken', values.refreshToken),
   ]);
 };
 

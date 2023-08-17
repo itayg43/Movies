@@ -50,11 +50,11 @@ const reissueUserAccessToken = async () => {
   const {data} = await apiClient.post<ReissueTokenResponseData>(
     `${ApiRoute.Auth}/reissue-access-token`,
     {
-      refreshToken: await tokensStorage.get('refresh'),
+      refreshToken: await tokensStorage.get('refreshToken'),
     },
   );
 
-  await tokensStorage.set('access', data.accessToken);
+  await tokensStorage.set('accessToken', data.accessToken);
 };
 
 export default {

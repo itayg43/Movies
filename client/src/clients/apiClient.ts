@@ -13,7 +13,7 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   async config => {
-    const token = await tokensStorage.get('access');
+    const token = await tokensStorage.get('accessToken');
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -21,6 +21,7 @@ apiClient.interceptors.request.use(
 
     return config;
   },
+
   error => {
     return Promise.reject(error);
   },
@@ -30,6 +31,7 @@ apiClient.interceptors.response.use(
   res => {
     return res;
   },
+
   async err => {
     const originalConfig = err.config;
 
@@ -41,11 +43,11 @@ apiClient.interceptors.response.use(
           const {data} = await apiClient.post<{accessToken: string}>(
             '/auth/reissue-access-token',
             {
-              refreshToken: await tokensStorage.get('refresh'),
+              refreshToken: await tokensStorage.get('refreshToken'),
             },
           );
 
-          await tokensStorage.set('access', data.accessToken);
+          await tokensStorage.set('accessToken', data.accessToken);
 
           return apiClient(originalConfig);
         } catch (_error) {
