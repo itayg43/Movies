@@ -10,6 +10,10 @@ type LoginRegisterResponseData = {
   userTokens: UserTokens;
 };
 
+type ReissueTokenResponseData = {
+  accessToken: string;
+};
+
 const loginUser = async (loginFormData: LoginFormData) => {
   const {data} = await apiClient.post<LoginRegisterResponseData>(
     `${ApiRoute.Auth}/login`,
@@ -42,8 +46,20 @@ const logoutUser = async () => {
   await Promise.all([userStorage.remove(), tokensStorage.clearBoth()]);
 };
 
+const reissueUserAccessToken = async () => {
+  const {data} = await apiClient.post<ReissueTokenResponseData>(
+    `${ApiRoute.Auth}/reissue-access-token`,
+    {
+      refreshToken: await tokensStorage.get('refresh'),
+    },
+  );
+
+  await tokensStorage.set('access', data.accessToken);
+};
+
 export default {
   loginUser,
   registerUser,
   logoutUser,
+  reissueUserAccessToken,
 };
