@@ -24,9 +24,7 @@ const authSlice = createSlice({
         state.user = payload;
       })
       .addCase(authActions.loginUser.rejected, (state, {payload}) => {
-        if (payload) {
-          state.message = payload;
-        }
+        if (payload) state.message = payload;
       })
 
       // register
@@ -34,9 +32,7 @@ const authSlice = createSlice({
         state.user = payload;
       })
       .addCase(authActions.registerUser.rejected, (state, {payload}) => {
-        if (payload) {
-          state.message = payload;
-        }
+        if (payload) state.message = payload;
       })
 
       // logout
@@ -44,9 +40,7 @@ const authSlice = createSlice({
         state.user = null;
       })
       .addCase(authActions.logoutUser.rejected, (state, {payload}) => {
-        if (payload) {
-          state.message = payload;
-        }
+        if (payload) state.message = payload;
       });
   },
 });
