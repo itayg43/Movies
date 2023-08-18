@@ -1,10 +1,9 @@
-import {createAsyncThunk} from '@reduxjs/toolkit';
-
+import {definedCreateAsyncThunk} from '../store';
 import authService from '../../services/authService';
 import errorHandlerUtil from '../../utils/errorHandlerUtil';
 import {LoginFormData, RegisterFormData, User} from '../../types';
 
-const loginUser = createAsyncThunk<User, LoginFormData, {rejectValue: string}>(
+const loginUser = definedCreateAsyncThunk<User, LoginFormData>(
   'auth/loginUser',
   async (loginFormData, {rejectWithValue}) => {
     try {
@@ -16,20 +15,19 @@ const loginUser = createAsyncThunk<User, LoginFormData, {rejectValue: string}>(
   },
 );
 
-const registerUser = createAsyncThunk<
-  User,
-  RegisterFormData,
-  {rejectValue: string}
->('auth/registerUser', async (registerFormData, {rejectWithValue}) => {
-  try {
-    return await authService.registerUser(registerFormData);
-  } catch (error) {
-    const message = errorHandlerUtil.extractMessage(error);
-    return rejectWithValue(message);
-  }
-});
+const registerUser = definedCreateAsyncThunk<User, RegisterFormData>(
+  'auth/registerUser',
+  async (registerFormData, {rejectWithValue}) => {
+    try {
+      return await authService.registerUser(registerFormData);
+    } catch (error) {
+      const message = errorHandlerUtil.extractMessage(error);
+      return rejectWithValue(message);
+    }
+  },
+);
 
-const logoutUser = createAsyncThunk<undefined, void, {rejectValue: string}>(
+const logoutUser = definedCreateAsyncThunk<undefined, void>(
   'auth/logoutUser',
   async (_, {rejectWithValue}) => {
     try {
