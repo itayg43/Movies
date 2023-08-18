@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import authDataAccess from "./auth-data-access";
 import {
   InvalidCredentialsError,
@@ -13,8 +15,8 @@ const registerUser = async (name: string, email: string, password: string) => {
   const user = await authDataAccess.createUser(name, email, hashedPassword);
 
   return {
-    user,
-    tokens: authUtils.generateTokens({ id: user.id }),
+    user: _.omit(user, ["password"]),
+    userTokens: authUtils.generateTokens({ id: user.id }),
   };
 };
 
@@ -35,8 +37,8 @@ const loginUser = async (email: string, password: string) => {
   }
 
   return {
-    user,
-    tokens: authUtils.generateTokens({ id: user.id }),
+    user: _.omit(user, ["password"]),
+    userTokens: authUtils.generateTokens({ id: user.id }),
   };
 };
 
