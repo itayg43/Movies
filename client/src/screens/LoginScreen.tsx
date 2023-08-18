@@ -15,25 +15,18 @@ const LoginScreen = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
-  const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
-  const requestMessage = useAppSelector(selectAuthMessage);
+  const [loginRequestStatus, setLoginRequestStatus] =
+    useState<RequestStatus>('idle');
+  const loginRequestMessage = useAppSelector(selectAuthMessage);
 
-  const handleNavigation = useCallback(() => {
-    navigation.navigate('register');
-  }, [navigation]);
-
-  const handleDismissSnackbar = useCallback(() => {
-    setRequestStatus('idle');
-  }, [setRequestStatus]);
-
-  const handleSubmitForm = useCallback(
+  const handleSubmitLoginForm = useCallback(
     async (formData: LoginFormData) => {
       try {
-        setRequestStatus('loading');
+        setLoginRequestStatus('loading');
         await dispatch(authActions.loginUser(formData)).unwrap();
-        setRequestStatus('succeded');
+        setLoginRequestStatus('succeded');
       } catch (error) {
-        setRequestStatus('failed');
+        setLoginRequestStatus('failed');
       }
     },
     [dispatch],
@@ -42,18 +35,21 @@ const LoginScreen = () => {
   return (
     <>
       <SafeView contentContainerStyle={styles.container}>
-        <LoginForm onSubmit={handleSubmitForm} />
+        <LoginForm onSubmit={handleSubmitLoginForm} />
 
         <Pressable
           style={styles.navigationLinkContainer}
-          onPress={handleNavigation}>
+          onPress={() => navigation.navigate('register')}>
           <Text>Need to register? Press here!</Text>
         </Pressable>
       </SafeView>
 
-      {requestStatus === 'failed' && (
-        <Snackbar visible duration={3000} onDismiss={handleDismissSnackbar}>
-          {requestMessage}
+      {loginRequestStatus === 'failed' && (
+        <Snackbar
+          visible
+          duration={3000}
+          onDismiss={() => setLoginRequestStatus('idle')}>
+          {loginRequestMessage}
         </Snackbar>
       )}
     </>
