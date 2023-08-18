@@ -10,12 +10,15 @@ import FormTextInput from '../components/FormTextInput';
 
 type Props = {
   contentContainerStyle?: StyleProp<ViewStyle>;
-  isSubmitting: boolean;
   onSubmit: (formData: LoginFormData) => void;
 };
 
-const LoginForm = ({contentContainerStyle, isSubmitting, onSubmit}: Props) => {
-  const {control, handleSubmit} = useForm<LoginFormData>({
+const LoginForm = ({contentContainerStyle, onSubmit}: Props) => {
+  const {
+    control,
+    handleSubmit,
+    formState: {isSubmitting},
+  } = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
   });
 

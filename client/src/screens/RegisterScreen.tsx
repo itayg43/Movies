@@ -35,10 +35,7 @@ const RegisterScreen = () => {
   return (
     <>
       <SafeView contentContainerStyle={styles.container}>
-        <RegisterForm
-          isSubmitting={requestStatus === 'loading'}
-          onSubmit={handleSubmitForm}
-        />
+        <RegisterForm onSubmit={handleSubmitForm} />
       </SafeView>
 
       {requestStatus === 'failed' && (

@@ -42,10 +42,7 @@ const LoginScreen = () => {
   return (
     <>
       <SafeView contentContainerStyle={styles.container}>
-        <LoginForm
-          isSubmitting={requestStatus === 'loading'}
-          onSubmit={handleSubmitForm}
-        />
+        <LoginForm onSubmit={handleSubmitForm} />
 
         <Pressable
           style={styles.navigationLinkContainer}
