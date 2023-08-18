@@ -7,24 +7,21 @@ import {
   LoginUserInput,
   ReissueUserAccessTokenInput,
 } from "./auth-schemas";
-import { UserDtoMapper } from "./auth-dto";
-
-const userDtoMapper = new UserDtoMapper();
 
 const registerUser = async (
   req: Request<{}, {}, RegisterUserInput>,
   res: Response
 ) => {
   const { name, email, password } = req.body;
-  const { user, tokens } = await authService.registerUser(
+  const { user, userTokens } = await authService.registerUser(
     name,
     email,
     password
   );
 
   res.status(statusCode.created).json({
-    user: userDtoMapper.map(user),
-    userTokens: tokens,
+    user,
+    userTokens,
   });
 };
 
@@ -33,11 +30,11 @@ const loginUser = async (
   res: Response
 ) => {
   const { email, password } = req.body;
-  const { user, tokens } = await authService.loginUser(email, password);
+  const { user, userTokens } = await authService.loginUser(email, password);
 
   res.status(statusCode.ok).json({
-    user: userDtoMapper.map(user),
-    userTokens: tokens,
+    user,
+    userTokens,
   });
 };
 
@@ -48,7 +45,9 @@ const reissueUserAccessToken = async (
   const { refreshToken } = req.body;
   const accessToken = authService.reissueUserAccessToken(refreshToken);
 
-  res.status(statusCode.ok).json({ accessToken });
+  res.status(statusCode.ok).json({
+    accessToken,
+  });
 };
 
 export default {
