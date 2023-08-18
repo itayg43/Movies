@@ -19,25 +19,34 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(authActions.loginUser.fulfilled, (state, action) => {
-        state.user = action.payload;
+      // login
+      .addCase(authActions.loginUser.fulfilled, (state, {payload}) => {
+        state.user = payload;
       })
-      .addCase(authActions.loginUser.rejected, (state, action) => {
-        state.message = action.payload as string;
-      })
-
-      .addCase(authActions.registerUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-      })
-      .addCase(authActions.registerUser.rejected, (state, action) => {
-        state.message = action.payload as string;
+      .addCase(authActions.loginUser.rejected, (state, {payload}) => {
+        if (payload) {
+          state.message = payload;
+        }
       })
 
+      // register
+      .addCase(authActions.registerUser.fulfilled, (state, {payload}) => {
+        state.user = payload;
+      })
+      .addCase(authActions.registerUser.rejected, (state, {payload}) => {
+        if (payload) {
+          state.message = payload;
+        }
+      })
+
+      // logout
       .addCase(authActions.logoutUser.fulfilled, state => {
         state.user = null;
       })
-      .addCase(authActions.logoutUser.rejected, (state, action) => {
-        state.message = action.payload as string;
+      .addCase(authActions.logoutUser.rejected, (state, {payload}) => {
+        if (payload) {
+          state.message = payload;
+        }
       });
   },
 });
