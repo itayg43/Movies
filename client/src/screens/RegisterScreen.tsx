@@ -12,21 +12,18 @@ import RegisterForm from '../components/RegisterForm';
 const RegisterScreen = () => {
   const dispatch = useAppDispatch();
 
-  const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
-  const requestMessage = useAppSelector(selectAuthMessage);
+  const [registerRequestStatus, setRegisterRequestStatus] =
+    useState<RequestStatus>('idle');
+  const registerRequestMessage = useAppSelector(selectAuthMessage);
 
-  const handleDismissSnackbar = useCallback(() => {
-    setRequestStatus('idle');
-  }, [setRequestStatus]);
-
-  const handleSubmitForm = useCallback(
+  const handleSubmitRegisterForm = useCallback(
     async (formData: RegisterFormData) => {
       try {
-        setRequestStatus('loading');
+        setRegisterRequestStatus('loading');
         await dispatch(authActions.registerUser(formData)).unwrap();
-        setRequestStatus('succeded');
+        setRegisterRequestStatus('succeded');
       } catch (error) {
-        setRequestStatus('failed');
+        setRegisterRequestStatus('failed');
       }
     },
     [dispatch],
@@ -35,12 +32,15 @@ const RegisterScreen = () => {
   return (
     <>
       <SafeView contentContainerStyle={styles.container}>
-        <RegisterForm onSubmit={handleSubmitForm} />
+        <RegisterForm onSubmit={handleSubmitRegisterForm} />
       </SafeView>
 
-      {requestStatus === 'failed' && (
-        <Snackbar visible duration={3000} onDismiss={handleDismissSnackbar}>
-          {requestMessage}
+      {registerRequestStatus === 'failed' && (
+        <Snackbar
+          visible
+          duration={3000}
+          onDismiss={() => setRegisterRequestStatus('idle')}>
+          {registerRequestMessage}
         </Snackbar>
       )}
     </>
