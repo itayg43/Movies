@@ -1,7 +1,15 @@
-import {definedCreateAsyncThunk} from '../store';
+import {createAsyncThunk} from '@reduxjs/toolkit';
+
+import {RootState, AppDispatch} from '../store';
 import authService from '../../services/authService';
 import errorHandlerUtil from '../../utils/errorHandlerUtil';
 import {LoginFormData, RegisterFormData, User} from '../../types';
+
+export const definedCreateAsyncThunk = createAsyncThunk.withTypes<{
+  state: RootState;
+  dispatch: AppDispatch;
+  rejectValue: string;
+}>();
 
 const loginUser = definedCreateAsyncThunk<User, LoginFormData>(
   'auth/loginUser',
