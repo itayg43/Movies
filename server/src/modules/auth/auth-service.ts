@@ -6,29 +6,40 @@ import {
   ExpiredRefreshTokenError,
   InvalidRefreshTokenError,
 } from "./auth-errors";
+import {
+  LoginUserInput,
+  RegisterUserInput,
+  ReissueUserAccessTokenInput,
+} from "./auth-schemas";
 import bcryptUtils from "./utils/bcrypt-utils";
 import jwtUtils from "./utils/jwt-utils";
 import authUtils from "./auth-utils";
 
-const registerUser = async (name: string, email: string, password: string) => {
-  const hashedPassword = await bcryptUtils.hashPassword(password);
-  const user = await authDataAccess.createUser(name, email, hashedPassword);
+const registerUser = async (registerInput: RegisterUserInput) => {
+  const hashedPassword = await bcryptUtils.hashPassword(registerInput.password);
+  const user = await authDataAccess.createUser(
+    registerInput.name,
+    registerInput.password,
+    hashedPassword
+  );
 
   return {
-    user: _.omit(user, ["password"]),
-    userTokens: authUtils.generateTokens({ id: user.id }),
+    ..._.omit(user, ["password"]),
+    tokens: authUtils.generateTokens({
+      id: user.id,
+    }),
   };
 };
 
-const loginUser = async (email: string, password: string) => {
-  const user = await authDataAccess.findUserByEmail(email);
+const loginUser = async (loginInput: LoginUserInput) => {
+  const user = await authDataAccess.findUserByEmail(loginInput.email);
 
   if (!user) {
     throw new InvalidCredentialsError();
   }
 
   const isValidPassword = await bcryptUtils.validatePassword(
-    password,
+    loginInput.password,
     user.password
   );
 
@@ -37,14 +48,16 @@ const loginUser = async (email: string, password: string) => {
   }
 
   return {
-    user: _.omit(user, ["password"]),
-    userTokens: authUtils.generateTokens({ id: user.id }),
+    ..._.omit(user, ["password"]),
+    tokens: authUtils.generateTokens({
+      id: user.id,
+    }),
   };
 };
 
-const reissueUserAccessToken = (refreshToken: string) => {
+const reissueUserAccessToken = (reissueInput: ReissueUserAccessTokenInput) => {
   const { isValid, isExpired, payload } = jwtUtils.validateToken(
-    refreshToken,
+    reissueInput.refreshToken,
     process.env.REFRESH_TOKEN_PUBLIC_KEY as string
   );
 
@@ -57,7 +70,9 @@ const reissueUserAccessToken = (refreshToken: string) => {
   }
 
   const p = payload as any;
-  return authUtils.generateAccessToken({ id: p.id });
+  return authUtils.generateAccessToken({
+    id: p.id,
+  });
 };
 
 export default {

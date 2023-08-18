@@ -12,16 +12,10 @@ const registerUser = async (
   req: Request<{}, {}, RegisterUserInput>,
   res: Response
 ) => {
-  const { name, email, password } = req.body;
-  const { user, userTokens } = await authService.registerUser(
-    name,
-    email,
-    password
-  );
+  const user = await authService.registerUser(req.body);
 
   res.status(statusCode.created).json({
     user,
-    userTokens,
   });
 };
 
@@ -29,12 +23,10 @@ const loginUser = async (
   req: Request<{}, {}, LoginUserInput>,
   res: Response
 ) => {
-  const { email, password } = req.body;
-  const { user, userTokens } = await authService.loginUser(email, password);
+  const user = await authService.loginUser(req.body);
 
   res.status(statusCode.ok).json({
     user,
-    userTokens,
   });
 };
 
@@ -42,8 +34,7 @@ const reissueUserAccessToken = async (
   req: Request<{}, {}, ReissueUserAccessTokenInput>,
   res: Response
 ) => {
-  const { refreshToken } = req.body;
-  const accessToken = authService.reissueUserAccessToken(refreshToken);
+  const accessToken = authService.reissueUserAccessToken(req.body);
 
   res.status(statusCode.ok).json({
     accessToken,
