@@ -22,7 +22,7 @@ const loginUser = async (loginFormData: LoginFormData) => {
 const registerUser = async (registerFormData: RegisterFormData) => {
   const {data} = await apiClient.post<LoginRegisterResponseData>(
     `${ApiRoute.Auth}/register`,
-    _.omit(registerFormData, ['confirmPassword']),
+    registerFormData,
   );
 
   await tokensStorage.setBoth(data.tokens);
