@@ -2,8 +2,7 @@ import React from 'react';
 
 import {useAppSelector} from './hooks';
 import {selectAuthUser} from './redux/auth/authSelectors';
-import AuthStackNavigator from './navigators/AuthStackNavigator';
-import AppBottomTabsNavigator from './navigators/AppBottomTabsNavigator';
+import {AuthStackNavigator, AppBottomTabsNavigator} from './navigators';
 
 const App = () => {
   const user = useAppSelector(selectAuthUser);
