@@ -14,9 +14,9 @@ const loginUser = async (loginFormData: LoginFormData) => {
     loginFormData,
   );
 
-  await tokensStorage.setBoth(data.userTokens);
+  await tokensStorage.setBoth(data.tokens);
 
-  return data.user;
+  return _.omit(data, ['tokens']);
 };
 
 const registerUser = async (registerFormData: RegisterFormData) => {
@@ -25,9 +25,9 @@ const registerUser = async (registerFormData: RegisterFormData) => {
     _.omit(registerFormData, ['confirmPassword']),
   );
 
-  await tokensStorage.setBoth(data.userTokens);
+  await tokensStorage.setBoth(data.tokens);
 
-  return data.user;
+  return _.omit(data, ['tokens']);
 };
 
 const logoutUser = async () => {

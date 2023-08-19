@@ -23,9 +23,8 @@ export type UserTokens = {
 
 export type UserTokenType = 'accessToken' | 'refreshToken';
 
-export type LoginRegisterResponseData = {
-  user: User;
-  userTokens: UserTokens;
+export type LoginRegisterResponseData = User & {
+  tokens: UserTokens;
 };
 
 export type ReissueTokenResponseData = {

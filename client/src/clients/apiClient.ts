@@ -44,12 +44,9 @@ apiClient.interceptors.response.use(
       originalConfig._retry = true;
 
       try {
-        const {data} = await apiClient.post<ReissueTokenResponseData>(
-          `${ApiRoute.Auth}/reissue-access-token`,
-          {refreshToken: await tokensStorage.get('refreshToken')},
-        );
+        const token = await reissueUserAccessToken();
 
-        await tokensStorage.set('accessToken', data.accessToken);
+        await tokensStorage.set('accessToken', token);
 
         return apiClient(originalConfig);
       } catch (_error) {
@@ -60,5 +57,14 @@ apiClient.interceptors.response.use(
     return Promise.reject(err);
   },
 );
+
+async function reissueUserAccessToken() {
+  const {data} = await apiClient.post<ReissueTokenResponseData>(
+    `${ApiRoute.Auth}/reissue-access-token`,
+    {refreshToken: await tokensStorage.get('refreshToken')},
+  );
+
+  return data.accessToken;
+}
 
 export default apiClient;
