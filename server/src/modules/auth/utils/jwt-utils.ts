@@ -18,8 +18,6 @@ const validateToken = (token: string, publicKey: string) => {
       payload,
     };
   } catch (error) {
-    console.error(error);
-
     return {
       isValid: false,
       isExpired: error instanceof jwt.TokenExpiredError,
