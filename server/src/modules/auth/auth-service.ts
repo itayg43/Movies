@@ -16,12 +16,10 @@ import jwtUtils from "./utils/jwt-utils";
 import authUtils from "./auth-utils";
 
 const registerUser = async (registerInput: RegisterUserInput) => {
-  const hashedPassword = await bcryptUtils.hashPassword(registerInput.password);
-  const user = await authDataAccess.createUser(
-    registerInput.name,
-    registerInput.password,
-    hashedPassword
-  );
+  const { name, email, password } = registerInput;
+
+  const hashedPassword = await bcryptUtils.hashPassword(password);
+  const user = await authDataAccess.createUser(name, email, hashedPassword);
 
   return {
     ..._.omit(user, ["password"]),
@@ -32,14 +30,16 @@ const registerUser = async (registerInput: RegisterUserInput) => {
 };
 
 const loginUser = async (loginInput: LoginUserInput) => {
-  const user = await authDataAccess.findUserByEmail(loginInput.email);
+  const { email, password } = loginInput;
+
+  const user = await authDataAccess.findUserByEmail(email);
 
   if (!user) {
     throw new InvalidCredentialsError();
   }
 
   const isValidPassword = await bcryptUtils.validatePassword(
-    loginInput.password,
+    password,
     user.password
   );
 
@@ -56,8 +56,10 @@ const loginUser = async (loginInput: LoginUserInput) => {
 };
 
 const reissueUserAccessToken = (reissueInput: ReissueUserAccessTokenInput) => {
+  const { refreshToken } = reissueInput;
+
   const { isValid, isExpired, payload } = jwtUtils.validateToken(
-    reissueInput.refreshToken,
+    refreshToken,
     process.env.REFRESH_TOKEN_PUBLIC_KEY as string
   );
 
