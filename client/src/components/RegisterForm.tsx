@@ -22,8 +22,8 @@ const RegisterForm = ({contentContainerStyle, onSubmit}: Props) => {
     resolver: zodResolver(registerFormSchema),
   });
 
-  const [hidePassword, setHidePassword] = useState<boolean>(true);
-  const [hideConfirmPassword, setHideConfirmPassword] = useState<boolean>(true);
+  const [hidePassword, setHidePassword] = useState(true);
+  const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
 
   return (
     <View style={contentContainerStyle}>

@@ -22,7 +22,7 @@ const LoginForm = ({contentContainerStyle, onSubmit}: Props) => {
     resolver: zodResolver(loginFormSchema),
   });
 
-  const [hidePassword, setHidePassword] = useState<boolean>(true);
+  const [hidePassword, setHidePassword] = useState(true);
 
   return (
     <View style={contentContainerStyle}>
