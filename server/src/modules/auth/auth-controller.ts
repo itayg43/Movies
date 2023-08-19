@@ -14,9 +14,7 @@ const registerUser = async (
 ) => {
   const user = await authService.registerUser(req.body);
 
-  res.status(statusCode.created).json({
-    user,
-  });
+  res.status(statusCode.created).json(user);
 };
 
 const loginUser = async (
@@ -25,9 +23,7 @@ const loginUser = async (
 ) => {
   const user = await authService.loginUser(req.body);
 
-  res.status(statusCode.ok).json({
-    user,
-  });
+  res.status(statusCode.ok).json(user);
 };
 
 const reissueUserAccessToken = async (
