@@ -13,6 +13,13 @@ export const registerUserSchema = object({
     password: string({
       required_error: "Password is required",
     }).min(4, "Password should be at least 4 characters long"),
+
+    confirmPassword: string({
+      required_error: "Confirm password is required",
+    }),
+  }).refine((formData) => formData.password === formData.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Password dont match",
   }),
 });
 export type RegisterUserInput = TypeOf<typeof registerUserSchema>["body"];
