@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import {useForm} from 'react-hook-form';
@@ -24,10 +24,6 @@ const LoginForm = ({contentContainerStyle, onSubmit}: Props) => {
 
   const [hidePassword, setHidePassword] = useState<boolean>(true);
 
-  const handleToggleHidePassword = useCallback(() => {
-    setHidePassword(currState => !currState);
-  }, [setHidePassword]);
-
   return (
     <View style={contentContainerStyle}>
       {/** email */}
@@ -50,7 +46,12 @@ const LoginForm = ({contentContainerStyle, onSubmit}: Props) => {
         label="Password"
         autoCapitalize="none"
         secureTextEntry={hidePassword}
-        right={<TextInput.Icon icon="eye" onPress={handleToggleHidePassword} />}
+        right={
+          <TextInput.Icon
+            icon="eye"
+            onPress={() => setHidePassword(currState => !currState)}
+          />
+        }
       />
 
       {/** submit */}
