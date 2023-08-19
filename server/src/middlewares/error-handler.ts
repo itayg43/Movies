@@ -11,6 +11,7 @@ const errorHandler = async (
   next: NextFunction
 ) => {
   console.error(error);
+
   const status = error.statusCode ?? statusCode.internal;
   const message = error.message ?? DEFAULT_ERROR_MESSAGE;
 
