@@ -24,7 +24,7 @@ const loginUser = async (loginFormData: LoginFormData) => {
   setApiClientAuthorizationHeader(tokens.accessToken);
 
   const user = _.omit(data, ['tokens']);
-  await userStorage.set(user);
+  // await userStorage.set(user);
 
   return user;
 };
@@ -40,7 +40,7 @@ const registerUser = async (registerFormData: RegisterFormData) => {
   setApiClientAuthorizationHeader(tokens.accessToken);
 
   const user = _.omit(data, ['tokens']);
-  await userStorage.set(user);
+  // await userStorage.set(user);
 
   return user;
 };
@@ -48,7 +48,7 @@ const registerUser = async (registerFormData: RegisterFormData) => {
 const logoutUser = async () => {
   await refreshTokenStorage.remove();
   removeApiClientAuthorizationHeader();
-  await userStorage.remove();
+  // await userStorage.remove();
 };
 
 export default {
