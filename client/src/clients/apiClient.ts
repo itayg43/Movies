@@ -12,23 +12,12 @@ const apiClient = axios.create({
   baseURL: `${BACKEND_BASE_URL}/api`,
 });
 
-export const setApiClientAuthorizationHeader = (token: string) => {
-  apiClient.defaults.headers.common.Authorization = `Bearer ${token}`;
-};
-
-export const removeApiClientAuthorizationHeader = () => {
-  delete apiClient.defaults.headers.common.Authorization;
-};
-
 apiClient.interceptors.request.use(
   async config => {
-    if (config.headers.Authorization) {
-      return config;
-    }
-
     const token = await tokenStorage.get('accessToken');
+
     if (token) {
-      setApiClientAuthorizationHeader(token);
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
@@ -53,7 +42,7 @@ apiClient.interceptors.response.use(
       try {
         const token = await reissueUserAccessToken();
 
-        setApiClientAuthorizationHeader(token);
+        await tokenStorage.set('accessToken', token);
 
         return apiClient(originalConfig);
       } catch (_error) {
