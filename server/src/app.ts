@@ -4,6 +4,7 @@ import helmet from "helmet";
 
 import { statusCode } from "./constants";
 import requestLogger from "./middlewares/request-logger";
+import validateAccessToken from "./middlewares/validate-access-token";
 import errorHandler from "./middlewares/error-handler";
 import apiRouter from "./routers/api-router";
 
@@ -18,6 +19,15 @@ app.use(requestLogger);
 app.get("/health", (_: Request, res: Response) => {
   res.sendStatus(statusCode.ok);
 });
+
+app.get(
+  "/api/protected",
+  [validateAccessToken],
+  (_: Request, res: Response) => {
+    res.sendStatus(statusCode.ok);
+  }
+);
+
 app.use("/api", apiRouter);
 
 app.use(errorHandler);
