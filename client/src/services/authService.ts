@@ -10,7 +10,7 @@ import {
   RegisterFormData,
   LoginRegisterResponseData,
 } from '../types';
-import refreshTokenStorage from '../storage/refreshTokenStorage';
+import tokenStorage from '../storage/tokenStorage';
 
 const loginUser = async (loginFormData: LoginFormData) => {
   const {data} = await apiClient.post<LoginRegisterResponseData>(
@@ -19,7 +19,7 @@ const loginUser = async (loginFormData: LoginFormData) => {
   );
 
   const {tokens} = data;
-  await refreshTokenStorage.set(tokens.refreshToken);
+  await tokenStorage.setBoth(tokens);
   setApiClientAuthorizationHeader(tokens.accessToken);
 
   return _.omit(data, ['tokens']);
@@ -32,14 +32,14 @@ const registerUser = async (registerFormData: RegisterFormData) => {
   );
 
   const {tokens} = data;
-  await refreshTokenStorage.set(tokens.refreshToken);
+  await tokenStorage.setBoth(tokens);
   setApiClientAuthorizationHeader(tokens.accessToken);
 
   return _.omit(data, ['tokens']);
 };
 
 const logoutUser = async () => {
-  await refreshTokenStorage.remove();
+  await tokenStorage.remove();
   removeApiClientAuthorizationHeader();
 };
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import {BACKEND_BASE_URL} from '@env';
-import refreshTokenStorage from '../storage/refreshTokenStorage';
+import tokenStorage from '../storage/tokenStorage';
 import {ReissueTokenResponseData} from '../types';
 
 export enum ApiRoute {
@@ -49,7 +49,7 @@ apiClient.interceptors.response.use(
 async function reissueUserAccessToken() {
   const {data} = await apiClient.post<ReissueTokenResponseData>(
     `${ApiRoute.Auth}/reissue-access-token`,
-    {refreshToken: await refreshTokenStorage.get()},
+    {refreshToken: await tokenStorage.get('refreshToken')},
   );
 
   return data.accessToken;
