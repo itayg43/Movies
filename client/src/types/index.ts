@@ -25,6 +25,6 @@ export type LoginRegisterResponseData = User & {
   tokens: UserTokens;
 };
 
-export type ReissueTokenResponseData = {
+export type ReissueAccessTokenResponseData = {
   accessToken: string;
 };

@@ -2,7 +2,9 @@ import axios from 'axios';
 
 import {BACKEND_BASE_URL} from '@env';
 import tokenStorage from '../storage/tokenStorage';
-import {ReissueTokenResponseData} from '../types';
+import {ReissueAccessTokenResponseData} from '../types';
+import store from '../redux/store';
+import authActions from '../redux/auth/authActions';
 
 export enum ApiRoute {
   Auth = '/auth',
@@ -22,7 +24,6 @@ apiClient.interceptors.request.use(
 
     return config;
   },
-
   error => {
     return Promise.reject(error);
   },
@@ -32,7 +33,6 @@ apiClient.interceptors.response.use(
   res => {
     return res;
   },
-
   async err => {
     const originalConfig = err.config;
 
@@ -45,8 +45,8 @@ apiClient.interceptors.response.use(
         await tokenStorage.set('accessToken', token);
 
         return apiClient(originalConfig);
-      } catch (_error) {
-        return Promise.reject(_error);
+      } catch (error) {
+        store.dispatch(authActions.logoutUser());
       }
     }
 
@@ -55,8 +55,8 @@ apiClient.interceptors.response.use(
 );
 
 async function reissueUserAccessToken() {
-  const {data} = await apiClient.post<ReissueTokenResponseData>(
-    `${ApiRoute.Auth}/reissue-access-token`,
+  const {data} = await axios.post<ReissueAccessTokenResponseData>(
+    `${BACKEND_BASE_URL}/api/auth/reissue-access-token`,
     {refreshToken: await tokenStorage.get('refreshToken')},
   );
 
