@@ -4,7 +4,7 @@ import {Snackbar} from 'react-native-paper';
 
 import {useAppDispatch, useAppSelector} from '../hooks';
 import authActions from '../redux/auth/authActions';
-import {selectAuthMessage} from '../redux/auth/authSelectors';
+import {selectAuthErrorMessage} from '../redux/auth/authSelectors';
 import {RegisterFormData, RequestStatus} from '../types';
 import SafeView from '../components/SafeView';
 import RegisterForm from '../components/RegisterForm';
@@ -14,7 +14,7 @@ const RegisterScreen = () => {
 
   const [registerRequestStatus, setRegisterRequestStatus] =
     useState<RequestStatus>('idle');
-  const registerRequestMessage = useAppSelector(selectAuthMessage);
+  const registerRequestErrorMessage = useAppSelector(selectAuthErrorMessage);
 
   const handleSubmitRegisterForm = useCallback(
     async (formData: RegisterFormData) => {
@@ -40,7 +40,7 @@ const RegisterScreen = () => {
           visible
           duration={3000}
           onDismiss={() => setRegisterRequestStatus('idle')}>
-          {registerRequestMessage}
+          {registerRequestErrorMessage}
         </Snackbar>
       )}
     </>

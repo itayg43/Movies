@@ -5,12 +5,12 @@ import authActions from './authActions';
 
 type AuthState = {
   user: User | null;
-  message: string;
+  errorMessage: string;
 };
 
 const initialState: AuthState = {
   user: null,
-  message: '',
+  errorMessage: '',
 };
 
 const authSlice = createSlice({
@@ -24,7 +24,7 @@ const authSlice = createSlice({
         state.user = payload;
       })
       .addCase(authActions.loginUser.rejected, (state, {payload}) => {
-        if (payload) state.message = payload;
+        if (payload) state.errorMessage = payload;
       })
 
       // register
@@ -32,7 +32,7 @@ const authSlice = createSlice({
         state.user = payload;
       })
       .addCase(authActions.registerUser.rejected, (state, {payload}) => {
-        if (payload) state.message = payload;
+        if (payload) state.errorMessage = payload;
       })
 
       // logout
@@ -40,7 +40,7 @@ const authSlice = createSlice({
         state.user = null;
       })
       .addCase(authActions.logoutUser.rejected, (state, {payload}) => {
-        if (payload) state.message = payload;
+        if (payload) state.errorMessage = payload;
       });
   },
 });

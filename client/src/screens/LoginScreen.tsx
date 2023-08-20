@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '../hooks';
 import {RequestStatus, LoginFormData} from '../types';
 import authActions from '../redux/auth/authActions';
-import {selectAuthMessage} from '../redux/auth/authSelectors';
+import {selectAuthErrorMessage} from '../redux/auth/authSelectors';
 import {LoginScreenNavigationProp} from '../navigators/AuthStackNavigator';
 import SafeView from '../components/SafeView';
 import LoginForm from '../components/LoginForm';
@@ -17,7 +17,7 @@ const LoginScreen = () => {
 
   const [loginRequestStatus, setLoginRequestStatus] =
     useState<RequestStatus>('idle');
-  const loginRequestMessage = useAppSelector(selectAuthMessage);
+  const loginRequestErrorMessage = useAppSelector(selectAuthErrorMessage);
 
   const handleSubmitLoginForm = useCallback(
     async (formData: LoginFormData) => {
@@ -49,7 +49,7 @@ const LoginScreen = () => {
           visible
           duration={3000}
           onDismiss={() => setLoginRequestStatus('idle')}>
-          {loginRequestMessage}
+          {loginRequestErrorMessage}
         </Snackbar>
       )}
     </>
