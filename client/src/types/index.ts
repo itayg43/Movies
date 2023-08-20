@@ -21,8 +21,6 @@ export type UserTokens = {
   refreshToken: string;
 };
 
-export type UserTokenType = 'accessToken' | 'refreshToken';
-
 export type LoginRegisterResponseData = User & {
   tokens: UserTokens;
 };
