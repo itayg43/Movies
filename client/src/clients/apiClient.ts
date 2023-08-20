@@ -12,26 +12,14 @@ const apiClient = axios.create({
   baseURL: `${BACKEND_BASE_URL}/api`,
 });
 
-// interceptors
+export const setApiClientAuthorizationHeader = (token: string) => {
+  apiClient.defaults.headers.common.Authorization = `Bearer ${token}`;
+};
 
-// request
-apiClient.interceptors.request.use(
-  async config => {
-    const token = await tokensStorage.get('accessToken');
+export const removeApiClientAuthorizationHeader = () => {
+  delete apiClient.defaults.headers.common.Authorization;
+};
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-
-  error => {
-    return Promise.reject(error);
-  },
-);
-
-// response
 apiClient.interceptors.response.use(
   res => {
     return res;
@@ -47,6 +35,7 @@ apiClient.interceptors.response.use(
         const token = await reissueUserAccessToken();
 
         await tokensStorage.set('accessToken', token);
+        setApiClientAuthorizationHeader(token);
 
         return apiClient(originalConfig);
       } catch (_error) {

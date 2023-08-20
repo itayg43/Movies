@@ -1,6 +1,10 @@
 import _ from 'lodash';
 
-import apiClient, {ApiRoute} from '../clients/apiClient';
+import apiClient, {
+  ApiRoute,
+  setApiClientAuthorizationHeader,
+  removeApiClientAuthorizationHeader,
+} from '../clients/apiClient';
 import tokensStorage from '../storage/tokensStorage';
 import {
   LoginFormData,
@@ -14,7 +18,9 @@ const loginUser = async (loginFormData: LoginFormData) => {
     loginFormData,
   );
 
-  await tokensStorage.setBoth(data.tokens);
+  const {tokens} = data;
+  await tokensStorage.setBoth(tokens);
+  setApiClientAuthorizationHeader(tokens.accessToken);
 
   return _.omit(data, ['tokens']);
 };
@@ -25,13 +31,16 @@ const registerUser = async (registerFormData: RegisterFormData) => {
     registerFormData,
   );
 
-  await tokensStorage.setBoth(data.tokens);
+  const {tokens} = data;
+  await tokensStorage.setBoth(tokens);
+  setApiClientAuthorizationHeader(tokens.accessToken);
 
   return _.omit(data, ['tokens']);
 };
 
 const logoutUser = async () => {
   await tokensStorage.clearBoth();
+  removeApiClientAuthorizationHeader();
 };
 
 export default {
