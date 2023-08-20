@@ -11,6 +11,7 @@ import {
   LoginRegisterResponseData,
 } from '../types';
 import refreshTokenStorage from '../storage/refreshTokenStorage';
+import userStorage from '../storage/userStorage';
 
 const loginUser = async (loginFormData: LoginFormData) => {
   const {data} = await apiClient.post<LoginRegisterResponseData>(
@@ -22,7 +23,10 @@ const loginUser = async (loginFormData: LoginFormData) => {
   await refreshTokenStorage.set(tokens.refreshToken);
   setApiClientAuthorizationHeader(tokens.accessToken);
 
-  return _.omit(data, ['tokens']);
+  const user = _.omit(data, ['tokens']);
+  await userStorage.set(user);
+
+  return user;
 };
 
 const registerUser = async (registerFormData: RegisterFormData) => {
@@ -35,12 +39,16 @@ const registerUser = async (registerFormData: RegisterFormData) => {
   await refreshTokenStorage.set(tokens.refreshToken);
   setApiClientAuthorizationHeader(tokens.accessToken);
 
-  return _.omit(data, ['tokens']);
+  const user = _.omit(data, ['tokens']);
+  await userStorage.set(user);
+
+  return user;
 };
 
 const logoutUser = async () => {
   await refreshTokenStorage.remove();
   removeApiClientAuthorizationHeader();
+  await userStorage.remove();
 };
 
 export default {
