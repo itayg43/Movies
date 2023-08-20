@@ -3,7 +3,6 @@ import axios from 'axios';
 import {BACKEND_BASE_URL} from '@env';
 import tokenStorage from '../storage/tokenStorage';
 import {ReissueAccessTokenResponseData} from '../types';
-import store from '../redux/store';
 import authActions from '../redux/auth/authActions';
 
 export enum ApiRoute {
@@ -13,6 +12,11 @@ export enum ApiRoute {
 const apiClient = axios.create({
   baseURL: `${BACKEND_BASE_URL}/api`,
 });
+
+let dispatch: any;
+export const injectStoreDispatch = (_dispatch: any) => {
+  dispatch = _dispatch;
+};
 
 apiClient.interceptors.request.use(
   async config => {
@@ -46,7 +50,7 @@ apiClient.interceptors.response.use(
 
         return apiClient(originalConfig);
       } catch (error) {
-        store.dispatch(authActions.logoutUser());
+        dispatch(authActions.logoutUser());
       }
     }
 

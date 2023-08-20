@@ -9,6 +9,9 @@ import {PersistGate} from 'redux-persist/integration/react';
 import App from './src/App';
 import {name as appName} from './app.json';
 import store, {persistedStore} from './src/redux/store';
+import {injectStoreDispatch} from './src/clients/apiClient';
+
+injectStoreDispatch(store.dispatch);
 
 const theme = {
   ...DefaultTheme,
