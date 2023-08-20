@@ -20,6 +20,25 @@ export const removeApiClientAuthorizationHeader = () => {
   delete apiClient.defaults.headers.common.Authorization;
 };
 
+apiClient.interceptors.request.use(
+  async config => {
+    if (config.headers.Authorization) {
+      return config;
+    }
+
+    const token = await tokenStorage.get('accessToken');
+    if (token) {
+      setApiClientAuthorizationHeader(token);
+    }
+
+    return config;
+  },
+
+  error => {
+    return Promise.reject(error);
+  },
+);
+
 apiClient.interceptors.response.use(
   res => {
     return res;
