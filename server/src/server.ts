@@ -43,6 +43,12 @@ if (!process.env.REFRESH_TOKEN_TTL) {
   process.exit(1);
 }
 
+// tmdb access token
+if (!process.env.TMDB_ACCESS_TOKEN) {
+  console.log("TMDB_ACCESS_TOKEN was not provided");
+  process.exit(1);
+}
+
 const port = parseInt(process.env.PORT);
 const server = http.createServer(app);
 
