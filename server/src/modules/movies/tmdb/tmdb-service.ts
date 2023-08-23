@@ -26,9 +26,9 @@ type ResponseData = {
   total_results: number;
 };
 
-const getPopularMovies = async () => {
+const getMoviesByCategory = async (category: "popular" | "top_rated") => {
   const { data } = await tmdbClient.get<ResponseData>(
-    "/movie/popular?language=en-US&page=1"
+    `/movie/${category}?language=en-US&page=1`
   );
 
   return data.results.map(
@@ -37,5 +37,5 @@ const getPopularMovies = async () => {
 };
 
 export default {
-  getPopularMovies,
+  getMoviesByCategory,
 };

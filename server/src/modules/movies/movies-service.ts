@@ -8,7 +8,7 @@ const getMovies = async () => {
     return cachedMovies;
   }
 
-  const movies = await tmdbService.getPopularMovies();
+  const movies = await tmdbService.getMoviesByCategory("popular");
 
   await moviesCacheAccess.setMovies(movies);
 
