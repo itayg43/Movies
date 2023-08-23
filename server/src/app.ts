@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
+import compression from "compression";
 import { createClient } from "redis";
 import { RedisClientType } from "@redis/client";
 
@@ -24,6 +25,7 @@ export let redisClient: RedisClientType;
 
 app.use(helmet());
 app.use(cors());
+app.use(compression());
 app.use(express.json());
 
 app.use(requestLogger);
