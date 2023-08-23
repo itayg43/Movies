@@ -1,20 +1,22 @@
+import _ from "lodash";
+
 import tmdbClient from "./tmdb-client";
 
 export type Movie = {
   adult: boolean;
-  backdrop_path: string;
-  genre_ids: number[];
+  backdropPath: string;
+  genreIds: number[];
   id: number;
-  original_language: string;
-  original_title: string;
+  originalLanguage: string;
+  originalTitle: string;
   overview: string;
   popularity: number;
-  poster_path: string;
-  release_date: string;
+  posterPath: string;
+  releaseDate: string;
   title: string;
   video: false;
-  vote_average: number;
-  vote_count: number;
+  voteAverage: number;
+  voteCount: number;
 };
 
 type ResponseData = {
@@ -29,7 +31,9 @@ const getPopularMovies = async () => {
     "/movie/popular?language=en-US&page=1"
   );
 
-  return data.results;
+  return data.results.map(
+    (item) => _.mapKeys(item, (v, key) => _.camelCase(key)) as Movie
+  );
 };
 
 export default {
