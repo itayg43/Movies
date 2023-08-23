@@ -1,23 +1,32 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
-import {Button} from 'react-native-paper';
 
 import {useAppDispatch} from '../hooks';
-import authActions from '../redux/auth/authActions';
+import moviesActions from '../redux/movies/moviesActions';
+import {RequestStatus} from '../types';
 import SafeView from '../components/SafeView';
 
 const MoviesScreen = () => {
   const dispatch = useAppDispatch();
 
-  const handleLogoutPress = useCallback(async () => {
-    dispatch(authActions.logoutUser());
+  const [getMoviesRequestStatus, setGetMoviesRequestStatus] =
+    useState<RequestStatus>('idle');
+
+  const handleGetMovies = useCallback(async () => {
+    try {
+      setGetMoviesRequestStatus('loading');
+      await dispatch(moviesActions.getMovies()).unwrap();
+      setGetMoviesRequestStatus('succeded');
+    } catch (error) {
+      setGetMoviesRequestStatus('failed');
+    }
   }, [dispatch]);
 
-  return (
-    <SafeView contentContainerStyle={styles.container}>
-      <Button onPress={handleLogoutPress}>Logout</Button>
-    </SafeView>
-  );
+  useEffect(() => {
+    handleGetMovies();
+  }, [handleGetMovies]);
+
+  return <SafeView contentContainerStyle={styles.container}></SafeView>;
 };
 
 export default MoviesScreen;

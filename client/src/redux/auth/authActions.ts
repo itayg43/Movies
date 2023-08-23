@@ -5,7 +5,7 @@ import authService from '../../services/authService';
 import errorHandlerUtil from '../../utils/errorHandlerUtil';
 import {LoginFormData, RegisterFormData, User} from '../../types';
 
-export const definedCreateAsyncThunk = createAsyncThunk.withTypes<{
+const definedCreateAsyncThunk = createAsyncThunk.withTypes<{
   state: RootState;
   dispatch: AppDispatch;
   rejectValue: string;
