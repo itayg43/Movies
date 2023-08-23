@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import _ from "lodash";
 
 import tmdbClient from "./tmdb-client";
@@ -27,13 +28,19 @@ type ResponseData = {
 };
 
 const getMoviesByCategory = async (category: "popular" | "top_rated") => {
-  const { data } = await tmdbClient.get<ResponseData>(
-    `/movie/${category}?language=en-US&page=1`
-  );
+  try {
+    const { data } = await tmdbClient.get<ResponseData>(
+      `/movie/${category}?language=en-US&page=1`
+    );
 
-  return data.results.map(
-    (item) => _.mapKeys(item, (v, key) => _.camelCase(key)) as Movie
-  );
+    return data.results.map(
+      (item) => _.mapKeys(item, (v, key) => _.camelCase(key)) as Movie
+    );
+  } catch (error) {
+    console.error(error instanceof AxiosError ? error.response?.data : error);
+
+    throw new Error(`Couldn't get movies for the category: ${category}`);
+  }
 };
 
 export default {
