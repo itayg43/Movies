@@ -8,11 +8,12 @@ const THUMBNAIL_BASR_URL = 'https://image.tmdb.org/t/p/w500';
 
 type Props = {
   item: Movie;
+  onPress: () => void;
 };
 
-const MovieListItem = ({item}: Props) => {
+const MovieListItem = ({item, onPress}: Props) => {
   return (
-    <Card mode="outlined">
+    <Card mode="outlined" onPress={onPress}>
       <Card.Cover source={{uri: `${THUMBNAIL_BASR_URL}${item.backdropPath}`}} />
 
       <Card.Title title={item.title} titleStyle={styles.title} />

@@ -7,6 +7,7 @@ import MovieListItem from './MovieListItem';
 type Props = {
   contentContainerStyle?: StyleProp<ViewStyle>;
   data: Movie[];
+  onPress: (id: number) => void;
   listHeaderComponent?: React.ReactElement;
   listEmptyComponent?: React.ReactElement;
 };
@@ -14,6 +15,7 @@ type Props = {
 const MovieList = ({
   contentContainerStyle,
   data,
+  onPress,
   listHeaderComponent,
   listEmptyComponent,
 }: Props) => {
@@ -22,7 +24,9 @@ const MovieList = ({
       <FlatList
         data={data}
         keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => <MovieListItem item={item} />}
+        renderItem={({item}) => (
+          <MovieListItem item={item} onPress={() => onPress(item.id)} />
+        )}
         initialNumToRender={3}
         ListHeaderComponent={listHeaderComponent}
         ItemSeparatorComponent={BottomSpacer}
