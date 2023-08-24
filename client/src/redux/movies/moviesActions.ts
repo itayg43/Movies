@@ -17,10 +17,13 @@ const getMovies = definedCreateAsyncThunk<MovieEntities, void>(
     try {
       const movies = await moviesService.getMovies();
 
-      return movies.reduce((entities, currMovie) => ({
-        ...entities,
-        [currMovie.id]: currMovie,
-      }));
+      return movies.reduce(
+        (entities, currMovie) => ({
+          ...entities,
+          [currMovie.id]: currMovie,
+        }),
+        {},
+      );
     } catch (error) {
       const message = errorHandlerUtil.extractMessage(error);
       return rejectWithValue(message);
