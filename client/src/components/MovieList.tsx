@@ -8,12 +8,14 @@ type Props = {
   contentContainerStyle?: StyleProp<ViewStyle>;
   data: Movie[];
   listHeaderComponent?: React.ReactElement;
+  listEmptyComponent?: React.ReactElement;
 };
 
 const MovieList = ({
   contentContainerStyle,
   data,
   listHeaderComponent,
+  listEmptyComponent,
 }: Props) => {
   return (
     <View style={contentContainerStyle}>
@@ -25,6 +27,7 @@ const MovieList = ({
         ListHeaderComponent={listHeaderComponent}
         ItemSeparatorComponent={BottomSpacer}
         ListFooterComponent={BottomSpacer}
+        ListEmptyComponent={listEmptyComponent}
       />
     </View>
   );

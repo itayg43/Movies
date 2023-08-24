@@ -9,6 +9,7 @@ import {selectMovies} from '../redux/movies/moviesSelectors';
 import SafeView from '../components/SafeView';
 import MovieList from '../components/MovieList';
 import MovieListHeader from '../components/MovieListHeader';
+import MovieListEmptyPlaceholder from '../components/MovieListEmptyPlaceholder';
 
 const MoviesScreen = () => {
   const dispatch = useAppDispatch();
@@ -40,7 +41,7 @@ const MoviesScreen = () => {
   }, [dispatch, debouncedSearchQuery]);
 
   return (
-    <SafeView contentContainerStyle={styles.container}>
+    <SafeView>
       {getMoviesRequestStatus === 'succeded' && (
         <MovieList
           contentContainerStyle={styles.listContainer}
@@ -52,6 +53,9 @@ const MoviesScreen = () => {
               onSearchQueryChange={setSearchQuery}
             />
           }
+          listEmptyComponent={
+            <MovieListEmptyPlaceholder searchQuery={searchQuery} />
+          }
         />
       )}
     </SafeView>
@@ -61,8 +65,6 @@ const MoviesScreen = () => {
 export default MoviesScreen;
 
 const styles = StyleSheet.create({
-  container: {},
-
   listContainer: {
     paddingHorizontal: 5,
   },
