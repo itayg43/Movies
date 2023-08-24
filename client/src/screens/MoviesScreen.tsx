@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
+import {ActivityIndicator} from 'react-native-paper';
 
 import {useAppDispatch, useAppSelector, useDebounce} from '../hooks';
 import moviesActions from '../redux/movies/moviesActions';
@@ -42,6 +43,14 @@ const MoviesScreen = () => {
 
   return (
     <SafeView>
+      {getMoviesRequestStatus === 'loading' && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator />
+
+          <Text>Loading...</Text>
+        </View>
+      )}
+
       {getMoviesRequestStatus === 'succeded' && (
         <MovieList
           contentContainerStyle={styles.listContainer}
@@ -65,6 +74,13 @@ const MoviesScreen = () => {
 export default MoviesScreen;
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20,
+  },
+
   listContainer: {
     paddingHorizontal: 5,
   },
