@@ -12,9 +12,7 @@ type Props = {
 const MovieListItem = ({item}: Props) => {
   return (
     <Card mode="outlined">
-      <Card.Cover
-        source={{uri: `${THUMBNAIL_BASR_URL}/${item.backdropPath}`}}
-      />
+      <Card.Cover source={{uri: `${THUMBNAIL_BASR_URL}${item.backdropPath}`}} />
 
       <Card.Title title={item.title} titleStyle={{fontWeight: 'bold'}} />
 
