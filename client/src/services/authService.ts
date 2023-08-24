@@ -11,7 +11,7 @@ import tokenStorage from '../storage/tokenStorage';
 
 const loginUser = async (loginFormData: LoginFormData) => {
   const {data} = await apiClient.post<LoginRegisterResponseData>(
-    `/auth/login`,
+    '/auth/login',
     loginFormData,
   );
 
@@ -22,7 +22,7 @@ const loginUser = async (loginFormData: LoginFormData) => {
 
 const registerUser = async (registerFormData: RegisterFormData) => {
   const {data} = await apiClient.post<LoginRegisterResponseData>(
-    `/auth/register`,
+    '/auth/register',
     registerFormData,
   );
 
