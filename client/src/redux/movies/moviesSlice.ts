@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 import {Movie} from '../../types';
 import moviesActions from './moviesActions';
@@ -9,18 +9,24 @@ export type MovieEntities = {
 
 type MoviesState = {
   entities: MovieEntities;
+  searchQuery: string;
   errorMessage: string;
 };
 
 const initialState: MoviesState = {
   entities: {},
+  searchQuery: '',
   errorMessage: '',
 };
 
 const moviesSlice = createSlice({
   name: 'movies',
   initialState,
-  reducers: {},
+  reducers: {
+    updateSearchQuery: (state, action: PayloadAction<string>) => {
+      state.searchQuery = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(moviesActions.getMovies.fulfilled, (state, {payload}) => {
@@ -34,5 +40,7 @@ const moviesSlice = createSlice({
       });
   },
 });
+
+export const {updateSearchQuery} = moviesSlice.actions;
 
 export default moviesSlice.reducer;

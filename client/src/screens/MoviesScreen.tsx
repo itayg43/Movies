@@ -3,8 +3,12 @@ import {StyleSheet} from 'react-native';
 
 import {useAppDispatch, useAppSelector} from '../hooks';
 import moviesActions from '../redux/movies/moviesActions';
+import {updateSearchQuery} from '../redux/movies/moviesSlice';
 import {RequestStatus} from '../types';
-import {selectMovies} from '../redux/movies/moviesSelectors';
+import {
+  selectMovies,
+  selectMoviesSearchQuery,
+} from '../redux/movies/moviesSelectors';
 import SafeView from '../components/SafeView';
 import MovieList from '../components/MovieList';
 import MovieListHeader from '../components/MovieListHeader';
@@ -13,7 +17,7 @@ const MoviesScreen = () => {
   const dispatch = useAppDispatch();
 
   const movies = useAppSelector(selectMovies);
-  const [searchQuery, setSearchQuery] = useState('');
+  const searchQuery = useAppSelector(selectMoviesSearchQuery);
 
   const [getMoviesRequestStatus, setGetMoviesRequestStatus] =
     useState<RequestStatus>('idle');
@@ -42,7 +46,7 @@ const MoviesScreen = () => {
             <MovieListHeader
               contentContainerStyle={styles.listHeaderContainer}
               searchQuery={searchQuery}
-              onSearchQueryChange={setSearchQuery}
+              onSearchQueryChange={value => dispatch(updateSearchQuery(value))}
             />
           }
         />
