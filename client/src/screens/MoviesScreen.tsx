@@ -2,7 +2,12 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {ActivityIndicator} from 'react-native-paper';
 
-import {useAppDispatch, useAppSelector, useDebounce} from '../hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useDebounce,
+  useIsFirstRender,
+} from '../hooks';
 import moviesActions from '../redux/movies/moviesActions';
 import {updateSearchQuery} from '../redux/movies/moviesSlice';
 import {RequestStatus} from '../types';
@@ -13,6 +18,8 @@ import MovieListHeader from '../components/MovieListHeader';
 import MovieListEmptyPlaceholder from '../components/MovieListEmptyPlaceholder';
 
 const MoviesScreen = () => {
+  const isFirstRender = useIsFirstRender();
+
   const dispatch = useAppDispatch();
 
   const movies = useAppSelector(selectMovies);
@@ -38,7 +45,12 @@ const MoviesScreen = () => {
   }, [handleGetMovies]);
 
   useEffect(() => {
+    if (isFirstRender) {
+      return;
+    }
+
     dispatch(updateSearchQuery(debouncedSearchQuery));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, debouncedSearchQuery]);
 
   return (
