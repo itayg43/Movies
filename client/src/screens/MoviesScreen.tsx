@@ -1,14 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 
-import {useAppDispatch, useAppSelector} from '../hooks';
+import {useAppDispatch, useAppSelector, useDebounce} from '../hooks';
 import moviesActions from '../redux/movies/moviesActions';
 import {updateSearchQuery} from '../redux/movies/moviesSlice';
 import {RequestStatus} from '../types';
-import {
-  selectMovies,
-  selectMoviesSearchQuery,
-} from '../redux/movies/moviesSelectors';
+import {selectMovies} from '../redux/movies/moviesSelectors';
 import SafeView from '../components/SafeView';
 import MovieList from '../components/MovieList';
 import MovieListHeader from '../components/MovieListHeader';
@@ -17,7 +14,9 @@ const MoviesScreen = () => {
   const dispatch = useAppDispatch();
 
   const movies = useAppSelector(selectMovies);
-  const searchQuery = useAppSelector(selectMoviesSearchQuery);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery);
 
   const [getMoviesRequestStatus, setGetMoviesRequestStatus] =
     useState<RequestStatus>('idle');
@@ -36,6 +35,10 @@ const MoviesScreen = () => {
     handleGetMovies();
   }, [handleGetMovies]);
 
+  useEffect(() => {
+    dispatch(updateSearchQuery(debouncedSearchQuery));
+  }, [dispatch, debouncedSearchQuery]);
+
   return (
     <SafeView contentContainerStyle={styles.container}>
       {getMoviesRequestStatus === 'succeded' && (
@@ -46,7 +49,7 @@ const MoviesScreen = () => {
             <MovieListHeader
               contentContainerStyle={styles.listHeaderContainer}
               searchQuery={searchQuery}
-              onSearchQueryChange={value => dispatch(updateSearchQuery(value))}
+              onSearchQueryChange={setSearchQuery}
             />
           }
         />
