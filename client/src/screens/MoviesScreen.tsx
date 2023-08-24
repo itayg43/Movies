@@ -1,7 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
-import {ActivityIndicator} from 'react-native-paper';
+import {StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
+import {MoviesScreenNavigationProp} from '../navigators/MoviesStackNavigator';
 import {
   useAppDispatch,
   useAppSelector,
@@ -13,6 +14,7 @@ import {updateSearchQuery} from '../redux/movies/moviesSlice';
 import {RequestStatus} from '../types';
 import {selectMovies} from '../redux/movies/moviesSelectors';
 import SafeView from '../components/SafeView';
+import LoadingView from '../components/LoadingView';
 import {
   MovieList,
   MovieListHeader,
@@ -23,6 +25,7 @@ const MoviesScreen = () => {
   const isFirstRender = useIsFirstRender();
 
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<MoviesScreenNavigationProp>();
 
   const movies = useAppSelector(selectMovies);
 
@@ -57,18 +60,17 @@ const MoviesScreen = () => {
 
   return (
     <SafeView>
-      {getMoviesRequestStatus === 'loading' && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator />
-
-          <Text>Loading...</Text>
-        </View>
-      )}
+      {getMoviesRequestStatus === 'loading' && <LoadingView />}
 
       {getMoviesRequestStatus === 'succeded' && (
         <MovieList
           contentContainerStyle={styles.listContainer}
           data={movies}
+          onPress={id =>
+            navigation.navigate('movieDetails', {
+              id,
+            })
+          }
           listHeaderComponent={
             <MovieListHeader
               contentContainerStyle={styles.listHeaderContainer}
@@ -88,13 +90,6 @@ const MoviesScreen = () => {
 export default MoviesScreen;
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 20,
-  },
-
   listContainer: {
     paddingHorizontal: 5,
   },
