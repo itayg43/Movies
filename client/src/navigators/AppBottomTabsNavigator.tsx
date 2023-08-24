@@ -1,20 +1,12 @@
 import React from 'react';
-import {
-  createBottomTabNavigator,
-  BottomTabNavigationProp,
-} from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import MoviesScreen from '../screens/MoviesScreen';
+import MoviesStackNavigator from './MoviesStackNavigator';
 
 type AppBottomTabsParams = {
-  movies: undefined;
+  moviesStack: undefined;
 };
-
-export type MoviesScreenNavigationProp = BottomTabNavigationProp<
-  AppBottomTabsParams,
-  'movies'
->;
 
 const Tab = createBottomTabNavigator<AppBottomTabsParams>();
 
@@ -25,10 +17,11 @@ const AppBottomTabsNavigator = () => {
         headerShown: false,
       }}>
       <Tab.Screen
-        name="movies"
-        component={MoviesScreen}
+        name="moviesStack"
+        component={MoviesStackNavigator}
         options={{
           tabBarLabel: 'Movies',
+          // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons name="movie" color={color} size={size} />
           ),
