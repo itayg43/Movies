@@ -1,4 +1,5 @@
 import React from 'react';
+import {StyleSheet} from 'react-native';
 import {Card, Text} from 'react-native-paper';
 
 import {Movie} from '../types';
@@ -14,7 +15,7 @@ const MovieListItem = ({item}: Props) => {
     <Card mode="outlined">
       <Card.Cover source={{uri: `${THUMBNAIL_BASR_URL}${item.backdropPath}`}} />
 
-      <Card.Title title={item.title} titleStyle={{fontWeight: 'bold'}} />
+      <Card.Title title={item.title} titleStyle={styles.title} />
 
       <Card.Content>
         <Text variant="bodyMedium" numberOfLines={3}>
@@ -26,3 +27,9 @@ const MovieListItem = ({item}: Props) => {
 };
 
 export default MovieListItem;
+
+const styles = StyleSheet.create({
+  title: {
+    fontWeight: 'bold',
+  },
+});
