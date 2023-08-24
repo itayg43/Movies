@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {Card, Text} from 'react-native-paper';
 
-import {Movie} from '../types';
+import {Movie} from '../../types';
 
 const THUMBNAIL_BASR_URL = 'https://image.tmdb.org/t/p/w500';
 

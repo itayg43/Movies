@@ -1,7 +1,7 @@
 import React from 'react';
-import {FlatList, View, StyleProp, ViewStyle} from 'react-native';
+import {StyleSheet, FlatList, View, StyleProp, ViewStyle} from 'react-native';
 
-import {Movie} from '../types';
+import {Movie} from '../../types';
 import MovieListItem from './MovieListItem';
 
 type Props = {
@@ -36,5 +36,11 @@ const MovieList = ({
 export default MovieList;
 
 function BottomSpacer() {
-  return <View style={{marginBottom: 10}} />;
+  return <View style={styles.bottomSpacerContainer} />;
 }
+
+const styles = StyleSheet.create({
+  bottomSpacerContainer: {
+    marginBottom: 10,
+  },
+});

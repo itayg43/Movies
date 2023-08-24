@@ -13,9 +13,11 @@ import {updateSearchQuery} from '../redux/movies/moviesSlice';
 import {RequestStatus} from '../types';
 import {selectMovies} from '../redux/movies/moviesSelectors';
 import SafeView from '../components/SafeView';
-import MovieList from '../components/MovieList';
-import MovieListHeader from '../components/MovieListHeader';
-import MovieListEmptyPlaceholder from '../components/MovieListEmptyPlaceholder';
+import {
+  MovieList,
+  MovieListHeader,
+  MovieListEmptyPlaceholder,
+} from '../components/movieList';
 
 const MoviesScreen = () => {
   const isFirstRender = useIsFirstRender();
