@@ -10,6 +10,7 @@ type Props = {
   onPress: (id: number) => void;
   listHeaderComponent?: React.ReactElement;
   listEmptyComponent?: React.ReactElement;
+  horizontal?: boolean | undefined;
 };
 
 const MovieList = ({
@@ -18,18 +19,24 @@ const MovieList = ({
   onPress,
   listHeaderComponent,
   listEmptyComponent,
+  horizontal,
 }: Props) => {
   return (
     <View style={contentContainerStyle}>
       <FlatList
+        horizontal={horizontal}
         data={data}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
-          <MovieListItem item={item} onPress={() => onPress(item.id)} />
+          <MovieListItem
+            item={item}
+            onPress={() => onPress(item.id)}
+            horizontal={horizontal}
+          />
         )}
         initialNumToRender={3}
         ListHeaderComponent={listHeaderComponent}
-        ItemSeparatorComponent={BottomSpacer}
+        ItemSeparatorComponent={horizontal ? RightSideSpacer : BottomSpacer}
         ListFooterComponent={BottomSpacer}
         ListEmptyComponent={listEmptyComponent}
       />
@@ -43,8 +50,16 @@ function BottomSpacer() {
   return <View style={styles.bottomSpacerContainer} />;
 }
 
+function RightSideSpacer() {
+  return <View style={styles.rightSideSpacerContainer} />;
+}
+
 const styles = StyleSheet.create({
   bottomSpacerContainer: {
     marginBottom: 10,
+  },
+
+  rightSideSpacerContainer: {
+    marginRight: 10,
   },
 });

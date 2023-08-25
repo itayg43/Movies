@@ -7,11 +7,15 @@ import {Movie} from '../../types';
 type Props = {
   item: Movie;
   onPress: () => void;
+  horizontal?: boolean | undefined;
 };
 
-const MovieListItem = ({item, onPress}: Props) => {
+const MovieListItem = ({item, onPress, horizontal}: Props) => {
   return (
-    <Card mode="outlined" onPress={onPress}>
+    <Card
+      contentStyle={horizontal ? styles.horizontalContainer : null}
+      mode="outlined"
+      onPress={onPress}>
       <Card.Cover source={{uri: item.backdropUrl}} />
 
       <Card.Title title={item.title} titleStyle={styles.title} />
@@ -28,6 +32,11 @@ const MovieListItem = ({item, onPress}: Props) => {
 export default MovieListItem;
 
 const styles = StyleSheet.create({
+  horizontalContainer: {
+    width: 300,
+    height: 300,
+  },
+
   title: {
     fontWeight: 'bold',
   },
