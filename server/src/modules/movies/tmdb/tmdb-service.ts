@@ -110,20 +110,20 @@ export type MovieDetailsResponseData = {
   vote_average: number;
   vote_count: number;
   videos: {
-    results: [
-      {
-        iso_639_1: string;
-        iso_3166_1: string;
-        name: string;
-        key: string;
-        site: "YouTube";
-        size: number;
-        type: "Trailer";
-        official: boolean;
-        published_at: string;
-        id: string;
-      }
-    ];
+    results: VideoResponseData[];
   };
   recommendations: GetMoviesResponseData;
+};
+
+export type VideoResponseData = {
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  key: string;
+  site: "YouTube";
+  size: number;
+  type: "Trailer";
+  official: boolean;
+  published_at: string;
+  id: string;
 };

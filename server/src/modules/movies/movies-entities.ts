@@ -5,6 +5,7 @@ import {
 import {
   MovieResponseData,
   MovieDetailsResponseData,
+  VideoResponseData,
 } from "./tmdb/tmdb-service";
 
 export class Movie {
@@ -36,7 +37,7 @@ export class MovieDetails {
   genres: string[];
   releaseDate: string;
   voteAverage: number;
-  youTubeTrailerKey: string | undefined;
+  youTubeTrailerUrl: string | null;
   recommendations: Movie[];
 
   constructor(data: MovieDetailsResponseData) {
@@ -48,13 +49,17 @@ export class MovieDetails {
     this.genres = data.genres.map((g) => g.name);
     this.releaseDate = data.release_date;
     this.voteAverage = data.vote_average;
-
-    this.youTubeTrailerKey = data.videos.results
-      .filter((v) => v.site === "YouTube" && v.type === "Trailer" && v.official)
-      .at(0)?.key;
-
+    this.youTubeTrailerUrl = this._initYouTubeTrailerUrl(data.videos.results);
     this.recommendations = data.recommendations.results.map(
       (r) => new Movie(r)
     );
+  }
+
+  _initYouTubeTrailerUrl(videos: VideoResponseData[]) {
+    const trailerKey = videos
+      .filter((v) => v.site === "YouTube" && v.type === "Trailer" && v.official)
+      .at(0)?.key;
+
+    return trailerKey ? `https://www.youtube.com/watch?v=${trailerKey}` : null;
   }
 }
