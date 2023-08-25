@@ -1,8 +1,8 @@
 import apiClient from '../clients/apiClient';
-import {MoviesResponseData} from '../types';
+import {Movie} from '../types';
 
 const getMovies = async () => {
-  const {data} = await apiClient.get<MoviesResponseData>('/movies');
+  const {data} = await apiClient.get<Movie[]>('/movies');
 
   return data;
 };

@@ -30,20 +30,17 @@ export type ReissueAccessTokenResponseData = {
 };
 
 export type Movie = {
-  adult: boolean;
-  backdropPath: string;
-  genreIds: number[];
   id: number;
-  originalLanguage: string;
-  originalTitle: string;
-  overview: string;
-  popularity: number;
-  posterPath: string;
-  releaseDate: string;
   title: string;
-  video: false;
+  backdropUrl: string;
+  posterUrl: string;
+  overview: string;
+  releaseDate: string;
   voteAverage: number;
-  voteCount: number;
 };
 
-export type MoviesResponseData = Movie[];
+export type MovieDetails = Movie & {
+  genres: string[];
+  youTubeTrailerKey: string | undefined;
+  recommendations: Movie[];
+};
