@@ -12,4 +12,10 @@ mvoiesRouter.get(
   asyncHandler(moviesController.getMovies)
 );
 
+mvoiesRouter.get(
+  "/:id",
+  [validateAccessToken],
+  asyncHandler(moviesController.getMovieDetailsById)
+);
+
 export default mvoiesRouter;

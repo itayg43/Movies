@@ -9,6 +9,16 @@ const getMovies = async (_: Request, res: Response) => {
   res.status(statusCode.ok).json(movies);
 };
 
+const getMovieDetailsById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const movieDetails = await moviesService.getMovieDetailsById(
+    Number.parseInt(id)
+  );
+
+  res.status(statusCode.ok).json(movieDetails);
+};
+
 export default {
   getMovies,
+  getMovieDetailsById,
 };

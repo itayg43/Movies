@@ -15,6 +15,21 @@ const getMovies = async () => {
   return movies;
 };
 
+const getMovieDetailsById = async (id: number) => {
+  const cachedMovieDetails = await moviesCacheAccess.getMovieDetailsById(id);
+
+  if (cachedMovieDetails) {
+    return cachedMovieDetails;
+  }
+
+  const movieDetails = await tmdbService.getMovieDetailsById(id);
+
+  await moviesCacheAccess.setMovieDetails(movieDetails);
+
+  return movieDetails;
+};
+
 export default {
   getMovies,
+  getMovieDetailsById,
 };
