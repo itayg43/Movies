@@ -41,6 +41,6 @@ export type Movie = {
 
 export type MovieDetails = Movie & {
   genres: string[];
-  youTubeTrailerKey: string | undefined;
+  youTubeTrailerUrl: string | null;
   recommendations: Movie[];
 };
