@@ -33,11 +33,10 @@ const MoviesScreen = () => {
   const debouncedSearchQuery = useDebounce(searchQuery);
 
   const [getMoviesRequestStatus, setGetMoviesRequestStatus] =
-    useState<RequestStatus>('idle');
+    useState<RequestStatus>('loading');
 
   const handleGetMovies = useCallback(async () => {
     try {
-      setGetMoviesRequestStatus('loading');
       await dispatch(moviesActions.getMovies()).unwrap();
       setGetMoviesRequestStatus('succeded');
     } catch (error) {
