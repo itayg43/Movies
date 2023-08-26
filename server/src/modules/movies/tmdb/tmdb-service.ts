@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 import tmdbClient from "./tmdb-client";
 import { Movie, MovieDetails } from "../movies-entities";
 
-const getMoviesByCategory = async (category: "popular" | "top_rated") => {
+const getMoviesByCategory = async (category: "popular") => {
   try {
     const { data } = await tmdbClient.get<GetMoviesResponseData>(
       `/movie/${category}?language=en-US&page=1`
@@ -45,7 +45,7 @@ export type GetMoviesResponseData = {
 
 export type MovieResponseData = {
   adult: boolean;
-  backdrop_path: string;
+  backdrop_path: string | null;
   genre_ids: number[];
   id: number;
   original_language: string;
@@ -62,7 +62,7 @@ export type MovieResponseData = {
 
 export type MovieDetailsResponseData = {
   adult: boolean;
-  backdrop_path: string;
+  backdrop_path: string | null;
   belongs_to_collection: null;
   budget: number;
   genres: [

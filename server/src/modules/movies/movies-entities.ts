@@ -11,7 +11,7 @@ import {
 export class Movie {
   id: number;
   title: string;
-  backdropUrl: string;
+  backdropUrl: string | null;
   posterUrl: string;
   overview: string;
   releaseDate: string;
@@ -21,7 +21,11 @@ export class Movie {
     this.id = data.id;
     this.title = data.title;
     this.overview = data.overview;
-    this.backdropUrl = `${TMDB_BACKDROP_BASE_URL}${data.backdrop_path}`;
+
+    this.backdropUrl = data.backdrop_path
+      ? `${TMDB_BACKDROP_BASE_URL}${data.backdrop_path}`
+      : null;
+
     this.posterUrl = `${TMDB_POSTER_BASE_URL}${data.poster_path}`;
     this.releaseDate = data.release_date;
     this.voteAverage = data.vote_average;
@@ -31,7 +35,7 @@ export class Movie {
 export class MovieDetails {
   id: number;
   title: string;
-  backdropUrl: string;
+  backdropUrl: string | null;
   posterUrl: string;
   overview: string;
   genres: string[];
@@ -44,12 +48,17 @@ export class MovieDetails {
     this.id = data.id;
     this.title = data.title;
     this.overview = data.overview;
-    this.backdropUrl = `${TMDB_BACKDROP_BASE_URL}${data.backdrop_path}`;
+
+    this.backdropUrl = data.backdrop_path
+      ? `${TMDB_BACKDROP_BASE_URL}${data.backdrop_path}`
+      : null;
+
     this.posterUrl = `${TMDB_POSTER_BASE_URL}${data.poster_path}`;
     this.genres = data.genres.map((g) => g.name);
     this.releaseDate = data.release_date;
     this.voteAverage = data.vote_average;
     this.youTubeTrailerUrl = this._initYouTubeTrailerUrl(data.videos.results);
+
     this.recommendations = data.recommendations.results.map(
       (r) => new Movie(r)
     );
