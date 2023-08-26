@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {Snackbar} from 'react-native-paper';
 
@@ -11,36 +11,31 @@ import RegisterForm from '../components/RegisterForm';
 
 const RegisterScreen = () => {
   const dispatch = useAppDispatch();
+  const authErrorMessage = useAppSelector(selectAuthErrorMessage);
 
-  const [registerRequestStatus, setRegisterRequestStatus] =
-    useState<RequestStatus>('idle');
-  const registerRequestErrorMessage = useAppSelector(selectAuthErrorMessage);
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
 
-  const handleSubmitRegisterForm = useCallback(
-    async (formData: RegisterFormData) => {
-      try {
-        setRegisterRequestStatus('loading');
-        await dispatch(authActions.registerUser(formData)).unwrap();
-        setRegisterRequestStatus('succeded');
-      } catch (error) {
-        setRegisterRequestStatus('failed');
-      }
-    },
-    [dispatch],
-  );
+  const handleSubmitForm = async (formData: RegisterFormData) => {
+    try {
+      await dispatch(authActions.registerUser(formData)).unwrap();
+    } catch (error) {
+      setRequestStatus('failed');
+    }
+  };
+
+  const handleDismissSnackbar = () => {
+    setRequestStatus('idle');
+  };
 
   return (
     <>
       <SafeView contentContainerStyle={styles.container}>
-        <RegisterForm onSubmit={handleSubmitRegisterForm} />
+        <RegisterForm onSubmit={handleSubmitForm} />
       </SafeView>
 
-      {registerRequestStatus === 'failed' && (
-        <Snackbar
-          visible
-          duration={3000}
-          onDismiss={() => setRegisterRequestStatus('idle')}>
-          {registerRequestErrorMessage}
+      {requestStatus === 'failed' && (
+        <Snackbar visible onDismiss={handleDismissSnackbar}>
+          {authErrorMessage}
         </Snackbar>
       )}
     </>

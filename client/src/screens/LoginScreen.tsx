@@ -31,7 +31,7 @@ const LoginScreen = () => {
     navigation.navigate('registerScreen');
   };
 
-  const handleSnackbarDismiss = () => {
+  const handleDismissSnackbar = () => {
     setRequestStatus('idle');
   };
 
@@ -48,7 +48,7 @@ const LoginScreen = () => {
       </SafeView>
 
       {requestStatus === 'failed' && (
-        <Snackbar visible onDismiss={handleSnackbarDismiss}>
+        <Snackbar visible onDismiss={handleDismissSnackbar}>
           {authErrorMessage}
         </Snackbar>
       )}
