@@ -6,6 +6,7 @@ import {
   Text,
   View,
   Pressable,
+  Linking,
 } from 'react-native';
 import {Chip} from 'react-native-paper';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -41,9 +42,22 @@ const MovieDetailsScreen = () => {
     [setGetMovieDetailsRequestStatus, setMovieDetails],
   );
 
-  const handleCloseBtnPress = useCallback(() => {
+  const handleMovieListItemPress = useCallback(
+    (id: number) => {
+      navigation.push('movieDetails', {id});
+    },
+    [navigation],
+  );
+
+  const handleCloseButtonPress = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
+
+  const handleOpenYouTubeTrialer = useCallback(() => {
+    if (movieDetails?.youTubeTrailerUrl) {
+      Linking.openURL(movieDetails.youTubeTrailerUrl);
+    }
+  }, [movieDetails]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -64,10 +78,10 @@ const MovieDetailsScreen = () => {
           {/** image */}
           <Image style={styles.image} source={{uri: movieDetails.posterUrl}} />
 
-          {/** close btn */}
+          {/** close button */}
           <Pressable
-            style={styles.closeBtnContainer}
-            onPress={handleCloseBtnPress}>
+            style={styles.closeButtonContainer}
+            onPress={handleCloseButtonPress}>
             <MaterialCommunityIcons name="close" size={24} />
           </Pressable>
 
@@ -76,7 +90,7 @@ const MovieDetailsScreen = () => {
             {/** title */}
             <Text style={styles.title}>{movieDetails.title}</Text>
 
-            {/** year & rating */}
+            {/** year & rating & youtube link*/}
             <View style={styles.yearAndRatingContainer}>
               {/** year */}
               <Text style={styles.year}>
@@ -95,6 +109,14 @@ const MovieDetailsScreen = () => {
                 {/** star icon */}
                 <MaterialCommunityIcons name="star" color="orange" />
               </View>
+
+              {/** dot spacer icon */}
+              <MaterialCommunityIcons name="dots-vertical" />
+
+              {/** youtube icon */}
+              <Pressable onPress={handleOpenYouTubeTrialer}>
+                <MaterialCommunityIcons name="youtube" color="red" size={20} />
+              </Pressable>
             </View>
 
             {/** genres */}
@@ -110,13 +132,15 @@ const MovieDetailsScreen = () => {
             <Text style={styles.overview}>{movieDetails.overview}</Text>
 
             {/** recommendations */}
-            <Text style={styles.recommendations}>Recommendations</Text>
+            <>
+              <Text style={styles.recommendations}>Recommendations</Text>
 
-            <MovieList
-              horizontal
-              data={movieDetails.recommendations}
-              onPress={id => navigation.push('movieDetails', {id})}
-            />
+              <MovieList
+                horizontal
+                data={movieDetails.recommendations}
+                onPress={handleMovieListItemPress}
+              />
+            </>
           </View>
         </ScrollView>
       )}
@@ -137,7 +161,7 @@ const styles = StyleSheet.create({
     resizeMode: 'stretch',
   },
 
-  closeBtnContainer: {
+  closeButtonContainer: {
     position: 'absolute',
     top: 20,
     left: 10,
