@@ -32,7 +32,7 @@ export type ReissueAccessTokenResponseData = {
 export type Movie = {
   id: number;
   title: string;
-  backdropUrl: string;
+  backdropUrl: string | null;
   posterUrl: string;
   overview: string;
   releaseDate: string;
