@@ -25,6 +25,14 @@ const RegisterForm = ({contentContainerStyle, onSubmit}: Props) => {
   const [hidePassword, setHidePassword] = useState(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
 
+  const handleToggleHidePassword = () => {
+    setHidePassword(currState => !currState);
+  };
+
+  const handleToggleHideConfirmPassword = () => {
+    setHideConfirmPassword(currState => !currState);
+  };
+
   return (
     <View style={contentContainerStyle}>
       {/** name */}
@@ -56,12 +64,7 @@ const RegisterForm = ({contentContainerStyle, onSubmit}: Props) => {
         label="Password"
         autoCapitalize="none"
         secureTextEntry={hidePassword}
-        right={
-          <TextInput.Icon
-            icon="eye"
-            onPress={() => setHidePassword(currState => !currState)}
-          />
-        }
+        right={<TextInput.Icon icon="eye" onPress={handleToggleHidePassword} />}
       />
 
       {/** confirm password */}
@@ -76,7 +79,7 @@ const RegisterForm = ({contentContainerStyle, onSubmit}: Props) => {
         right={
           <TextInput.Icon
             icon="eye"
-            onPress={() => setHideConfirmPassword(currState => !currState)}
+            onPress={handleToggleHideConfirmPassword}
           />
         }
       />

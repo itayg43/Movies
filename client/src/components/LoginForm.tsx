@@ -24,6 +24,10 @@ const LoginForm = ({contentContainerStyle, onSubmit}: Props) => {
 
   const [hidePassword, setHidePassword] = useState(true);
 
+  const handleToggleHidePassword = () => {
+    setHidePassword(currState => !currState);
+  };
+
   return (
     <View style={contentContainerStyle}>
       {/** email */}
@@ -46,12 +50,7 @@ const LoginForm = ({contentContainerStyle, onSubmit}: Props) => {
         label="Password"
         autoCapitalize="none"
         secureTextEntry={hidePassword}
-        right={
-          <TextInput.Icon
-            icon="eye"
-            onPress={() => setHidePassword(currState => !currState)}
-          />
-        }
+        right={<TextInput.Icon icon="eye" onPress={handleToggleHidePassword} />}
       />
 
       {/** submit */}
