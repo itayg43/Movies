@@ -39,7 +39,7 @@ const LoginScreen = () => {
 
         <Pressable
           style={styles.navigationLinkContainer}
-          onPress={() => navigation.navigate('register')}>
+          onPress={() => navigation.navigate('registerScreen')}>
           <Text>Need to register? Press here!</Text>
         </Pressable>
       </SafeView>

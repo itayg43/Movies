@@ -46,7 +46,7 @@ const MoviesScreen = () => {
 
   const handleMovieListItemPress = useCallback(
     (id: number) => {
-      navigation.navigate('movieDetails', {id});
+      navigation.navigate('movieDetailsScreen', {id});
     },
     [navigation],
   );

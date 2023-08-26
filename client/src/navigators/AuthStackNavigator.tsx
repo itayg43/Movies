@@ -8,27 +8,27 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 
 type AuthStackParams = {
-  login: undefined;
-  register: undefined;
+  loginScreen: undefined;
+  registerScreen: undefined;
 };
 
 export type LoginScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParams,
-  'login'
+  'loginScreen'
 >;
 
 export type RegisterScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParams,
-  'register'
+  'registerScreen'
 >;
 
 const Stack = createNativeStackNavigator<AuthStackParams>();
 
 const AuthStackNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="login">
+    <Stack.Navigator initialRouteName="loginScreen">
       <Stack.Screen
-        name="login"
+        name="loginScreen"
         component={LoginScreen}
         options={{
           headerTitle: 'Login',
@@ -36,7 +36,7 @@ const AuthStackNavigator = () => {
       />
 
       <Stack.Screen
-        name="register"
+        name="registerScreen"
         component={RegisterScreen}
         options={{
           headerTitle: 'Register',

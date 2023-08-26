@@ -9,25 +9,25 @@ import MoviesScreen from '../screens/MoviesScreen';
 import MovieDetailsScreen from '../screens/MovieDetailsScreen';
 
 type MoviesStackParams = {
-  movies: undefined;
-  movieDetails: {
+  moviesScreen: undefined;
+  movieDetailsScreen: {
     id: number;
   };
 };
 
 export type MoviesScreenNavigationProp = NativeStackNavigationProp<
   MoviesStackParams,
-  'movies'
+  'moviesScreen'
 >;
 
 export type MovieDetailsScreenNavigationProp = NativeStackNavigationProp<
   MoviesStackParams,
-  'movieDetails'
+  'movieDetailsScreen'
 >;
 
 export type MovieDetailsScreenRouteProp = RouteProp<
   MoviesStackParams,
-  'movieDetails'
+  'movieDetailsScreen'
 >;
 
 const Stack = createNativeStackNavigator<MoviesStackParams>();
@@ -35,12 +35,12 @@ const Stack = createNativeStackNavigator<MoviesStackParams>();
 const MoviesStackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="movies"
+      initialRouteName="moviesScreen"
       screenOptions={{headerShown: false}}>
-      <Stack.Screen name="movies" component={MoviesScreen} />
+      <Stack.Screen name="moviesScreen" component={MoviesScreen} />
 
       <Stack.Screen
-        name="movieDetails"
+        name="movieDetailsScreen"
         component={MovieDetailsScreen}
         options={{presentation: 'modal'}}
       />
