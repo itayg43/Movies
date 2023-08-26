@@ -19,7 +19,9 @@ import {
 import {MovieDetails, RequestStatus} from '../types';
 import moviesService from '../services/moviesService';
 import LoadingView from '../components/LoadingView';
+import ErrorView from '../components/ErrorView';
 import {MovieList} from '../components/movieList';
+import errorHandlerUtil from '../utils/errorHandlerUtil';
 
 const MovieDetailsScreen = () => {
   const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
@@ -29,6 +31,8 @@ const MovieDetailsScreen = () => {
 
   const [getMovieDetailsRequestStatus, setGetMovieDetailsRequestStatus] =
     useState<RequestStatus>('loading');
+  const [getMovieDetailsErrorMessage, setGetMovieDetailsErrorMessage] =
+    useState('');
 
   const handleGetMovieDetailsById = useCallback(
     async (id: number, signal?: AbortSignal) => {
@@ -36,15 +40,25 @@ const MovieDetailsScreen = () => {
         setMovieDetails(await moviesService.getMovieDetailsById(id, signal));
         setGetMovieDetailsRequestStatus('succeded');
       } catch (error) {
+        const message = errorHandlerUtil.extractMessage(error);
+        setGetMovieDetailsErrorMessage(message);
         setGetMovieDetailsRequestStatus('failed');
       }
     },
-    [setGetMovieDetailsRequestStatus, setMovieDetails],
+    [],
   );
+
+  const handleOpenYouTubeTrialer = () => {
+    if (movieDetails?.youTubeTrailerUrl) {
+      Linking.openURL(movieDetails.youTubeTrailerUrl);
+    }
+  };
 
   const handleMovieListItemPress = useCallback(
     (id: number) => {
-      navigation.push('movieDetailsScreen', {id});
+      navigation.push('movieDetailsScreen', {
+        id,
+      });
     },
     [navigation],
   );
@@ -52,12 +66,6 @@ const MovieDetailsScreen = () => {
   const handleCloseButtonPress = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
-
-  const handleOpenYouTubeTrialer = useCallback(() => {
-    if (movieDetails?.youTubeTrailerUrl) {
-      Linking.openURL(movieDetails.youTubeTrailerUrl);
-    }
-  }, [movieDetails]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -71,7 +79,9 @@ const MovieDetailsScreen = () => {
 
   return (
     <>
-      {getMovieDetailsRequestStatus === 'loading' && <LoadingView />}
+      {getMovieDetailsRequestStatus === 'loading' && (
+        <LoadingView message="Loading Movie Details..." />
+      )}
 
       {getMovieDetailsRequestStatus === 'succeded' && movieDetails && (
         <ScrollView style={styles.container}>
@@ -113,7 +123,7 @@ const MovieDetailsScreen = () => {
               {/** dot spacer icon */}
               <MaterialCommunityIcons name="dots-vertical" />
 
-              {/** youtube icon */}
+              {/** youtube link */}
               <Pressable onPress={handleOpenYouTubeTrialer}>
                 <MaterialCommunityIcons name="youtube" color="red" size={20} />
               </Pressable>
@@ -143,6 +153,10 @@ const MovieDetailsScreen = () => {
             </>
           </View>
         </ScrollView>
+      )}
+
+      {getMovieDetailsRequestStatus === 'failed' && (
+        <ErrorView message={getMovieDetailsErrorMessage} />
       )}
     </>
   );
