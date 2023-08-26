@@ -1,5 +1,5 @@
-import React, {useCallback, useState} from 'react';
-import {StyleSheet, Pressable, Text} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {Snackbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
@@ -12,44 +12,44 @@ import SafeView from '../components/SafeView';
 import LoginForm from '../components/LoginForm';
 
 const LoginScreen = () => {
-  const dispatch = useAppDispatch();
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
-  const [loginRequestStatus, setLoginRequestStatus] =
-    useState<RequestStatus>('idle');
-  const loginRequestErrorMessage = useAppSelector(selectAuthErrorMessage);
+  const dispatch = useAppDispatch();
+  const authErrorMessage = useAppSelector(selectAuthErrorMessage);
 
-  const handleSubmitLoginForm = useCallback(
-    async (formData: LoginFormData) => {
-      try {
-        setLoginRequestStatus('loading');
-        await dispatch(authActions.loginUser(formData)).unwrap();
-        setLoginRequestStatus('succeded');
-      } catch (error) {
-        setLoginRequestStatus('failed');
-      }
-    },
-    [dispatch],
-  );
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
+
+  const handleSubmitForm = async (formData: LoginFormData) => {
+    try {
+      await dispatch(authActions.loginUser(formData)).unwrap();
+    } catch (error) {
+      setRequestStatus('failed');
+    }
+  };
+
+  const handleNavigationLinkPress = () => {
+    navigation.navigate('registerScreen');
+  };
+
+  const handleSnackbarDismiss = () => {
+    setRequestStatus('idle');
+  };
 
   return (
     <>
       <SafeView contentContainerStyle={styles.container}>
-        <LoginForm onSubmit={handleSubmitLoginForm} />
+        <LoginForm onSubmit={handleSubmitForm} />
 
-        <Pressable
+        <TouchableOpacity
           style={styles.navigationLinkContainer}
-          onPress={() => navigation.navigate('registerScreen')}>
+          onPress={handleNavigationLinkPress}>
           <Text>Need to register? Press here!</Text>
-        </Pressable>
+        </TouchableOpacity>
       </SafeView>
 
-      {loginRequestStatus === 'failed' && (
-        <Snackbar
-          visible
-          duration={3000}
-          onDismiss={() => setLoginRequestStatus('idle')}>
-          {loginRequestErrorMessage}
+      {requestStatus === 'failed' && (
+        <Snackbar visible onDismiss={handleSnackbarDismiss}>
+          {authErrorMessage}
         </Snackbar>
       )}
     </>
