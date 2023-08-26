@@ -12,9 +12,13 @@ import {
 import moviesActions from '../redux/movies/moviesActions';
 import {updateSearchQuery} from '../redux/movies/moviesSlice';
 import {RequestStatus} from '../types';
-import {selectMovies} from '../redux/movies/moviesSelectors';
+import {
+  selectMovies,
+  selectMoviesErrorMessage,
+} from '../redux/movies/moviesSelectors';
 import SafeView from '../components/SafeView';
 import LoadingView from '../components/LoadingView';
+import ErrorView from '../components/ErrorView';
 import {
   MovieList,
   MovieListHeader,
@@ -28,6 +32,7 @@ const MoviesScreen = () => {
   const navigation = useNavigation<MoviesScreenNavigationProp>();
 
   const movies = useAppSelector(selectMovies);
+  const moviesErrorMessage = useAppSelector(selectMoviesErrorMessage);
 
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchQuery = useDebounce(searchQuery);
@@ -84,6 +89,10 @@ const MoviesScreen = () => {
             <MovieListEmptyPlaceholder searchQuery={searchQuery} />
           }
         />
+      )}
+
+      {getMoviesRequestStatus === 'failed' && (
+        <ErrorView message={moviesErrorMessage} onTryAgain={handleGetMovies} />
       )}
     </SafeView>
   );
