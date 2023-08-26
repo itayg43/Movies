@@ -44,6 +44,13 @@ const MoviesScreen = () => {
     }
   }, [dispatch]);
 
+  const handleMovieListItemPress = useCallback(
+    (id: number) => {
+      navigation.navigate('movieDetails', {id});
+    },
+    [navigation],
+  );
+
   useEffect(() => {
     handleGetMovies();
   }, [handleGetMovies]);
@@ -65,11 +72,7 @@ const MoviesScreen = () => {
         <MovieList
           contentContainerStyle={styles.listContainer}
           data={movies}
-          onPress={id =>
-            navigation.navigate('movieDetails', {
-              id,
-            })
-          }
+          onPress={handleMovieListItemPress}
           listHeaderComponent={
             <MovieListHeader
               contentContainerStyle={styles.listHeaderContainer}
