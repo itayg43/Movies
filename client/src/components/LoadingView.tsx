@@ -2,12 +2,16 @@ import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {ActivityIndicator} from 'react-native-paper';
 
-const LoadingView = () => {
+type Props = {
+  message: string;
+};
+
+const LoadingView = ({message}: Props) => {
   return (
     <View style={styles.container}>
       <ActivityIndicator />
 
-      <Text>Loading...</Text>
+      <Text>{message}</Text>
     </View>
   );
 };
@@ -19,6 +23,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 20,
+    rowGap: 20,
   },
 });

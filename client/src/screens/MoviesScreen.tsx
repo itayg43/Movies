@@ -51,7 +51,9 @@ const MoviesScreen = () => {
 
   const handleMovieListItemPress = useCallback(
     (id: number) => {
-      navigation.navigate('movieDetailsScreen', {id});
+      navigation.navigate('movieDetailsScreen', {
+        id,
+      });
     },
     [navigation],
   );
@@ -71,7 +73,9 @@ const MoviesScreen = () => {
 
   return (
     <SafeView>
-      {getMoviesRequestStatus === 'loading' && <LoadingView />}
+      {getMoviesRequestStatus === 'loading' && (
+        <LoadingView message="Loading Movies..." />
+      )}
 
       {getMoviesRequestStatus === 'succeded' && (
         <MovieList
