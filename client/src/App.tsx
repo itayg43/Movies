@@ -1,13 +1,18 @@
 import React from 'react';
 
 import {useAppSelector} from './hooks';
-import {selectAuthUser} from './redux/auth/authSelectors';
+import {selectAuthStatus, selectAuthUser} from './redux/auth/authSelectors';
 import {AuthStackNavigator, AppBottomTabsNavigator} from './navigators';
 
 const App = () => {
-  const user = useAppSelector(selectAuthUser);
+  const authStatus = useAppSelector(selectAuthStatus);
+  const authUser = useAppSelector(selectAuthUser);
 
-  return user ? <AppBottomTabsNavigator /> : <AuthStackNavigator />;
+  return authStatus && authUser ? (
+    <AppBottomTabsNavigator />
+  ) : (
+    <AuthStackNavigator />
+  );
 };
 
 export default App;

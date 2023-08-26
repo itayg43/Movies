@@ -1,4 +1,5 @@
 import React from 'react';
+import {Alert} from 'react-native';
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
@@ -6,6 +7,11 @@ import {
 
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import {useAppSelector} from '../hooks';
+import {
+  selectAuthErrorMessage,
+  selectAuthStatus,
+} from '../redux/auth/authSelectors';
 
 type AuthStackParams = {
   loginScreen: undefined;
@@ -25,24 +31,31 @@ export type RegisterScreenNavigationProp = NativeStackNavigationProp<
 const Stack = createNativeStackNavigator<AuthStackParams>();
 
 const AuthStackNavigator = () => {
-  return (
-    <Stack.Navigator initialRouteName="loginScreen">
-      <Stack.Screen
-        name="loginScreen"
-        component={LoginScreen}
-        options={{
-          headerTitle: 'Login',
-        }}
-      />
+  const authStatus = useAppSelector(selectAuthStatus);
+  const authErrorMessage = useAppSelector(selectAuthErrorMessage);
 
-      <Stack.Screen
-        name="registerScreen"
-        component={RegisterScreen}
-        options={{
-          headerTitle: 'Register',
-        }}
-      />
-    </Stack.Navigator>
+  return (
+    <>
+      <Stack.Navigator initialRouteName="loginScreen">
+        <Stack.Screen
+          name="loginScreen"
+          component={LoginScreen}
+          options={{
+            headerTitle: 'Login',
+          }}
+        />
+
+        <Stack.Screen
+          name="registerScreen"
+          component={RegisterScreen}
+          options={{
+            headerTitle: 'Register',
+          }}
+        />
+      </Stack.Navigator>
+
+      {authStatus === 'failed' && <>{Alert.alert('Error', authErrorMessage)}</>}
+    </>
   );
 };
 
