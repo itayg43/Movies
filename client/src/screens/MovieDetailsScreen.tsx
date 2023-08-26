@@ -24,7 +24,6 @@ import {MovieList} from '../components/movieList';
 import errorHandlerUtil from '../utils/errorHandlerUtil';
 
 const MovieDetailsScreen = () => {
-  const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
   const route = useRoute<MovieDetailsScreenRouteProp>();
 
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
@@ -48,25 +47,6 @@ const MovieDetailsScreen = () => {
     [],
   );
 
-  const handleOpenYouTubeTrialer = () => {
-    if (movieDetails?.youTubeTrailerUrl) {
-      Linking.openURL(movieDetails.youTubeTrailerUrl);
-    }
-  };
-
-  const handleMovieListItemPress = useCallback(
-    (id: number) => {
-      navigation.push('movieDetailsScreen', {
-        id,
-      });
-    },
-    [navigation],
-  );
-
-  const handleCloseButtonPress = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
-
   useEffect(() => {
     const controller = new AbortController();
 
@@ -84,85 +64,117 @@ const MovieDetailsScreen = () => {
       )}
 
       {getMovieDetailsRequestStatus === 'succeded' && movieDetails && (
-        <ScrollView style={styles.container}>
-          {/** image */}
-          <Image style={styles.image} source={{uri: movieDetails.posterUrl}} />
-
-          {/** close button */}
-          <Pressable
-            style={styles.closeButtonContainer}
-            onPress={handleCloseButtonPress}>
-            <MaterialCommunityIcons name="close" size={24} />
-          </Pressable>
-
-          {/** details */}
-          <View style={styles.detailsContainer}>
-            {/** title */}
-            <Text style={styles.title}>{movieDetails.title}</Text>
-
-            {/** year & rating & youtube link*/}
-            <View style={styles.yearAndRatingContainer}>
-              {/** year */}
-              <Text style={styles.year}>
-                {new Date(movieDetails.releaseDate).getFullYear()}
-              </Text>
-
-              {/** dot spacer icon */}
-              <MaterialCommunityIcons name="dots-vertical" />
-
-              {/** rating */}
-              <View style={styles.ratingContainer}>
-                <Text style={styles.rating}>
-                  {movieDetails.voteAverage.toFixed(1)}
-                </Text>
-
-                {/** star icon */}
-                <MaterialCommunityIcons name="star" color="orange" />
-              </View>
-
-              {/** dot spacer icon */}
-              <MaterialCommunityIcons name="dots-vertical" />
-
-              {/** youtube link */}
-              <Pressable onPress={handleOpenYouTubeTrialer}>
-                <MaterialCommunityIcons name="youtube" color="red" size={20} />
-              </Pressable>
-            </View>
-
-            {/** genres */}
-            <ScrollView
-              horizontal
-              contentContainerStyle={styles.genresContainer}>
-              {movieDetails.genres.map(g => (
-                <Chip key={g}>{g}</Chip>
-              ))}
-            </ScrollView>
-
-            {/** overview */}
-            <Text style={styles.overview}>{movieDetails.overview}</Text>
-
-            {/** recommendations */}
-            <>
-              <Text style={styles.recommendations}>Recommendations</Text>
-
-              <MovieList
-                horizontal
-                data={movieDetails.recommendations}
-                onPress={handleMovieListItemPress}
-              />
-            </>
-          </View>
-        </ScrollView>
+        <ContentView movieDetails={movieDetails} />
       )}
 
       {getMovieDetailsRequestStatus === 'failed' && (
-        <ErrorView message={getMovieDetailsErrorMessage} />
+        <ErrorView
+          message={getMovieDetailsErrorMessage}
+          onTryAgain={() => handleGetMovieDetailsById(route.params.id)}
+        />
       )}
     </>
   );
 };
 
 export default MovieDetailsScreen;
+
+type ContentViewProps = {
+  movieDetails: MovieDetails;
+};
+
+function ContentView({movieDetails}: ContentViewProps) {
+  const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
+
+  const handleOpenYouTubeTrialer = () => {
+    if (movieDetails.youTubeTrailerUrl) {
+      Linking.openURL(movieDetails.youTubeTrailerUrl);
+    }
+  };
+
+  const handleMovieListItemPress = useCallback(
+    (id: number) => {
+      navigation.push('movieDetailsScreen', {
+        id,
+      });
+    },
+    [navigation],
+  );
+
+  const handleCloseButtonPress = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
+  return (
+    <ScrollView style={styles.container}>
+      {/** image */}
+      <Image style={styles.image} source={{uri: movieDetails.posterUrl}} />
+
+      {/** close button */}
+      <Pressable
+        style={styles.closeButtonContainer}
+        onPress={handleCloseButtonPress}>
+        <MaterialCommunityIcons name="close" size={24} />
+      </Pressable>
+
+      {/** details */}
+      <View style={styles.detailsContainer}>
+        {/** title */}
+        <Text style={styles.title}>{movieDetails.title}</Text>
+
+        {/** year & rating & youtube link*/}
+        <View style={styles.yearAndRatingContainer}>
+          {/** year */}
+          <Text style={styles.year}>
+            {new Date(movieDetails.releaseDate).getFullYear()}
+          </Text>
+
+          {/** dot spacer icon */}
+          <MaterialCommunityIcons name="dots-vertical" />
+
+          {/** rating */}
+          <View style={styles.ratingContainer}>
+            <Text style={styles.rating}>
+              {movieDetails.voteAverage.toFixed(1)}
+            </Text>
+
+            {/** star icon */}
+            <MaterialCommunityIcons name="star" color="orange" />
+          </View>
+
+          {/** dot spacer icon */}
+          <MaterialCommunityIcons name="dots-vertical" />
+
+          {/** youtube link */}
+          <Pressable onPress={handleOpenYouTubeTrialer}>
+            <MaterialCommunityIcons name="youtube" color="red" size={20} />
+          </Pressable>
+        </View>
+
+        {/** genres */}
+        <ScrollView horizontal contentContainerStyle={styles.genresContainer}>
+          {movieDetails.genres.map(g => (
+            <Chip key={g}>{g}</Chip>
+          ))}
+        </ScrollView>
+
+        {/** overview */}
+        <Text style={styles.overview}>{movieDetails.overview}</Text>
+
+        {/** recommendations */}
+        <>
+          <Text style={styles.recommendations}>Recommendations</Text>
+
+          <MovieList
+            horizontal
+            data={movieDetails.recommendations}
+            onPress={handleMovieListItemPress}
+          />
+        </>
+      </View>
+    </ScrollView>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
