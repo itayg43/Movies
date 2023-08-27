@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Pressable, Text, Image, View} from 'react-native';
 
 import {Movie} from '../../types';
+import YearRatingTrailerLinkSection from '../YearRatingTrailerLinkSection';
 
 type Props = {
   item: Movie;
@@ -24,6 +25,11 @@ const MovieListItem = ({item, onPress, horizontal}: Props) => {
           {item.title}
         </Text>
 
+        <YearRatingTrailerLinkSection
+          year={new Date(item.releaseDate).getFullYear()}
+          rating={item.voteAverage}
+        />
+
         <Text numberOfLines={2}>{item.overview}</Text>
       </View>
     </Pressable>
@@ -45,13 +51,13 @@ const styles = StyleSheet.create({
 
   image: {
     width: '100%',
-    height: '70%',
+    height: '65%',
   },
 
   detailsContainer: {
     flex: 1,
     padding: 10,
-    rowGap: 10,
+    rowGap: 5,
     backgroundColor: 'white',
   },
   title: {

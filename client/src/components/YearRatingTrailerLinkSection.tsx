@@ -25,12 +25,14 @@ const YearRatingTrailerLinkSection = ({year, rating, trailerLink}: Props) => {
 
       <Rating value={rating} />
 
-      <MaterialCommunityIcons name="dots-vertical" />
-
       {trailerLink && (
-        <TouchableOpacity onPress={handleTrailerLinkPress}>
-          <MaterialCommunityIcons name="youtube" color="red" size={20} />
-        </TouchableOpacity>
+        <>
+          <MaterialCommunityIcons name="dots-vertical" />
+
+          <TouchableOpacity onPress={handleTrailerLinkPress}>
+            <MaterialCommunityIcons name="youtube" color="red" size={20} />
+          </TouchableOpacity>
+        </>
       )}
     </View>
   );
