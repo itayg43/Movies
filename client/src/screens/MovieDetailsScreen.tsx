@@ -6,7 +6,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Linking,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,8 +20,8 @@ import {MovieList} from '../components/movieList';
 import errorHandlerUtil from '../utils/errorHandlerUtil';
 import LoadingView from '../components/LoadingView';
 import ErrorView from '../components/ErrorView';
-import Rating from '../components/Rating';
 import Genres from '../components/Genres';
+import YearRatingTrailerLinkSection from '../components/movieList/YearRatingTrailerLinkSection';
 
 const MovieDetailsScreen = () => {
   const route = useRoute<MovieDetailsScreenRouteProp>();
@@ -90,12 +89,6 @@ function ContentView({details}: ContentViewProps) {
     navigation.goBack();
   };
 
-  const handleTrailerLinkPress = () => {
-    if (details.youTubeTrailerUrl) {
-      Linking.openURL(details.youTubeTrailerUrl);
-    }
-  };
-
   const handleMovieListItemPress = (id: number) => {
     navigation.push('movieDetailsScreen', {
       id,
@@ -119,27 +112,12 @@ function ContentView({details}: ContentViewProps) {
         {/** title */}
         <Text style={styles.title}>{details.title}</Text>
 
-        {/** year & rating & youtube link */}
-        <View style={styles.yearAndRatingContainer}>
-          {/** year */}
-          <Text style={styles.year}>
-            {new Date(details.releaseDate).getFullYear()}
-          </Text>
-
-          {/** dot spacer icon */}
-          <MaterialCommunityIcons name="dots-vertical" />
-
-          {/** rating */}
-          <Rating value={details.voteAverage} />
-
-          {/** dot spacer icon */}
-          <MaterialCommunityIcons name="dots-vertical" />
-
-          {/** youtube link */}
-          <TouchableOpacity onPress={handleTrailerLinkPress}>
-            <MaterialCommunityIcons name="youtube" color="red" size={20} />
-          </TouchableOpacity>
-        </View>
+        {/** year & rating & trailer link */}
+        <YearRatingTrailerLinkSection
+          year={new Date(details.releaseDate).getFullYear()}
+          rating={details.voteAverage}
+          trailerLink={details.youTubeTrailerUrl}
+        />
 
         {/** genres */}
         <Genres values={details.genres} />
@@ -149,7 +127,7 @@ function ContentView({details}: ContentViewProps) {
 
         {/** recommendations */}
         <>
-          <Text style={styles.recommendations}>Recommendations</Text>
+          <Text style={styles.recommendationsTitle}>Recommendations</Text>
 
           <MovieList
             horizontal
@@ -193,18 +171,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  yearAndRatingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    columnGap: 3,
-  },
-  year: {
-    color: 'gray',
-  },
   overview: {
     fontSize: 14,
   },
-  recommendations: {
+  recommendationsTitle: {
     fontSize: 16,
     fontWeight: 'bold',
   },
