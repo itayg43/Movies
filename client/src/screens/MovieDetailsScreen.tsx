@@ -5,7 +5,7 @@ import {
   ScrollView,
   Text,
   View,
-  Pressable,
+  TouchableOpacity,
   Linking,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -108,11 +108,11 @@ function ContentView({details}: ContentViewProps) {
       <Image style={styles.image} source={{uri: details.posterUrl}} />
 
       {/** close button */}
-      <Pressable
+      <TouchableOpacity
         style={styles.closeButtonContainer}
         onPress={handleCloseButtonPress}>
         <MaterialCommunityIcons name="close" size={24} />
-      </Pressable>
+      </TouchableOpacity>
 
       {/** details */}
       <View style={styles.detailsContainer}>
@@ -136,9 +136,9 @@ function ContentView({details}: ContentViewProps) {
           <MaterialCommunityIcons name="dots-vertical" />
 
           {/** youtube link */}
-          <Pressable onPress={handleTrailerLinkPress}>
+          <TouchableOpacity onPress={handleTrailerLinkPress}>
             <MaterialCommunityIcons name="youtube" color="red" size={20} />
-          </Pressable>
+          </TouchableOpacity>
         </View>
 
         {/** genres */}
