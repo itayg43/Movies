@@ -8,7 +8,7 @@ const App = () => {
   const authStatus = useAppSelector(selectAuthStatus);
   const authUser = useAppSelector(selectAuthUser);
 
-  return authStatus && authUser ? (
+  return authStatus === 'succeded' && authUser ? (
     <AppBottomTabsNavigator />
   ) : (
     <AuthStackNavigator />
