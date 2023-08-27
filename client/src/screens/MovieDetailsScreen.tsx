@@ -8,7 +8,6 @@ import {
   Pressable,
   Linking,
 } from 'react-native';
-import {Chip} from 'react-native-paper';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -23,6 +22,7 @@ import errorHandlerUtil from '../utils/errorHandlerUtil';
 import LoadingView from '../components/LoadingView';
 import ErrorView from '../components/ErrorView';
 import Rating from '../components/Rating';
+import Genres from '../components/Genres';
 
 const MovieDetailsScreen = () => {
   const route = useRoute<MovieDetailsScreenRouteProp>();
@@ -142,11 +142,7 @@ function ContentView({details}: ContentViewProps) {
         </View>
 
         {/** genres */}
-        <ScrollView horizontal contentContainerStyle={styles.genresContainer}>
-          {details.genres.map(g => (
-            <Chip key={g}>{g}</Chip>
-          ))}
-        </ScrollView>
+        <Genres values={details.genres} />
 
         {/** overview */}
         <Text style={styles.overview}>{details.overview}</Text>
@@ -204,9 +200,6 @@ const styles = StyleSheet.create({
   },
   year: {
     color: 'gray',
-  },
-  genresContainer: {
-    columnGap: 5,
   },
   overview: {
     fontSize: 14,
