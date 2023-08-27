@@ -22,6 +22,7 @@ import {MovieList} from '../components/movieList';
 import errorHandlerUtil from '../utils/errorHandlerUtil';
 import LoadingView from '../components/LoadingView';
 import ErrorView from '../components/ErrorView';
+import Rating from '../components/Rating';
 
 const MovieDetailsScreen = () => {
   const route = useRoute<MovieDetailsScreenRouteProp>();
@@ -129,12 +130,7 @@ function ContentView({details}: ContentViewProps) {
           <MaterialCommunityIcons name="dots-vertical" />
 
           {/** rating */}
-          <View style={styles.ratingContainer}>
-            <Text style={styles.rating}>{details.voteAverage.toFixed(1)}</Text>
-
-            {/** star icon */}
-            <MaterialCommunityIcons name="star" color="orange" />
-          </View>
+          <Rating value={details.voteAverage} />
 
           {/** dot spacer icon */}
           <MaterialCommunityIcons name="dots-vertical" />
@@ -207,14 +203,6 @@ const styles = StyleSheet.create({
     columnGap: 3,
   },
   year: {
-    color: 'gray',
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    columnGap: 3,
-  },
-  rating: {
     color: 'gray',
   },
   genresContainer: {
