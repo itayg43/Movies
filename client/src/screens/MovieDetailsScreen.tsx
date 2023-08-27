@@ -18,30 +18,29 @@ import {
 } from '../navigators/MoviesStackNavigator';
 import {MovieDetails, RequestStatus} from '../types';
 import moviesService from '../services/moviesService';
-import LoadingView from '../components/LoadingView';
-import ErrorView from '../components/ErrorView';
 import {MovieList} from '../components/movieList';
 import errorHandlerUtil from '../utils/errorHandlerUtil';
+import LoadingView from '../components/LoadingView';
+import ErrorView from '../components/ErrorView';
 
 const MovieDetailsScreen = () => {
   const route = useRoute<MovieDetailsScreenRouteProp>();
 
-  const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
+  const movieId = route.params.id;
 
-  const [getMovieDetailsRequestStatus, setGetMovieDetailsRequestStatus] =
-    useState<RequestStatus>('loading');
-  const [getMovieDetailsErrorMessage, setGetMovieDetailsErrorMessage] =
-    useState('');
+  const [details, setDetails] = useState<MovieDetails | null>(null);
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleGetMovieDetailsById = useCallback(
+  const handleGetDetails = useCallback(
     async (id: number, signal?: AbortSignal) => {
       try {
-        setMovieDetails(await moviesService.getMovieDetailsById(id, signal));
-        setGetMovieDetailsRequestStatus('succeded');
+        setDetails(await moviesService.getMovieDetailsById(id, signal));
+        setRequestStatus('succeded');
       } catch (error) {
         const message = errorHandlerUtil.extractMessage(error);
-        setGetMovieDetailsErrorMessage(message);
-        setGetMovieDetailsRequestStatus('failed');
+        setErrorMessage(message);
+        setRequestStatus('failed');
       }
     },
     [],
@@ -50,27 +49,27 @@ const MovieDetailsScreen = () => {
   useEffect(() => {
     const controller = new AbortController();
 
-    handleGetMovieDetailsById(route.params.id, controller.signal);
+    handleGetDetails(movieId, controller.signal);
 
     return () => {
       controller.abort();
     };
-  }, [route.params.id, handleGetMovieDetailsById]);
+  }, [movieId, handleGetDetails]);
 
   return (
     <>
-      {getMovieDetailsRequestStatus === 'loading' && (
+      {requestStatus === 'loading' && (
         <LoadingView message="Loading Movie Details..." />
       )}
 
-      {getMovieDetailsRequestStatus === 'succeded' && movieDetails && (
-        <ContentView movieDetails={movieDetails} />
+      {requestStatus === 'succeded' && details && (
+        <ContentView details={details} />
       )}
 
-      {getMovieDetailsRequestStatus === 'failed' && (
+      {requestStatus === 'failed' && (
         <ErrorView
-          message={getMovieDetailsErrorMessage}
-          onTryAgain={() => handleGetMovieDetailsById(route.params.id)}
+          message={errorMessage}
+          onTryAgain={() => handleGetDetails(movieId)}
         />
       )}
     </>
@@ -80,35 +79,32 @@ const MovieDetailsScreen = () => {
 export default MovieDetailsScreen;
 
 type ContentViewProps = {
-  movieDetails: MovieDetails;
+  details: MovieDetails;
 };
 
-function ContentView({movieDetails}: ContentViewProps) {
+function ContentView({details}: ContentViewProps) {
   const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
 
-  const handleOpenYouTubeTrialer = () => {
-    if (movieDetails.youTubeTrailerUrl) {
-      Linking.openURL(movieDetails.youTubeTrailerUrl);
+  const handleCloseButtonPress = () => {
+    navigation.goBack();
+  };
+
+  const handleTrailerLinkPress = () => {
+    if (details.youTubeTrailerUrl) {
+      Linking.openURL(details.youTubeTrailerUrl);
     }
   };
 
-  const handleMovieListItemPress = useCallback(
-    (id: number) => {
-      navigation.push('movieDetailsScreen', {
-        id,
-      });
-    },
-    [navigation],
-  );
-
-  const handleCloseButtonPress = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+  const handleMovieListItemPress = (id: number) => {
+    navigation.push('movieDetailsScreen', {
+      id,
+    });
+  };
 
   return (
     <ScrollView style={styles.container}>
       {/** image */}
-      <Image style={styles.image} source={{uri: movieDetails.posterUrl}} />
+      <Image style={styles.image} source={{uri: details.posterUrl}} />
 
       {/** close button */}
       <Pressable
@@ -120,13 +116,13 @@ function ContentView({movieDetails}: ContentViewProps) {
       {/** details */}
       <View style={styles.detailsContainer}>
         {/** title */}
-        <Text style={styles.title}>{movieDetails.title}</Text>
+        <Text style={styles.title}>{details.title}</Text>
 
-        {/** year & rating & youtube link*/}
+        {/** year & rating & youtube link */}
         <View style={styles.yearAndRatingContainer}>
           {/** year */}
           <Text style={styles.year}>
-            {new Date(movieDetails.releaseDate).getFullYear()}
+            {new Date(details.releaseDate).getFullYear()}
           </Text>
 
           {/** dot spacer icon */}
@@ -134,9 +130,7 @@ function ContentView({movieDetails}: ContentViewProps) {
 
           {/** rating */}
           <View style={styles.ratingContainer}>
-            <Text style={styles.rating}>
-              {movieDetails.voteAverage.toFixed(1)}
-            </Text>
+            <Text style={styles.rating}>{details.voteAverage.toFixed(1)}</Text>
 
             {/** star icon */}
             <MaterialCommunityIcons name="star" color="orange" />
@@ -146,20 +140,20 @@ function ContentView({movieDetails}: ContentViewProps) {
           <MaterialCommunityIcons name="dots-vertical" />
 
           {/** youtube link */}
-          <Pressable onPress={handleOpenYouTubeTrialer}>
+          <Pressable onPress={handleTrailerLinkPress}>
             <MaterialCommunityIcons name="youtube" color="red" size={20} />
           </Pressable>
         </View>
 
         {/** genres */}
         <ScrollView horizontal contentContainerStyle={styles.genresContainer}>
-          {movieDetails.genres.map(g => (
+          {details.genres.map(g => (
             <Chip key={g}>{g}</Chip>
           ))}
         </ScrollView>
 
         {/** overview */}
-        <Text style={styles.overview}>{movieDetails.overview}</Text>
+        <Text style={styles.overview}>{details.overview}</Text>
 
         {/** recommendations */}
         <>
@@ -167,7 +161,7 @@ function ContentView({movieDetails}: ContentViewProps) {
 
           <MovieList
             horizontal
-            data={movieDetails.recommendations}
+            data={details.recommendations}
             onPress={handleMovieListItemPress}
           />
         </>
