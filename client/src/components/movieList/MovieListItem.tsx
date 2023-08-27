@@ -37,8 +37,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 300,
     borderWidth: 1,
-    borderRadius: 4,
-    borderColor: '#ddd',
+    borderColor: '#ccc',
   },
   horizontalContainer: {
     width: 300,
