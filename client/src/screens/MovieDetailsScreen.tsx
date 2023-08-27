@@ -29,12 +29,13 @@ const MovieDetailsScreen = () => {
   const movieId = route.params.id;
 
   const [details, setDetails] = useState<MovieDetails | null>(null);
-  const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading');
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleGetDetails = useCallback(
     async (id: number, signal?: AbortSignal) => {
       try {
+        setRequestStatus('loading');
         setDetails(await moviesService.getMovieDetailsById(id, signal));
         setRequestStatus('succeded');
       } catch (error) {

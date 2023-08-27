@@ -29,10 +29,11 @@ const MoviesScreen = () => {
   const moviesSearchQuery = useAppSelector(selectMoviesSearchQuery);
   const moviesErrorMessage = useAppSelector(selectMoviesErrorMessage);
 
-  const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading');
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
 
   const handleGetMovies = useCallback(async () => {
     try {
+      setRequestStatus('loading');
       await dispatch(moviesActions.getMovies()).unwrap();
       setRequestStatus('succeded');
     } catch (error) {
