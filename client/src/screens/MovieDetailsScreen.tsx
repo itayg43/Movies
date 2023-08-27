@@ -21,7 +21,7 @@ import errorHandlerUtil from '../utils/errorHandlerUtil';
 import LoadingView from '../components/LoadingView';
 import ErrorView from '../components/ErrorView';
 import Genres from '../components/Genres';
-import YearRatingTrailerLinkSection from '../components/movieList/YearRatingTrailerLinkSection';
+import YearRatingTrailerLinkSection from '../components/YearRatingTrailerLinkSection';
 
 const MovieDetailsScreen = () => {
   const route = useRoute<MovieDetailsScreenRouteProp>();
