@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { statusCode } from "../../constants";
 import moviesService from "./movies-service";
+import { GetMovieDetailsInput } from "./movies-schemas";
 
 const getMovies = async (_: Request, res: Response) => {
   const movies = await moviesService.getMovies();
@@ -9,11 +10,12 @@ const getMovies = async (_: Request, res: Response) => {
   res.status(statusCode.ok).json(movies);
 };
 
-const getMovieDetailsById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const movieDetails = await moviesService.getMovieDetailsById(
-    Number.parseInt(id)
-  );
+const getMovieDetailsById = async (
+  req: Request<GetMovieDetailsInput>,
+  res: Response
+) => {
+  const id = Number.parseInt(req.params.id);
+  const movieDetails = await moviesService.getMovieDetailsById(id);
 
   res.status(statusCode.ok).json(movieDetails);
 };
