@@ -4,9 +4,9 @@ import {Button, TextInput} from 'react-native-paper';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 
-import {loginFormSchema} from '../schemas';
-import {LoginFormData} from '../types';
-import FormTextInput from '../components/FormTextInput';
+import {loginFormSchema} from '../../schemas';
+import {LoginFormData} from '../../types';
+import FormTextInput from './FormTextInput';
 
 type Props = {
   contentContainerStyle?: StyleProp<ViewStyle>;

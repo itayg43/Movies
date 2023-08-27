@@ -4,8 +4,8 @@ import {Button, TextInput} from 'react-native-paper';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 
-import {registerFormSchema} from '../schemas';
-import {RegisterFormData} from '../types';
+import {registerFormSchema} from '../../schemas';
+import {RegisterFormData} from '../../types';
 import FormTextInput from './FormTextInput';
 
 type Props = {

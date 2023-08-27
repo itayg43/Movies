@@ -7,7 +7,7 @@ import {LoginFormData} from '../types';
 import authActions from '../redux/auth/authActions';
 import {LoginScreenNavigationProp} from '../navigators/AuthStackNavigator';
 import SafeView from '../components/SafeView';
-import LoginForm from '../components/LoginForm';
+import {LoginForm} from '../components/forms';
 
 const LoginScreen = () => {
   const navigation = useNavigation<LoginScreenNavigationProp>();

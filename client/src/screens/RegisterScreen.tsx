@@ -5,7 +5,7 @@ import {useAppDispatch} from '../hooks';
 import authActions from '../redux/auth/authActions';
 import {RegisterFormData} from '../types';
 import SafeView from '../components/SafeView';
-import RegisterForm from '../components/RegisterForm';
+import {RegisterForm} from '../components/forms';
 
 const RegisterScreen = () => {
   const dispatch = useAppDispatch();
