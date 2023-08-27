@@ -15,7 +15,7 @@ const getMovies = async () => {
   return movies;
 };
 
-const getMovieDetailsById = async (id: number) => {
+const getMovieDetailsById = async (id: string) => {
   const cachedMovieDetails = await moviesCacheAccess.getMovieDetailsById(id);
 
   if (cachedMovieDetails) {

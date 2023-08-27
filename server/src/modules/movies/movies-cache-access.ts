@@ -19,9 +19,9 @@ const setMovies = async (values: Movie[]) => {
 };
 
 const getMovieDetailsById = async (
-  id: number
+  id: string
 ): Promise<MovieDetails | null> => {
-  const jsonValue = await redisClient.get(id.toString());
+  const jsonValue = await redisClient.get(`movie_${id}`);
 
   return jsonValue ? JSON.parse(jsonValue) : null;
 };

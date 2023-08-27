@@ -14,8 +14,7 @@ const getMovieDetailsById = async (
   req: Request<GetMovieDetailsInput>,
   res: Response
 ) => {
-  const id = Number.parseInt(req.params.id);
-  const movieDetails = await moviesService.getMovieDetailsById(id);
+  const movieDetails = await moviesService.getMovieDetailsById(req.params.id);
 
   res.status(statusCode.ok).json(movieDetails);
 };

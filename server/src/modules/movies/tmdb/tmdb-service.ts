@@ -17,7 +17,7 @@ const getMoviesByCategory = async (category: "popular") => {
   }
 };
 
-const getMovieDetailsById = async (id: number) => {
+const getMovieDetailsById = async (id: string) => {
   try {
     const { data } = await tmdbClient.get<MovieDetailsResponseData>(
       `/movie/${id}?language=en-US&append_to_response=videos,recommendations`
