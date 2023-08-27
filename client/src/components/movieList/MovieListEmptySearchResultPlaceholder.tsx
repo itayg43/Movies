@@ -5,15 +5,15 @@ type Props = {
   searchQuery: string;
 };
 
-const MovieListEmptyPlaceholder = ({searchQuery}: Props) => {
+const MovieListEmptySearchResultPlaceholder = ({searchQuery}: Props) => {
   return (
     <View style={styles.container}>
-      {searchQuery !== '' && <Text>No results for: {searchQuery}</Text>}
+      {searchQuery !== '' && <Text>No search results.</Text>}
     </View>
   );
 };
 
-export default MovieListEmptyPlaceholder;
+export default MovieListEmptySearchResultPlaceholder;
 
 const styles = StyleSheet.create({
   container: {

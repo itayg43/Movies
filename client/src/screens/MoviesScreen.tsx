@@ -3,99 +3,83 @@ import {StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {MoviesScreenNavigationProp} from '../navigators/MoviesStackNavigator';
-import {
-  useAppDispatch,
-  useAppSelector,
-  useDebounce,
-  useIsFirstRender,
-} from '../hooks';
+import {useAppDispatch, useAppSelector} from '../hooks';
 import moviesActions from '../redux/movies/moviesActions';
 import {updateSearchQuery} from '../redux/movies/moviesSlice';
 import {RequestStatus} from '../types';
 import {
   selectMovies,
   selectMoviesErrorMessage,
+  selectMoviesSearchQuery,
 } from '../redux/movies/moviesSelectors';
 import SafeView from '../components/SafeView';
 import LoadingView from '../components/LoadingView';
 import ErrorView from '../components/ErrorView';
 import {
   MovieList,
-  MovieListHeader,
-  MovieListEmptyPlaceholder,
+  MovieListSearchBarHeader,
+  MovieListEmptySearchResultPlaceholder,
 } from '../components/movieList';
 
 const MoviesScreen = () => {
-  const isFirstRender = useIsFirstRender();
-
-  const dispatch = useAppDispatch();
   const navigation = useNavigation<MoviesScreenNavigationProp>();
 
+  const dispatch = useAppDispatch();
   const movies = useAppSelector(selectMovies);
+  const moviesSearchQuery = useAppSelector(selectMoviesSearchQuery);
   const moviesErrorMessage = useAppSelector(selectMoviesErrorMessage);
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const debouncedSearchQuery = useDebounce(searchQuery);
-
-  const [getMoviesRequestStatus, setGetMoviesRequestStatus] =
-    useState<RequestStatus>('loading');
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading');
 
   const handleGetMovies = useCallback(async () => {
     try {
       await dispatch(moviesActions.getMovies()).unwrap();
-      setGetMoviesRequestStatus('succeded');
+      setRequestStatus('succeded');
     } catch (error) {
-      setGetMoviesRequestStatus('failed');
+      setRequestStatus('failed');
     }
   }, [dispatch]);
 
-  const handleMovieListItemPress = useCallback(
-    (id: number) => {
-      navigation.navigate('movieDetailsScreen', {
-        id,
-      });
-    },
-    [navigation],
-  );
+  const handleUpdateMoviesSearchQuery = (value: string) => {
+    dispatch(updateSearchQuery(value));
+  };
+
+  const handleMovieListItemPress = (id: number) => {
+    navigation.navigate('movieDetailsScreen', {
+      id,
+    });
+  };
 
   useEffect(() => {
     handleGetMovies();
   }, [handleGetMovies]);
 
-  useEffect(() => {
-    if (isFirstRender) {
-      return;
-    }
-
-    dispatch(updateSearchQuery(debouncedSearchQuery));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, debouncedSearchQuery]);
-
   return (
     <SafeView>
-      {getMoviesRequestStatus === 'loading' && (
+      {requestStatus === 'loading' && (
         <LoadingView message="Loading Movies..." />
       )}
 
-      {getMoviesRequestStatus === 'succeded' && (
+      {requestStatus === 'succeded' && (
         <MovieList
           contentContainerStyle={styles.listContainer}
           data={movies}
           onPress={handleMovieListItemPress}
           listHeaderComponent={
-            <MovieListHeader
+            <MovieListSearchBarHeader
               contentContainerStyle={styles.listHeaderContainer}
-              searchQuery={searchQuery}
-              onSearchQueryChange={setSearchQuery}
+              onSearchQueryChange={handleUpdateMoviesSearchQuery}
             />
           }
           listEmptyComponent={
-            <MovieListEmptyPlaceholder searchQuery={searchQuery} />
+            <MovieListEmptySearchResultPlaceholder
+              searchQuery={moviesSearchQuery}
+            />
           }
         />
       )}
 
-      {getMoviesRequestStatus === 'failed' && (
+      {requestStatus === 'failed' && (
         <ErrorView message={moviesErrorMessage} onTryAgain={handleGetMovies} />
       )}
     </SafeView>
