@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, FlatList, View} from 'react-native';
+import {StyleSheet, FlatList, View, Text} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
@@ -92,6 +92,9 @@ const MoviesScreen = () => {
             )}
             ItemSeparatorComponent={ListSpacer}
             ListFooterComponent={ListSpacer}
+            ListEmptyComponent={
+              debouncedSearchQuery !== '' ? <EmptyListPlaceholder /> : null
+            }
             showsVerticalScrollIndicator={false}
           />
         </View>
@@ -110,6 +113,14 @@ function ListSpacer() {
   return <View style={styles.listSpacerContainer} />;
 }
 
+function EmptyListPlaceholder() {
+  return (
+    <View style={styles.emptyListPlaceholderContainer}>
+      <Text>No results found.</Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
@@ -119,5 +130,10 @@ const styles = StyleSheet.create({
 
   listSpacerContainer: {
     marginBottom: 10,
+  },
+
+  emptyListPlaceholderContainer: {
+    marginTop: 50,
+    alignItems: 'center',
   },
 });
