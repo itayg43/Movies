@@ -26,6 +26,7 @@ import YearRatingTrailerLinkSection from '../components/YearRatingTrailerLinkSec
 
 const MovieDetailsScreen = () => {
   const route = useRoute<MovieDetailsScreenRouteProp>();
+  const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
 
   const movieId = route.params.id;
 
@@ -48,6 +49,16 @@ const MovieDetailsScreen = () => {
     [],
   );
 
+  const handleCloseButtonPress = () => {
+    navigation.goBack();
+  };
+
+  const handleMovieListItemPress = (id: number) => {
+    navigation.navigate('movieDetailsScreen', {
+      id,
+    });
+  };
+
   useEffect(() => {
     const controller = new AbortController();
 
@@ -65,7 +76,58 @@ const MovieDetailsScreen = () => {
       )}
 
       {requestStatus === 'succeded' && details && (
-        <ContentView details={details} />
+        <ScrollView style={styles.container}>
+          {/** image */}
+          <Image style={styles.image} source={{uri: details.posterUrl}} />
+
+          {/** close button */}
+          <TouchableOpacity
+            style={styles.closeButtonContainer}
+            onPress={handleCloseButtonPress}>
+            <MaterialCommunityIcons name="close" size={24} />
+          </TouchableOpacity>
+
+          {/** details */}
+          <View style={styles.detailsContainer}>
+            {/** title */}
+            <Text style={styles.title}>{details.title}</Text>
+
+            {/** year & rating & trailer link */}
+            <YearRatingTrailerLinkSection
+              releaseDate={details.releaseDate}
+              voteAverage={details.voteAverage}
+              trailerLink={details.youTubeTrailerUrl}
+            />
+
+            {/** genres */}
+            <Genres values={details.genres} />
+
+            {/** overview */}
+            <Text style={styles.overview}>{details.overview}</Text>
+
+            {/** recommendations */}
+            {details.recommendations.length > 0 && (
+              <>
+                <Text style={styles.recommendationsTitle}>Recommendations</Text>
+
+                <FlatList
+                  data={details.recommendations}
+                  keyExtractor={item => item.id.toString()}
+                  renderItem={({item}) => (
+                    <MovieListItem
+                      item={item}
+                      onPress={() => handleMovieListItemPress(item.id)}
+                      horizontal
+                    />
+                  )}
+                  horizontal
+                  ItemSeparatorComponent={ListSpacer}
+                  showsHorizontalScrollIndicator={false}
+                />
+              </>
+            )}
+          </View>
+        </ScrollView>
       )}
 
       {requestStatus === 'failed' && (
@@ -79,79 +141,6 @@ const MovieDetailsScreen = () => {
 };
 
 export default MovieDetailsScreen;
-
-type ContentViewProps = {
-  details: MovieDetails;
-};
-
-function ContentView({details}: ContentViewProps) {
-  const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
-
-  const handleCloseButtonPress = () => {
-    navigation.goBack();
-  };
-
-  const handleMovieListItemPress = (id: number) => {
-    navigation.navigate('movieDetailsScreen', {
-      id,
-    });
-  };
-
-  return (
-    <ScrollView style={styles.container}>
-      {/** image */}
-      <Image style={styles.image} source={{uri: details.posterUrl}} />
-
-      {/** close button */}
-      <TouchableOpacity
-        style={styles.closeButtonContainer}
-        onPress={handleCloseButtonPress}>
-        <MaterialCommunityIcons name="close" size={24} />
-      </TouchableOpacity>
-
-      {/** details */}
-      <View style={styles.detailsContainer}>
-        {/** title */}
-        <Text style={styles.title}>{details.title}</Text>
-
-        {/** year & rating & trailer link */}
-        <YearRatingTrailerLinkSection
-          releaseDate={details.releaseDate}
-          voteAverage={details.voteAverage}
-          trailerLink={details.youTubeTrailerUrl}
-        />
-
-        {/** genres */}
-        <Genres values={details.genres} />
-
-        {/** overview */}
-        <Text style={styles.overview}>{details.overview}</Text>
-
-        {/** recommendations */}
-        {details.recommendations.length > 0 && (
-          <>
-            <Text style={styles.recommendationsTitle}>Recommendations</Text>
-
-            <FlatList
-              data={details.recommendations}
-              keyExtractor={item => item.id.toString()}
-              renderItem={({item}) => (
-                <MovieListItem
-                  item={item}
-                  onPress={() => handleMovieListItemPress(item.id)}
-                  horizontal
-                />
-              )}
-              horizontal
-              ItemSeparatorComponent={ListSpacer}
-              showsHorizontalScrollIndicator={false}
-            />
-          </>
-        )}
-      </View>
-    </ScrollView>
-  );
-}
 
 function ListSpacer() {
   return <View style={styles.listSpacerContainer} />;

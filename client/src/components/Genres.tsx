@@ -11,7 +11,8 @@ const Genres = ({contentContainerStyle, values}: Props) => {
   return (
     <ScrollView
       horizontal
-      contentContainerStyle={[styles.container, contentContainerStyle]}>
+      contentContainerStyle={[styles.container, contentContainerStyle]}
+      showsHorizontalScrollIndicator={false}>
       {values.map(v => (
         <Chip key={v}>{v}</Chip>
       ))}
