@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, Pressable, Text, Image, View} from 'react-native';
 
-import {Movie} from '../../types';
-import YearRatingTrailerLinkSection from '../YearRatingTrailerLinkSection';
+import {Movie} from '../types';
+import YearRatingTrailerLinkSection from './YearRatingTrailerLinkSection';
 
 type Props = {
   item: Movie;

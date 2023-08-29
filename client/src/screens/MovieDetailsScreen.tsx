@@ -6,6 +6,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,7 +17,7 @@ import {
 } from '../navigators/MoviesStackNavigator';
 import {MovieDetails, RequestStatus} from '../types';
 import moviesService from '../services/moviesService';
-import {MovieList} from '../components/movieList';
+import MovieListItem from '../components/MovieListItem';
 import errorHandlerUtil from '../utils/errorHandlerUtil';
 import LoadingView from '../components/LoadingView';
 import ErrorView from '../components/ErrorView';
@@ -127,23 +128,38 @@ function ContentView({details}: ContentViewProps) {
         <Text style={styles.overview}>{details.overview}</Text>
 
         {/** recommendations */}
-        <>
-          <Text style={styles.recommendationsTitle}>Recommendations</Text>
+        {details.recommendations.length > 0 && (
+          <>
+            <Text style={styles.recommendationsTitle}>Recommendations</Text>
 
-          <MovieList
-            horizontal
-            data={details.recommendations}
-            onPress={handleMovieListItemPress}
-          />
-        </>
+            <FlatList
+              data={details.recommendations}
+              keyExtractor={item => item.id.toString()}
+              renderItem={({item}) => (
+                <MovieListItem
+                  item={item}
+                  onPress={() => handleMovieListItemPress(item.id)}
+                  horizontal
+                />
+              )}
+              horizontal
+              ItemSeparatorComponent={ListSpacer}
+              showsHorizontalScrollIndicator={false}
+            />
+          </>
+        )}
       </View>
     </ScrollView>
   );
 }
 
+function ListSpacer() {
+  return <View style={styles.listSpacerContainer} />;
+}
+
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 20,
+    marginBottom: 25,
   },
 
   image: {
@@ -178,5 +194,9 @@ const styles = StyleSheet.create({
   recommendationsTitle: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+
+  listSpacerContainer: {
+    marginRight: 5,
   },
 });
