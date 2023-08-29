@@ -16,6 +16,7 @@ export class Movie {
   overview: string;
   releaseDate: string;
   voteAverage: number;
+  voteCount: number;
 
   constructor(data: MovieResponseData) {
     this.id = data.id;
@@ -29,6 +30,7 @@ export class Movie {
     this.overview = data.overview;
     this.releaseDate = data.release_date;
     this.voteAverage = data.vote_average;
+    this.voteCount = data.vote_count;
   }
 }
 
