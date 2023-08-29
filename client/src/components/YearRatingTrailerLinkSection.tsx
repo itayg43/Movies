@@ -2,34 +2,42 @@ import React from 'react';
 import {StyleSheet, View, TouchableOpacity, Text, Linking} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Rating from './Rating';
-
 type Props = {
-  year: number;
-  rating: number;
+  releaseDate: string;
+  voteAverage: number;
   trailerLink?: string | undefined | null;
 };
 
-const YearRatingTrailerLinkSection = ({year, rating, trailerLink}: Props) => {
-  const handleTrailerLinkPress = () => {
-    if (trailerLink) {
-      Linking.openURL(trailerLink);
-    }
-  };
-
+const YearRatingTrailerLinkSection = ({
+  releaseDate,
+  voteAverage,
+  trailerLink,
+}: Props) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.year}>{year}</Text>
+      {/** year */}
+      {releaseDate !== '' && (
+        <Text style={styles.year}>{new Date(releaseDate).getFullYear()}</Text>
+      )}
 
-      <MaterialCommunityIcons name="dots-vertical" />
+      {/** rating */}
+      {voteAverage > 0 && (
+        <>
+          <MaterialCommunityIcons name="dots-vertical" />
 
-      <Rating value={rating} />
+          <View style={styles.ratingContainer}>
+            <Text style={styles.rating}>{voteAverage.toFixed(1)}</Text>
+
+            <MaterialCommunityIcons name="star" color="orange" />
+          </View>
+        </>
+      )}
 
       {trailerLink && (
         <>
           <MaterialCommunityIcons name="dots-vertical" />
 
-          <TouchableOpacity onPress={handleTrailerLinkPress}>
+          <TouchableOpacity onPress={() => Linking.openURL(trailerLink)}>
             <MaterialCommunityIcons name="youtube" color="red" size={20} />
           </TouchableOpacity>
         </>
@@ -48,6 +56,15 @@ const styles = StyleSheet.create({
   },
 
   year: {
+    color: 'gray',
+  },
+
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 3,
+  },
+  rating: {
     color: 'gray',
   },
 });

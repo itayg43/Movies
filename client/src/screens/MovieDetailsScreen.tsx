@@ -116,8 +116,8 @@ function ContentView({details}: ContentViewProps) {
 
         {/** year & rating & trailer link */}
         <YearRatingTrailerLinkSection
-          year={new Date(details.releaseDate).getFullYear()}
-          rating={details.voteAverage}
+          releaseDate={details.releaseDate}
+          voteAverage={details.voteAverage}
           trailerLink={details.youTubeTrailerUrl}
         />
 

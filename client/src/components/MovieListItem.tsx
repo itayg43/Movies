@@ -26,8 +26,8 @@ const MovieListItem = ({item, onPress, horizontal}: Props) => {
         </Text>
 
         <YearRatingTrailerLinkSection
-          year={new Date(item.releaseDate).getFullYear()}
-          rating={item.voteAverage}
+          releaseDate={item.releaseDate}
+          voteAverage={item.voteAverage}
         />
 
         <Text numberOfLines={2}>{item.overview}</Text>
