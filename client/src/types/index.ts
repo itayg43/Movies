@@ -37,6 +37,7 @@ export type Movie = {
   overview: string;
   releaseDate: string;
   voteAverage: number;
+  voteCount: number;
 };
 
 export type MovieDetails = Movie & {

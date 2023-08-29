@@ -96,6 +96,7 @@ const MovieDetailsScreen = () => {
             <YearRatingTrailerLinkSection
               releaseDate={details.releaseDate}
               voteAverage={details.voteAverage}
+              voteCount={details.voteCount}
               trailerLink={details.youTubeTrailerUrl}
             />
 

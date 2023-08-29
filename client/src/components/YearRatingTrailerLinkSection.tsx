@@ -5,12 +5,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 type Props = {
   releaseDate: string;
   voteAverage: number;
+  voteCount: number;
   trailerLink?: string | undefined | null;
 };
 
 const YearRatingTrailerLinkSection = ({
   releaseDate,
   voteAverage,
+  voteCount,
   trailerLink,
 }: Props) => {
   return (
@@ -21,7 +23,7 @@ const YearRatingTrailerLinkSection = ({
       )}
 
       {/** rating */}
-      {voteAverage > 0 && (
+      {voteCount > 0 && (
         <>
           <MaterialCommunityIcons name="dots-vertical" />
 
@@ -29,6 +31,8 @@ const YearRatingTrailerLinkSection = ({
             <Text style={styles.rating}>{voteAverage.toFixed(1)}</Text>
 
             <MaterialCommunityIcons name="star" color="orange" />
+
+            <Text style={styles.ratingsCount}>({voteCount})</Text>
           </View>
         </>
       )}
@@ -66,5 +70,9 @@ const styles = StyleSheet.create({
   },
   rating: {
     color: 'gray',
+  },
+  ratingsCount: {
+    color: 'gray',
+    fontSize: 12,
   },
 });
