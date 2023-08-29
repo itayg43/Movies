@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
+import {Chip} from 'react-native-paper';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -21,7 +22,6 @@ import MovieListItem from '../components/MovieListItem';
 import errorHandlerUtil from '../utils/errorHandlerUtil';
 import LoadingView from '../components/LoadingView';
 import ErrorView from '../components/ErrorView';
-import Genres from '../components/Genres';
 import YearRatingTrailerLinkSection from '../components/YearRatingTrailerLinkSection';
 
 const MovieDetailsScreen = () => {
@@ -76,7 +76,9 @@ const MovieDetailsScreen = () => {
       )}
 
       {requestStatus === 'succeded' && details && (
-        <ScrollView style={styles.container}>
+        <ScrollView
+          style={styles.container}
+          showsVerticalScrollIndicator={false}>
           {/** image */}
           <Image style={styles.image} source={{uri: details.posterUrl}} />
 
@@ -101,7 +103,14 @@ const MovieDetailsScreen = () => {
             />
 
             {/** genres */}
-            <Genres values={details.genres} />
+            <ScrollView
+              horizontal
+              contentContainerStyle={styles.genresContainer}
+              showsHorizontalScrollIndicator={false}>
+              {details.genres.map(g => (
+                <Chip key={g}>{g}</Chip>
+              ))}
+            </ScrollView>
 
             {/** overview */}
             <Text style={styles.overview}>{details.overview}</Text>
@@ -177,6 +186,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  genresContainer: {
+    columnGap: 5,
   },
   overview: {
     fontSize: 14,
