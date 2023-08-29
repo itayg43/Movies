@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   ratingsCount: {
-    color: 'gray',
     fontSize: 12,
   },
 });
