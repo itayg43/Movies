@@ -92,7 +92,7 @@ function ContentView({details}: ContentViewProps) {
   };
 
   const handleMovieListItemPress = (id: number) => {
-    navigation.push('movieDetailsScreen', {
+    navigation.navigate('movieDetailsScreen', {
       id,
     });
   };
