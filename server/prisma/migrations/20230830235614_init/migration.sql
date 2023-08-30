@@ -12,7 +12,7 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `WatchList` (
+CREATE TABLE `Watchlist` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `movieId` INTEGER NOT NULL,
     `userId` INTEGER NOT NULL,
@@ -24,4 +24,4 @@ CREATE TABLE `WatchList` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `WatchList` ADD CONSTRAINT `WatchList_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Watchlist` ADD CONSTRAINT `Watchlist_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
