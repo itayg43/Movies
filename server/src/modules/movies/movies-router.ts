@@ -7,15 +7,15 @@ import moviesMiddlewares from "./movies-middlewares";
 import validateSchema from "../../middlewares/validate-schema";
 import { getMovieDetailsSchema } from "./movies-schemas";
 
-const mvoiesRouter = express.Router();
+const moviesRouter = express.Router();
 
-mvoiesRouter.get(
+moviesRouter.get(
   "/",
   [validateAccessToken, asyncHandler(moviesMiddlewares.checkCacheForMovies)],
   asyncHandler(moviesController.getMovies)
 );
 
-mvoiesRouter.get(
+moviesRouter.get(
   "/:id",
   [
     validateAccessToken,
@@ -25,4 +25,4 @@ mvoiesRouter.get(
   asyncHandler(moviesController.getMovieDetailsById)
 );
 
-export default mvoiesRouter;
+export default moviesRouter;
