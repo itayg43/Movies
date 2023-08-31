@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 
 import { statusCode } from "../../constants";
 import usersService from "./users-service";
-import { AddToUserWatchlistInput } from "./users-schemas";
+import {
+  AddToUserWatchlistInput,
+  SoftDeleteUserWatchlistItemInput,
+} from "./users-schemas";
 
 const addToUserWatchlist = async (
   req: Request<{}, {}, AddToUserWatchlistInput>,
@@ -24,7 +27,19 @@ const getUserWatchlist = async (_: Request, res: Response) => {
   res.status(statusCode.ok).json(watchlist);
 };
 
+const softDeleteUserWatchlistItem = async (
+  req: Request<SoftDeleteUserWatchlistItemInput>,
+  res: Response
+) => {
+  await usersService.softDeleteUserWatchlistItem(
+    Number.parseInt(req.params.id)
+  );
+
+  res.sendStatus(statusCode.ok);
+};
+
 export default {
   addToUserWatchlist,
   getUserWatchlist,
+  softDeleteUserWatchlistItem,
 };

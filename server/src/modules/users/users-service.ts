@@ -54,7 +54,12 @@ const getUserWatchlist = async (userId: number) => {
   return await Promise.all(mappedWatchlist);
 };
 
+const softDeleteUserWatchlistItem = async (id: number) => {
+  await usersDataAccess.softDeleteUserWatchlistItem(id);
+};
+
 export default {
   addToUserWatchlist,
   getUserWatchlist,
+  softDeleteUserWatchlistItem,
 };
