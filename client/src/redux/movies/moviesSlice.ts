@@ -1,11 +1,7 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {Movie} from '../../types';
+import {MovieEntities} from '../../types';
 import moviesActions from './moviesActions';
-
-export type MovieEntities = {
-  [id: number]: Movie;
-};
 
 type MoviesState = {
   entities: MovieEntities;

@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import authReducer from './auth/authSlice';
 import moviesReducer from './movies/moviesSlice';
+import watchlistReducer from './watchlist/watchlistSlice';
 
 const additionalMiddlewares: any[] = [];
 
@@ -23,6 +24,7 @@ const store = configureStore({
   reducer: {
     auth: authPersistedReducer,
     movies: moviesReducer,
+    watchlist: watchlistReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

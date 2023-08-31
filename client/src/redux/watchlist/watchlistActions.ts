@@ -1,9 +1,9 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import {RootState, AppDispatch} from '../store';
-import moviesService from '../../services/moviesService';
+import watchlistService from '../../services/watchlistService';
 import errorHandlerUtil from '../../utils/errorHandlerUtil';
-import {MovieEntities} from '../../types';
+import {WatchlistEntities} from '../../types';
 
 const definedCreateAsyncThunk = createAsyncThunk.withTypes<{
   state: RootState;
@@ -11,16 +11,16 @@ const definedCreateAsyncThunk = createAsyncThunk.withTypes<{
   rejectValue: string;
 }>();
 
-const getMovies = definedCreateAsyncThunk<MovieEntities, void>(
-  'movies/getMoives',
+const getWatchlist = definedCreateAsyncThunk<WatchlistEntities, void>(
+  'watchlist/getWatchlist',
   async (_, {rejectWithValue}) => {
     try {
-      const movies = await moviesService.getMovies();
+      const watchlist = await watchlistService.getWatchlist();
 
-      return movies.reduce(
-        (entities, currMovie) => ({
+      return watchlist.reduce(
+        (entities, currWatchlist) => ({
           ...entities,
-          [currMovie.id]: currMovie,
+          [currWatchlist.id]: currWatchlist,
         }),
         {},
       );
@@ -32,5 +32,5 @@ const getMovies = definedCreateAsyncThunk<MovieEntities, void>(
 );
 
 export default {
-  getMovies,
+  getWatchlist,
 };

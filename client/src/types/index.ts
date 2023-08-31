@@ -45,3 +45,17 @@ export type MovieDetails = Movie & {
   youTubeTrailerUrl: string | null;
   recommendations: Movie[];
 };
+
+export type MovieEntities = {
+  [id: number]: Movie;
+};
+
+export type Watchlist = {
+  id: number;
+  createdAt: string;
+  movie: Movie;
+};
+
+export type WatchlistEntities = {
+  [id: number]: Watchlist;
+};
