@@ -17,11 +17,7 @@ moviesRouter.get(
 
 moviesRouter.get(
   "/:id",
-  [
-    validateAccessToken,
-    validateSchema(getMovieDetailsSchema),
-    asyncHandler(moviesMiddlewares.checkCacheForMovieDetails),
-  ],
+  [validateAccessToken, validateSchema(getMovieDetailsSchema)],
   asyncHandler(moviesController.getMovieDetailsById)
 );
 

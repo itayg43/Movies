@@ -10,6 +10,12 @@ const getMovies = async () => {
 };
 
 const getMovieDetailsById = async (id: string) => {
+  const cachedMovieDetails = await moviesCacheAccess.getMovieDetailsById(id);
+
+  if (cachedMovieDetails) {
+    return cachedMovieDetails;
+  }
+
   const movieDetails = await tmdbService.getMovieDetailsById(id);
 
   await moviesCacheAccess.setMovieDetails(movieDetails);
