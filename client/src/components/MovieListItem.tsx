@@ -21,7 +21,7 @@ const MovieListItem = ({item, onPress, horizontal}: Props) => {
       />
 
       <View style={styles.detailsContainer}>
-        <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit>
+        <Text style={styles.title} numberOfLines={1}>
           {item.title}
         </Text>
 
