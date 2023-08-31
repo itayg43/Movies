@@ -49,6 +49,8 @@ const styles = StyleSheet.create({
     height: 125,
     borderRadius: 4,
     backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
 
   image: {
