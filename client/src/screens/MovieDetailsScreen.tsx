@@ -23,21 +23,12 @@ import errorHandlerUtil from '../utils/errorHandlerUtil';
 import LoadingView from '../components/LoadingView';
 import ErrorView from '../components/ErrorView';
 import YearRatingTrailerLinkSection from '../components/YearRatingTrailerLinkSection';
-import {useAppDispatch, useAppSelector} from '../hooks';
-import watchlistActions from '../redux/watchlist/watchlistActions';
-import {selectWatchlist} from '../redux/watchlist/watchlistSelectors';
 
 const MovieDetailsScreen = () => {
   const route = useRoute<MovieDetailsScreenRouteProp>();
   const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
 
   const movieId = route.params.id;
-
-  const dispatch = useAppDispatch();
-
-  const watchlist = useAppSelector(selectWatchlist);
-
-  const watchlistItem = watchlist.find(w => w.movie.id === movieId);
 
   const [details, setDetails] = useState<MovieDetails | null>(null);
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
@@ -63,16 +54,6 @@ const MovieDetailsScreen = () => {
     navigation.navigate('movieDetailsScreen', {
       id,
     });
-  };
-
-  const handleHeartIconPress = async () => {
-    try {
-      watchlistItem
-        ? await dispatch(
-            watchlistActions.deleteWatchlistItem(watchlistItem.id),
-          ).unwrap()
-        : await dispatch(watchlistActions.addToWatchlist(movieId)).unwrap();
-    } catch (error) {}
   };
 
   useEffect(() => {
@@ -115,10 +96,10 @@ const MovieDetailsScreen = () => {
               </View>
 
               {/** heart icon */}
-              <TouchableOpacity onPress={handleHeartIconPress}>
+              <TouchableOpacity>
                 <MaterialCommunityIcons
-                  name={watchlistItem ? 'heart' : 'heart-outline'}
-                  color={watchlistItem ? 'red' : 'gray'}
+                  name={'heart-outline'}
+                  color={'gray'}
                   size={24}
                 />
               </TouchableOpacity>
