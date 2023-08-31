@@ -1,42 +1,42 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 import {MovieEntities} from '../../types';
-import moviesActions from './moviesActions';
+import moviesAsyncActions from './moviesAsyncActions';
 
 type MoviesState = {
-  entities: MovieEntities;
+  message: string;
   searchQuery: string;
-  errorMessage: string;
+  entities: MovieEntities;
 };
 
 const initialState: MoviesState = {
-  entities: {},
+  message: '',
   searchQuery: '',
-  errorMessage: '',
+  entities: {},
 };
 
 const moviesSlice = createSlice({
   name: 'movies',
   initialState,
   reducers: {
-    updateSearchQuery: (state, action: PayloadAction<string>) => {
+    updateMoviesSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
     },
   },
   extraReducers: builder => {
     builder
-      .addCase(moviesActions.getMovies.fulfilled, (state, {payload}) => {
+      .addCase(moviesAsyncActions.getMovies.fulfilled, (state, {payload}) => {
+        state.message = '';
         state.entities = payload;
-        state.errorMessage = '';
       })
-      .addCase(moviesActions.getMovies.rejected, (state, {payload}) => {
+      .addCase(moviesAsyncActions.getMovies.rejected, (state, {payload}) => {
         if (payload) {
-          state.errorMessage = payload;
+          state.message = payload;
         }
       });
   },
 });
 
-export const {updateSearchQuery} = moviesSlice.actions;
+export const {updateMoviesSearchQuery} = moviesSlice.actions;
 
 export default moviesSlice.reducer;

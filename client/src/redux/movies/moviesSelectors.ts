@@ -1,18 +1,17 @@
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../store';
 
-export const selectMoviesEntities = (state: RootState) => state.movies.entities;
+export const selectMoviesMessage = (state: RootState) => state.movies.message;
 
 export const selectMoviesSearchQuery = (state: RootState) =>
   state.movies.searchQuery;
 
-export const selectMoviesErrorMessage = (state: RootState) =>
-  state.movies.errorMessage;
+export const selectMoviesEntities = (state: RootState) => state.movies.entities;
 
 export const selectMovies = createSelector(
-  selectMoviesEntities,
   selectMoviesSearchQuery,
-  (moviesEntities, searchQuery) => {
+  selectMoviesEntities,
+  (searchQuery, moviesEntities) => {
     const movies = Object.values(moviesEntities);
 
     if (searchQuery === '') {

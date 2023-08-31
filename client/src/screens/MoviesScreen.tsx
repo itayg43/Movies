@@ -10,12 +10,12 @@ import {
   useDebounce,
   useIsFirstRender,
 } from '../hooks';
-import moviesActions from '../redux/movies/moviesActions';
-import {updateSearchQuery} from '../redux/movies/moviesSlice';
+import moviesActions from '../redux/movies/moviesAsyncActions';
+import {updateMoviesSearchQuery} from '../redux/movies/moviesSlice';
 import {RequestStatus} from '../types';
 import {
+  selectMoviesMessage,
   selectMovies,
-  selectMoviesErrorMessage,
 } from '../redux/movies/moviesSelectors';
 import SafeView from '../components/SafeView';
 import LoadingView from '../components/LoadingView';
@@ -30,7 +30,7 @@ const MoviesScreen = () => {
   const dispatch = useAppDispatch();
 
   const movies = useAppSelector(selectMovies);
-  const moviesErrorMessage = useAppSelector(selectMoviesErrorMessage);
+  const moviesMessage = useAppSelector(selectMoviesMessage);
 
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
 
@@ -62,7 +62,7 @@ const MoviesScreen = () => {
       return;
     }
 
-    dispatch(updateSearchQuery(debouncedSearchQuery));
+    dispatch(updateMoviesSearchQuery(debouncedSearchQuery));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, debouncedSearchQuery]);
 
@@ -101,7 +101,7 @@ const MoviesScreen = () => {
       )}
 
       {requestStatus === 'failed' && (
-        <ErrorView message={moviesErrorMessage} onTryAgain={handleGetMovies} />
+        <ErrorView message={moviesMessage} onTryAgain={handleGetMovies} />
       )}
     </SafeView>
   );
