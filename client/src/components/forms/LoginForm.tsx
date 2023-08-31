@@ -59,7 +59,7 @@ const LoginForm = ({contentContainerStyle, onSubmit}: Props) => {
         loading={isSubmitting}
         disabled={isSubmitting}
         onPress={handleSubmit(onSubmit)}>
-        Submit
+        Login
       </Button>
     </View>
   );

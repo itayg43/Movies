@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {useAppDispatch} from '../hooks';
@@ -28,11 +28,13 @@ const LoginScreen = () => {
     <SafeView contentContainerStyle={styles.container}>
       <LoginForm onSubmit={handleSubmitForm} />
 
-      <TouchableOpacity
-        style={styles.navigationLinkContainer}
-        onPress={handleNavigationLinkPress}>
-        <Text>Need to register? Press here!</Text>
-      </TouchableOpacity>
+      <View style={styles.navigationLinkContainer}>
+        <Text>Don't have an account?</Text>
+
+        <TouchableOpacity onPress={handleNavigationLinkPress}>
+          <Text style={styles.navigationLinkText}>Create one!</Text>
+        </TouchableOpacity>
+      </View>
     </SafeView>
   );
 };
@@ -45,6 +47,11 @@ const styles = StyleSheet.create({
   },
 
   navigationLinkContainer: {
+    flexDirection: 'row',
     marginTop: 20,
+    columnGap: 5,
+  },
+  navigationLinkText: {
+    fontWeight: 'bold',
   },
 });
