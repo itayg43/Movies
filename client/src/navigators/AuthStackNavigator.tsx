@@ -8,10 +8,7 @@ import {
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import {useAppSelector} from '../hooks';
-import {
-  selectAuthErrorMessage,
-  selectAuthStatus,
-} from '../redux/auth/authSelectors';
+import {selectAuthStatus, selectAuthMessage} from '../redux/auth/authSelectors';
 
 type AuthStackParams = {
   loginScreen: undefined;
@@ -32,7 +29,7 @@ const Stack = createNativeStackNavigator<AuthStackParams>();
 
 const AuthStackNavigator = () => {
   const authStatus = useAppSelector(selectAuthStatus);
-  const authErrorMessage = useAppSelector(selectAuthErrorMessage);
+  const authMessage = useAppSelector(selectAuthMessage);
 
   return (
     <>
@@ -54,7 +51,7 @@ const AuthStackNavigator = () => {
         />
       </Stack.Navigator>
 
-      {authStatus === 'failed' && <>{Alert.alert('Error', authErrorMessage)}</>}
+      {authStatus === 'failed' && <>{Alert.alert('Error', authMessage)}</>}
     </>
   );
 };

@@ -4,15 +4,15 @@ import {RequestStatus, User} from '../../types';
 import authActions from './authActions';
 
 type AuthState = {
-  user: User | null;
   status: RequestStatus;
-  errorMessage: string;
+  message: string;
+  user: User | null;
 };
 
 const initialState: AuthState = {
   user: null,
   status: 'idle',
-  errorMessage: '',
+  message: '',
 };
 
 const authSlice = createSlice({
@@ -24,48 +24,48 @@ const authSlice = createSlice({
       // login
       .addCase(authActions.loginUser.pending, state => {
         state.status = 'loading';
-        state.errorMessage = '';
+        state.message = '';
       })
       .addCase(authActions.loginUser.fulfilled, (state, {payload}) => {
-        state.user = payload;
         state.status = 'succeded';
+        state.user = payload;
       })
       .addCase(authActions.loginUser.rejected, (state, {payload}) => {
         state.status = 'failed';
         if (payload) {
-          state.errorMessage = payload;
+          state.message = payload;
         }
       })
 
       // register
       .addCase(authActions.registerUser.pending, state => {
         state.status = 'loading';
-        state.errorMessage = '';
+        state.message = '';
       })
       .addCase(authActions.registerUser.fulfilled, (state, {payload}) => {
-        state.user = payload;
         state.status = 'succeded';
+        state.user = payload;
       })
       .addCase(authActions.registerUser.rejected, (state, {payload}) => {
         state.status = 'failed';
         if (payload) {
-          state.errorMessage = payload;
+          state.message = payload;
         }
       })
 
       // logout
       .addCase(authActions.logoutUser.pending, state => {
         state.status = 'loading';
-        state.errorMessage = '';
+        state.message = '';
       })
       .addCase(authActions.logoutUser.fulfilled, state => {
-        state.user = null;
         state.status = 'succeded';
+        state.user = null;
       })
       .addCase(authActions.logoutUser.rejected, (state, {payload}) => {
         state.status = 'failed';
         if (payload) {
-          state.errorMessage = payload;
+          state.message = payload;
         }
       });
   },
