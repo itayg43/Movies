@@ -3,11 +3,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import MoviesStackNavigator from './MoviesStackNavigator';
-import WatchlistScreen from '../screens/WatchlistScreen';
+import WatchListScreen from '../screens/WatchListScreen';
 
 type AppBottomTabsParams = {
   moviesStack: undefined;
-  watchlistScreen: undefined;
+  watchListScreen: undefined;
 };
 
 const Tab = createBottomTabNavigator<AppBottomTabsParams>();
@@ -32,8 +32,8 @@ const AppBottomTabsNavigator = () => {
       />
 
       <Tab.Screen
-        name="watchlistScreen"
-        component={WatchlistScreen}
+        name="watchListScreen"
+        component={WatchListScreen}
         options={{
           tabBarLabel: 'Watch List',
           // eslint-disable-next-line react/no-unstable-nested-components

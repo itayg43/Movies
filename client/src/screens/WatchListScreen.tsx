@@ -2,8 +2,8 @@ import React from 'react';
 
 import SafeView from '../components/SafeView';
 
-const WatchlistScreen = () => {
+const WatchListScreen = () => {
   return <SafeView></SafeView>;
 };
 
-export default WatchlistScreen;
+export default WatchListScreen;
