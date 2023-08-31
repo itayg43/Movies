@@ -23,12 +23,16 @@ import errorHandlerUtil from '../utils/errorHandlerUtil';
 import LoadingView from '../components/LoadingView';
 import ErrorView from '../components/ErrorView';
 import YearRatingTrailerLinkSection from '../components/YearRatingTrailerLinkSection';
+import {useAppDispatch} from '../hooks';
+import watchlistActions from '../redux/watchlist/watchlistActions';
 
 const MovieDetailsScreen = () => {
   const route = useRoute<MovieDetailsScreenRouteProp>();
   const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
 
   const movieId = route.params.id;
+
+  const dispatch = useAppDispatch();
 
   const [details, setDetails] = useState<MovieDetails | null>(null);
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
@@ -57,6 +61,12 @@ const MovieDetailsScreen = () => {
     navigation.navigate('movieDetailsScreen', {
       id,
     });
+  };
+
+  const handleHeartIconPress = async () => {
+    try {
+      await dispatch(watchlistActions.addToWatchlist({movieId})).unwrap();
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -91,16 +101,28 @@ const MovieDetailsScreen = () => {
 
           {/** details */}
           <View style={styles.detailsContainer}>
-            {/** title */}
-            <Text style={styles.title}>{details.title}</Text>
+            <View style={styles.titleYearRatingTrailerHeartContainer}>
+              {/** title & year & rating & trailer link */}
+              <View style={styles.titleYearRatingTrailerContainer}>
+                <Text style={styles.title}>{details.title}</Text>
 
-            {/** year & rating & trailer link */}
-            <YearRatingTrailerLinkSection
-              releaseDate={details.releaseDate}
-              voteAverage={details.voteAverage}
-              voteCount={details.voteCount}
-              trailerLink={details.youTubeTrailerUrl}
-            />
+                <YearRatingTrailerLinkSection
+                  releaseDate={details.releaseDate}
+                  voteAverage={details.voteAverage}
+                  voteCount={details.voteCount}
+                  trailerLink={details.youTubeTrailerUrl}
+                />
+              </View>
+
+              {/** heart icon */}
+              <TouchableOpacity onPress={handleHeartIconPress}>
+                <MaterialCommunityIcons
+                  name="heart-outline"
+                  color="gray"
+                  size={24}
+                />
+              </TouchableOpacity>
+            </View>
 
             {/** genres */}
             <ScrollView
@@ -182,6 +204,14 @@ const styles = StyleSheet.create({
   detailsContainer: {
     padding: 10,
     rowGap: 10,
+  },
+  titleYearRatingTrailerHeartContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  titleYearRatingTrailerContainer: {
+    flex: 1,
+    rowGap: 5,
   },
   title: {
     fontSize: 18,

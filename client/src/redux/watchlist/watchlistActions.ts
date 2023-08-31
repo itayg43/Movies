@@ -3,7 +3,7 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {RootState, AppDispatch} from '../store';
 import watchlistService from '../../services/watchlistService';
 import errorHandlerUtil from '../../utils/errorHandlerUtil';
-import {WatchlistEntities} from '../../types';
+import {Watchlist, WatchlistEntities} from '../../types';
 
 const definedCreateAsyncThunk = createAsyncThunk.withTypes<{
   state: RootState;
@@ -31,6 +31,19 @@ const getWatchlist = definedCreateAsyncThunk<WatchlistEntities, void>(
   },
 );
 
+const addToWatchlist = definedCreateAsyncThunk<Watchlist, {movieId: number}>(
+  'watchlist/addToWatchlist',
+  async ({movieId}, {rejectWithValue}) => {
+    try {
+      return await watchlistService.addToWatchlist(movieId);
+    } catch (error) {
+      const message = errorHandlerUtil.extractMessage(error);
+      return rejectWithValue(message);
+    }
+  },
+);
+
 export default {
   getWatchlist,
+  addToWatchlist,
 };

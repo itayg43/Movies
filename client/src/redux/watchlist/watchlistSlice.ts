@@ -27,6 +27,19 @@ const watchlistSlice = createSlice({
         if (payload) {
           state.errorMessage = payload;
         }
+      })
+
+      .addCase(
+        watchlistActions.addToWatchlist.fulfilled,
+        (state, {payload}) => {
+          state.entities[payload.id] = payload;
+          state.errorMessage = '';
+        },
+      )
+      .addCase(watchlistActions.addToWatchlist.rejected, (state, {payload}) => {
+        if (payload) {
+          state.errorMessage = payload;
+        }
       });
   },
 });
