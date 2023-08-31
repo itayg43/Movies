@@ -8,26 +8,26 @@ datasource db {
 }
 
 model User {
-  id        Int         @id @default(autoincrement())
-  name      String
-  email     String      @unique
-  password  String
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  watchlist Watchlist[]
+  id             Int              @id @default(autoincrement())
+  name           String
+  email          String           @unique
+  password       String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  movieWatchlist MovieWatchlist[]
 }
 
-model Watchlist {
-  id        Int             @id @default(autoincrement())
+model MovieWatchlist {
+  id        Int                  @id @default(autoincrement())
   movieId   Int
-  user      User            @relation(fields: [userId], references: [id])
+  user      User                 @relation(fields: [userId], references: [id])
   userId    Int
-  status    WatchlistStatus @default(ACTIVE)
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
+  status    MovieWatchlistStatus @default(ACTIVE)
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
 }
 
-enum WatchlistStatus {
+enum MovieWatchlistStatus {
   ACTIVE
   DELETED
 }
