@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 
 import {useAppDispatch} from '../hooks';
-import authActions from '../redux/auth/authActions';
+import authAsyncActions from '../redux/auth/authAsyncActions';
 import {RegisterFormData} from '../types';
 import SafeView from '../components/SafeView';
 import {RegisterForm} from '../components/forms';
@@ -12,7 +12,7 @@ const RegisterScreen = () => {
 
   const handleSubmitForm = async (formData: RegisterFormData) => {
     try {
-      await dispatch(authActions.registerUser(formData)).unwrap();
+      await dispatch(authAsyncActions.registerUser(formData)).unwrap();
     } catch (error) {}
   };
 

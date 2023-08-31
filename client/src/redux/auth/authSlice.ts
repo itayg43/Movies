@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 import {RequestStatus, User} from '../../types';
-import authActions from './authActions';
+import authAsyncActions from './authAsyncActions';
 
 type AuthState = {
   status: RequestStatus;
@@ -18,19 +18,24 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    resetAuthStatusAndMessage: state => {
+      state.status = 'idle';
+      state.message = '';
+    },
+  },
   extraReducers: builder => {
     builder
       // login
-      .addCase(authActions.loginUser.pending, state => {
+      .addCase(authAsyncActions.loginUser.pending, state => {
         state.status = 'loading';
         state.message = '';
       })
-      .addCase(authActions.loginUser.fulfilled, (state, {payload}) => {
+      .addCase(authAsyncActions.loginUser.fulfilled, (state, {payload}) => {
         state.status = 'succeded';
         state.user = payload;
       })
-      .addCase(authActions.loginUser.rejected, (state, {payload}) => {
+      .addCase(authAsyncActions.loginUser.rejected, (state, {payload}) => {
         state.status = 'failed';
         if (payload) {
           state.message = payload;
@@ -38,15 +43,15 @@ const authSlice = createSlice({
       })
 
       // register
-      .addCase(authActions.registerUser.pending, state => {
+      .addCase(authAsyncActions.registerUser.pending, state => {
         state.status = 'loading';
         state.message = '';
       })
-      .addCase(authActions.registerUser.fulfilled, (state, {payload}) => {
+      .addCase(authAsyncActions.registerUser.fulfilled, (state, {payload}) => {
         state.status = 'succeded';
         state.user = payload;
       })
-      .addCase(authActions.registerUser.rejected, (state, {payload}) => {
+      .addCase(authAsyncActions.registerUser.rejected, (state, {payload}) => {
         state.status = 'failed';
         if (payload) {
           state.message = payload;
@@ -54,15 +59,15 @@ const authSlice = createSlice({
       })
 
       // logout
-      .addCase(authActions.logoutUser.pending, state => {
+      .addCase(authAsyncActions.logoutUser.pending, state => {
         state.status = 'loading';
         state.message = '';
       })
-      .addCase(authActions.logoutUser.fulfilled, state => {
+      .addCase(authAsyncActions.logoutUser.fulfilled, state => {
         state.status = 'succeded';
         state.user = null;
       })
-      .addCase(authActions.logoutUser.rejected, (state, {payload}) => {
+      .addCase(authAsyncActions.logoutUser.rejected, (state, {payload}) => {
         state.status = 'failed';
         if (payload) {
           state.message = payload;
@@ -70,5 +75,7 @@ const authSlice = createSlice({
       });
   },
 });
+
+export const {resetAuthStatusAndMessage} = authSlice.actions;
 
 export default authSlice.reducer;

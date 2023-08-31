@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import {useAppDispatch} from '../hooks';
 import {LoginFormData} from '../types';
-import authActions from '../redux/auth/authActions';
+import authAsyncActions from '../redux/auth/authAsyncActions';
 import {LoginScreenNavigationProp} from '../navigators/AuthStackNavigator';
 import SafeView from '../components/SafeView';
 import {LoginForm} from '../components/forms';
@@ -16,7 +16,7 @@ const LoginScreen = () => {
 
   const handleSubmitForm = async (formData: LoginFormData) => {
     try {
-      await dispatch(authActions.loginUser(formData)).unwrap();
+      await dispatch(authAsyncActions.loginUser(formData)).unwrap();
     } catch (error) {}
   };
 

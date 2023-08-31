@@ -1,5 +1,5 @@
 import apiClient from '../clients/apiClient';
-import authActions from '../redux/auth/authActions';
+import authAsyncActions from '../redux/auth/authAsyncActions';
 import authService from '../services/authService';
 import {AppDispatch} from '../redux/store';
 
@@ -34,7 +34,7 @@ const setup = (dispatch: AppDispatch) => {
 
           return apiClient(originalConfig);
         } catch (error) {
-          dispatch(authActions.logoutUser());
+          dispatch(authAsyncActions.logoutUser());
         }
       }
 
