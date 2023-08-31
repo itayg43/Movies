@@ -21,26 +21,32 @@ const watchlistSlice = createSlice({
     builder
       .addCase(watchlistActions.getWatchlist.fulfilled, (state, {payload}) => {
         state.entities = payload;
-        state.errorMessage = '';
-      })
-      .addCase(watchlistActions.getWatchlist.rejected, (state, {payload}) => {
-        if (payload) {
-          state.errorMessage = payload;
-        }
       })
 
       .addCase(
         watchlistActions.addToWatchlist.fulfilled,
         (state, {payload}) => {
           state.entities[payload.id] = payload;
-          state.errorMessage = '';
         },
       )
-      .addCase(watchlistActions.addToWatchlist.rejected, (state, {payload}) => {
-        if (payload) {
-          state.errorMessage = payload;
-        }
-      });
+
+      .addCase(
+        watchlistActions.deleteWatchlistItem.fulfilled,
+        (state, {payload}) => {
+          delete state.entities[payload];
+        },
+      )
+
+      .addCase(
+        watchlistActions.getWatchlist.rejected ||
+          watchlistActions.addToWatchlist.rejected ||
+          watchlistActions.deleteWatchlistItem.rejected,
+        (state, {payload}) => {
+          if (payload) {
+            state.errorMessage = payload;
+          }
+        },
+      );
   },
 });
 

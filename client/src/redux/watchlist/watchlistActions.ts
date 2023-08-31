@@ -31,11 +31,24 @@ const getWatchlist = definedCreateAsyncThunk<WatchlistEntities, void>(
   },
 );
 
-const addToWatchlist = definedCreateAsyncThunk<Watchlist, {movieId: number}>(
+const addToWatchlist = definedCreateAsyncThunk<Watchlist, number>(
   'watchlist/addToWatchlist',
-  async ({movieId}, {rejectWithValue}) => {
+  async (movieId, {rejectWithValue}) => {
     try {
       return await watchlistService.addToWatchlist(movieId);
+    } catch (error) {
+      const message = errorHandlerUtil.extractMessage(error);
+      return rejectWithValue(message);
+    }
+  },
+);
+
+const deleteWatchlistItem = definedCreateAsyncThunk<number, number>(
+  'watchlist/deleteWatchlistItem',
+  async (id, {rejectWithValue}) => {
+    try {
+      await watchlistService.deleteWatchlistItem(id);
+      return id;
     } catch (error) {
       const message = errorHandlerUtil.extractMessage(error);
       return rejectWithValue(message);
@@ -46,4 +59,5 @@ const addToWatchlist = definedCreateAsyncThunk<Watchlist, {movieId: number}>(
 export default {
   getWatchlist,
   addToWatchlist,
+  deleteWatchlistItem,
 };

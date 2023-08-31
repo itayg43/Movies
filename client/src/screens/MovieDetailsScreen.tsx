@@ -37,7 +37,7 @@ const MovieDetailsScreen = () => {
 
   const watchlist = useAppSelector(selectWatchlist);
 
-  const isMovieInWatchlist = !!watchlist.find(w => w.movie.id === movieId);
+  const watchlistItem = watchlist.find(w => w.movie.id === movieId);
 
   const [details, setDetails] = useState<MovieDetails | null>(null);
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
@@ -67,9 +67,11 @@ const MovieDetailsScreen = () => {
 
   const handleHeartIconPress = async () => {
     try {
-      isMovieInWatchlist
-        ? null
-        : await dispatch(watchlistActions.addToWatchlist({movieId})).unwrap();
+      watchlistItem
+        ? await dispatch(
+            watchlistActions.deleteWatchlistItem(watchlistItem.id),
+          ).unwrap()
+        : await dispatch(watchlistActions.addToWatchlist(movieId)).unwrap();
     } catch (error) {}
   };
 
@@ -115,8 +117,8 @@ const MovieDetailsScreen = () => {
               {/** heart icon */}
               <TouchableOpacity onPress={handleHeartIconPress}>
                 <MaterialCommunityIcons
-                  name={isMovieInWatchlist ? 'heart' : 'heart-outline'}
-                  color={isMovieInWatchlist ? 'red' : 'gray'}
+                  name={watchlistItem ? 'heart' : 'heart-outline'}
+                  color={watchlistItem ? 'red' : 'gray'}
                   size={24}
                 />
               </TouchableOpacity>

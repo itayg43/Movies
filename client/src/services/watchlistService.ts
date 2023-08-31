@@ -15,7 +15,12 @@ const addToWatchlist = async (movieId: number) => {
   return data;
 };
 
+const deleteWatchlistItem = async (id: number) => {
+  await apiClient.delete(`/users/watchlist/${id}`);
+};
+
 export default {
   getWatchlist,
   addToWatchlist,
+  deleteWatchlistItem,
 };
