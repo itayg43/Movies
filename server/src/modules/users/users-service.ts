@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { ConflictError } from "../../errors";
+import { ConflictError, NotFoundError } from "../../errors";
 import usersDataAccess from "./users-data-access";
 import moviesService from "../movies/movies-service";
 
@@ -55,6 +55,12 @@ const getUserWatchlist = async (userId: number) => {
 };
 
 const softDeleteUserWatchlistItem = async (id: number) => {
+  const watchlistItem = await usersDataAccess.findUserWatchlistItemById(id);
+
+  if (!watchlistItem) {
+    throw new NotFoundError("No watchlist found");
+  }
+
   await usersDataAccess.softDeleteUserWatchlistItem(id);
 };
 

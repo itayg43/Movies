@@ -26,3 +26,9 @@ export class ConflictError extends CustomError {
     super(statusCode.conflict, message);
   }
 }
+
+export class NotFoundError extends CustomError {
+  constructor(message: string) {
+    super(statusCode.notFound, message);
+  }
+}

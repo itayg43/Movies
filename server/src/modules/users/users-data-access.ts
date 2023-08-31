@@ -30,6 +30,14 @@ const findUserActiveWatchlistItem = async (userId: number, movieId: number) => {
   });
 };
 
+const findUserWatchlistItemById = async (id: number) => {
+  return await prismaClient.watchlist.findUnique({
+    where: {
+      id,
+    },
+  });
+};
+
 const softDeleteUserWatchlistItem = async (id: number) => {
   await prismaClient.watchlist.update({
     where: {
@@ -45,5 +53,6 @@ export default {
   createUserWatchlistItem,
   findUserActiveWatchlist,
   findUserActiveWatchlistItem,
+  findUserWatchlistItemById,
   softDeleteUserWatchlistItem,
 };
