@@ -23,8 +23,9 @@ import errorHandlerUtil from '../utils/errorHandlerUtil';
 import LoadingView from '../components/LoadingView';
 import ErrorView from '../components/ErrorView';
 import YearRatingTrailerLinkSection from '../components/YearRatingTrailerLinkSection';
-import {useAppDispatch} from '../hooks';
+import {useAppDispatch, useAppSelector} from '../hooks';
 import watchlistActions from '../redux/watchlist/watchlistActions';
+import {selectWatchlist} from '../redux/watchlist/watchlistSelectors';
 
 const MovieDetailsScreen = () => {
   const route = useRoute<MovieDetailsScreenRouteProp>();
@@ -34,24 +35,25 @@ const MovieDetailsScreen = () => {
 
   const dispatch = useAppDispatch();
 
+  const watchlist = useAppSelector(selectWatchlist);
+
+  const isMovieInWatchlist = !!watchlist.find(w => w.movie.id === movieId);
+
   const [details, setDetails] = useState<MovieDetails | null>(null);
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleGetDetails = useCallback(
-    async (id: number, signal?: AbortSignal) => {
-      try {
-        setRequestStatus('loading');
-        setDetails(await moviesService.getMovieDetailsById(id, signal));
-        setRequestStatus('succeded');
-      } catch (error) {
-        const message = errorHandlerUtil.extractMessage(error);
-        setErrorMessage(message);
-        setRequestStatus('failed');
-      }
-    },
-    [],
-  );
+  const handleGetDetails = useCallback(async (id: number) => {
+    try {
+      setRequestStatus('loading');
+      setDetails(await moviesService.getMovieDetailsById(id));
+      setRequestStatus('succeded');
+    } catch (error) {
+      const message = errorHandlerUtil.extractMessage(error);
+      setErrorMessage(message);
+      setRequestStatus('failed');
+    }
+  }, []);
 
   const handleCloseButtonPress = () => {
     navigation.goBack();
@@ -65,18 +67,14 @@ const MovieDetailsScreen = () => {
 
   const handleHeartIconPress = async () => {
     try {
-      await dispatch(watchlistActions.addToWatchlist({movieId})).unwrap();
+      isMovieInWatchlist
+        ? null
+        : await dispatch(watchlistActions.addToWatchlist({movieId})).unwrap();
     } catch (error) {}
   };
 
   useEffect(() => {
-    const controller = new AbortController();
-
-    handleGetDetails(movieId, controller.signal);
-
-    return () => {
-      controller.abort();
-    };
+    handleGetDetails(movieId);
   }, [movieId, handleGetDetails]);
 
   return (
@@ -117,8 +115,8 @@ const MovieDetailsScreen = () => {
               {/** heart icon */}
               <TouchableOpacity onPress={handleHeartIconPress}>
                 <MaterialCommunityIcons
-                  name="heart-outline"
-                  color="gray"
+                  name={isMovieInWatchlist ? 'heart' : 'heart-outline'}
+                  color={isMovieInWatchlist ? 'red' : 'gray'}
                   size={24}
                 />
               </TouchableOpacity>

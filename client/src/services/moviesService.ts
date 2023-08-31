@@ -7,10 +7,8 @@ const getMovies = async () => {
   return data;
 };
 
-const getMovieDetailsById = async (id: number, signal?: AbortSignal) => {
-  const {data} = await apiClient.get<MovieDetails>(`/movies/${id}`, {
-    signal,
-  });
+const getMovieDetailsById = async (id: number) => {
+  const {data} = await apiClient.get<MovieDetails>(`/movies/${id}`);
 
   return data;
 };
