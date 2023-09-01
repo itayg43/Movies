@@ -5,12 +5,12 @@ import authAsyncActions from './authAsyncActions';
 
 type AuthState = {
   user: User | null;
-  message: string;
+  errorMessage: string;
 };
 
 const initialState: AuthState = {
   user: null,
-  message: '',
+  errorMessage: '',
 };
 
 const authSlice = createSlice({
@@ -25,7 +25,7 @@ const authSlice = createSlice({
       })
       .addCase(authAsyncActions.loginUser.rejected, (state, {payload}) => {
         if (payload) {
-          state.message = payload;
+          state.errorMessage = payload;
         }
       })
 
@@ -35,7 +35,7 @@ const authSlice = createSlice({
       })
       .addCase(authAsyncActions.registerUser.rejected, (state, {payload}) => {
         if (payload) {
-          state.message = payload;
+          state.errorMessage = payload;
         }
       })
 
@@ -45,7 +45,7 @@ const authSlice = createSlice({
       })
       .addCase(authAsyncActions.logoutUser.rejected, (state, {payload}) => {
         if (payload) {
-          state.message = payload;
+          state.errorMessage = payload;
         }
       });
   },

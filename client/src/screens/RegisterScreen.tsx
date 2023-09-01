@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import authAsyncActions from '../redux/auth/authAsyncActions';
 import {useAppSelector} from '../hooks/useAppSelector';
-import {selectAuthMessage} from '../redux/auth/authSelectors';
+import {selectAuthErrorMessage} from '../redux/auth/authSelectors';
 import {RegisterFormData, RequestStatus} from '../types';
 import SafeView from '../components/SafeView';
 import RegisterForm from '../components/RegisterForm';
@@ -16,7 +16,7 @@ const RegisterScreen = () => {
   const navigation = useNavigation<RegisterScreenNavigationProp>();
 
   const [authStatus, setAuthStatus] = useState<RequestStatus>('idle');
-  const authMessage = useAppSelector(selectAuthMessage);
+  const authErrorMessage = useAppSelector(selectAuthErrorMessage);
 
   const handleSubmitForm = async (formData: RegisterFormData) => {
     try {
@@ -44,7 +44,7 @@ const RegisterScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {authStatus === 'failed' && <>{Alert.alert('Error', authMessage)}</>}
+      {authStatus === 'failed' && <>{Alert.alert('Error', authErrorMessage)}</>}
     </SafeView>
   );
 };

@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import authAsyncActions from '../redux/auth/authAsyncActions';
 import {useAppSelector} from '../hooks/useAppSelector';
-import {selectAuthMessage} from '../redux/auth/authSelectors';
+import {selectAuthErrorMessage} from '../redux/auth/authSelectors';
 import {LoginFormData, RequestStatus} from '../types';
 import {LoginScreenNavigationProp} from '../navigators/AuthStackNavigator';
 import SafeView from '../components/SafeView';
@@ -16,7 +16,7 @@ const LoginScreen = () => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
   const [authStatus, setAuthStatus] = useState<RequestStatus>('idle');
-  const authMessage = useAppSelector(selectAuthMessage);
+  const authErrorMessage = useAppSelector(selectAuthErrorMessage);
 
   const handleSubmitForm = async (formData: LoginFormData) => {
     try {
@@ -44,7 +44,7 @@ const LoginScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {authStatus === 'failed' && <>{Alert.alert('Error', authMessage)}</>}
+      {authStatus === 'failed' && <>{Alert.alert('Error', authErrorMessage)}</>}
     </SafeView>
   );
 };
