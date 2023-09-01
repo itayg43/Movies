@@ -22,6 +22,7 @@ const authSlice = createSlice({
       // login
       .addCase(authAsyncActions.loginUser.fulfilled, (state, {payload}) => {
         state.user = payload;
+        state.errorMessage = '';
       })
       .addCase(authAsyncActions.loginUser.rejected, (state, {payload}) => {
         if (payload) {
@@ -32,6 +33,7 @@ const authSlice = createSlice({
       // register
       .addCase(authAsyncActions.registerUser.fulfilled, (state, {payload}) => {
         state.user = payload;
+        state.errorMessage = '';
       })
       .addCase(authAsyncActions.registerUser.rejected, (state, {payload}) => {
         if (payload) {
