@@ -14,6 +14,7 @@ if (__DEV__) {
 const authPersistConfig = {
   key: 'auth',
   storage: AsyncStorage,
+  blacklist: ['errorMessage'],
 };
 
 const authPersistedReducer = persistReducer(authPersistConfig, authReducer);
