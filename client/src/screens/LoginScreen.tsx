@@ -1,23 +1,31 @@
-import React from 'react';
-import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, TouchableOpacity, Text, View, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {useAppDispatch} from '../hooks/useAppDispatch';
-import {LoginFormData} from '../types';
 import authAsyncActions from '../redux/auth/authAsyncActions';
+import {useAppSelector} from '../hooks/useAppSelector';
+import {selectAuthMessage} from '../redux/auth/authSelectors';
+import {LoginFormData, RequestStatus} from '../types';
 import {LoginScreenNavigationProp} from '../navigators/AuthStackNavigator';
 import SafeView from '../components/SafeView';
 import LoginForm from '../components/LoginForm';
 
 const LoginScreen = () => {
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
-  const dispatch = useAppDispatch();
+  const [authStatus, setAuthStatus] = useState<RequestStatus>('idle');
+  const authMessage = useAppSelector(selectAuthMessage);
 
   const handleSubmitForm = async (formData: LoginFormData) => {
     try {
+      setAuthStatus('loading');
       await dispatch(authAsyncActions.loginUser(formData)).unwrap();
-    } catch (error) {}
+      setAuthStatus('succeded');
+    } catch (error) {
+      setAuthStatus('failed');
+    }
   };
 
   const handleNavigationLinkPress = () => {
@@ -35,6 +43,8 @@ const LoginScreen = () => {
           <Text style={styles.navigationLinkText}>Create one!</Text>
         </TouchableOpacity>
       </View>
+
+      {authStatus === 'failed' && <>{Alert.alert('Error', authMessage)}</>}
     </SafeView>
   );
 };
@@ -48,7 +58,7 @@ const styles = StyleSheet.create({
 
   navigationLinkContainer: {
     flexDirection: 'row',
-    marginTop: 20,
+    marginTop: 10,
     columnGap: 5,
   },
   navigationLinkText: {
