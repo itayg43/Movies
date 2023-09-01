@@ -29,7 +29,7 @@ const LoginScreen = () => {
   };
 
   const handleNavigationLinkPress = () => {
-    navigation.navigate('registerScreen');
+    navigation.replace('registerScreen');
   };
 
   return (
