@@ -4,13 +4,14 @@ import apiClient, {apiReissueClient} from '../clients/apiClient';
 import {
   LoginFormData,
   RegisterFormData,
-  LoginRegisterResponseData,
-  ReissueAccessTokenResponseData,
+  LoginUserResponseData,
+  RegisterUserResponseData,
+  ReissueUserAccessTokenResponseData,
 } from '../types';
 import tokenStorage from '../storage/tokenStorage';
 
 const loginUser = async (loginFormData: LoginFormData) => {
-  const {data} = await apiClient.post<LoginRegisterResponseData>(
+  const {data} = await apiClient.post<LoginUserResponseData>(
     '/auth/login',
     loginFormData,
   );
@@ -21,7 +22,7 @@ const loginUser = async (loginFormData: LoginFormData) => {
 };
 
 const registerUser = async (registerFormData: RegisterFormData) => {
-  const {data} = await apiClient.post<LoginRegisterResponseData>(
+  const {data} = await apiClient.post<RegisterUserResponseData>(
     '/auth/register',
     registerFormData,
   );
@@ -36,10 +37,11 @@ const logoutUser = async () => {
 };
 
 const reissueUserAccessToken = async () => {
-  const {data} = await apiReissueClient.post<ReissueAccessTokenResponseData>(
-    '/auth/reissue-access-token',
-    {refreshToken: await tokenStorage.get('refreshToken')},
-  );
+  const {data} =
+    await apiReissueClient.post<ReissueUserAccessTokenResponseData>(
+      '/auth/reissue-access-token',
+      {refreshToken: await tokenStorage.get('refreshToken')},
+    );
 
   await tokenStorage.set('accessToken', data.accessToken);
 };

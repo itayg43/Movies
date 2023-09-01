@@ -21,11 +21,15 @@ export type UserTokens = {
   refreshToken: string;
 };
 
-export type LoginRegisterResponseData = User & {
+export type LoginUserResponseData = User & {
   tokens: UserTokens;
 };
 
-export type ReissueAccessTokenResponseData = {
+export type RegisterUserResponseData = User & {
+  tokens: UserTokens;
+};
+
+export type ReissueUserAccessTokenResponseData = {
   accessToken: string;
 };
 
