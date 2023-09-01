@@ -2,11 +2,11 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {useAppDispatch} from '../hooks';
+import {useAppDispatch} from '../hooks/useAppDispatch';
 import authAsyncActions from '../redux/auth/authAsyncActions';
 import {RegisterFormData} from '../types';
 import SafeView from '../components/SafeView';
-import {RegisterForm} from '../components/forms';
+import RegisterForm from '../components/RegisterForm';
 import {RegisterScreenNavigationProp} from '../navigators/AuthStackNavigator';
 
 const RegisterScreen = () => {

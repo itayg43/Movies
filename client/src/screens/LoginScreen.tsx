@@ -2,12 +2,12 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {useAppDispatch} from '../hooks';
+import {useAppDispatch} from '../hooks/useAppDispatch';
 import {LoginFormData} from '../types';
 import authAsyncActions from '../redux/auth/authAsyncActions';
 import {LoginScreenNavigationProp} from '../navigators/AuthStackNavigator';
 import SafeView from '../components/SafeView';
-import {LoginForm} from '../components/forms';
+import LoginForm from '../components/LoginForm';
 
 const LoginScreen = () => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
