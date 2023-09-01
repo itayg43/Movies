@@ -43,13 +43,13 @@ export class MovieDetails extends Movie {
     super(data);
 
     this.genres = data.genres.map((g) => g.name);
-    this.youTubeTrailerUrl = this._initYouTubeTrailerUrl(data.videos.results);
+    this.youTubeTrailerUrl = this.initYouTubeTrailerUrl(data.videos.results);
     this.recommendations = data.recommendations.results.map(
       (r) => new Movie(r)
     );
   }
 
-  _initYouTubeTrailerUrl(videos: VideoResponseData[]) {
+  private initYouTubeTrailerUrl(videos: VideoResponseData[]) {
     const trailerKey = videos
       .filter((v) => v.site === "YouTube" && v.type === "Trailer" && v.official)
       .at(0)?.key;
