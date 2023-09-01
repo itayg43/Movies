@@ -1,27 +1,35 @@
-import React from 'react';
-import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, TouchableOpacity, Text, View, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import authAsyncActions from '../redux/auth/authAsyncActions';
-import {RegisterFormData} from '../types';
+import {useAppSelector} from '../hooks/useAppSelector';
+import {selectAuthMessage} from '../redux/auth/authSelectors';
+import {RegisterFormData, RequestStatus} from '../types';
 import SafeView from '../components/SafeView';
 import RegisterForm from '../components/RegisterForm';
 import {RegisterScreenNavigationProp} from '../navigators/AuthStackNavigator';
 
 const RegisterScreen = () => {
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<RegisterScreenNavigationProp>();
 
-  const dispatch = useAppDispatch();
+  const [authStatus, setAuthStatus] = useState<RequestStatus>('idle');
+  const authMessage = useAppSelector(selectAuthMessage);
 
   const handleSubmitForm = async (formData: RegisterFormData) => {
     try {
+      setAuthStatus('loading');
       await dispatch(authAsyncActions.registerUser(formData)).unwrap();
-    } catch (error) {}
+      setAuthStatus('succeded');
+    } catch (error) {
+      setAuthStatus('failed');
+    }
   };
 
   const handleNavigationLinkPress = () => {
-    navigation.navigate('loginScreen');
+    navigation.replace('loginScreen');
   };
 
   return (
@@ -35,6 +43,8 @@ const RegisterScreen = () => {
           <Text style={styles.navigationLinkText}>Log In!</Text>
         </TouchableOpacity>
       </View>
+
+      {authStatus === 'failed' && <>{Alert.alert('Error', authMessage)}</>}
     </SafeView>
   );
 };
@@ -48,7 +58,7 @@ const styles = StyleSheet.create({
 
   navigationLinkContainer: {
     flexDirection: 'row',
-    marginTop: 20,
+    marginTop: 10,
     columnGap: 5,
   },
   navigationLinkText: {
