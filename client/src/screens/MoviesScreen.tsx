@@ -1,9 +1,11 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {StyleSheet, FlatList, ScrollView, View} from 'react-native';
-import {Chip} from 'react-native-paper';
+import {Chip, Searchbar} from 'react-native-paper';
 
 import {Movie, MoviesCategory} from '../types';
 import moviesService from '../services/moviesService';
+import useDebounce from '../hooks/useDebounce';
+import useIsFirstRender from '../hooks/useIsFirstRender';
 import SafeView from '../components/SafeView';
 import MovieListItem from '../components/MovieListItem';
 
@@ -31,10 +33,15 @@ const CATEGORIES: MoviesCategory[] = [
 ];
 
 const MoviesScreen = () => {
-  const [category, setCategory] = useState<MoviesCategory>(CATEGORIES[0]);
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const isFirstRender = useIsFirstRender();
 
   const listRef = useRef<FlatList>(null);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery);
+
+  const [category, setCategory] = useState<MoviesCategory>(CATEGORIES[0]);
+  const [movies, setMovies] = useState<Movie[]>([]);
 
   const handleGetMoviesByCategory = useCallback(async (c: MoviesCategory) => {
     try {
@@ -48,11 +55,32 @@ const MoviesScreen = () => {
   };
 
   useEffect(() => {
+    if (isFirstRender) {
+      return;
+    }
+
+    if (debouncedSearchQuery !== '') {
+      console.log('Searching...');
+      return;
+    }
+
+    handleGetMoviesByCategory(category);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchQuery]);
+
+  useEffect(() => {
     handleGetMoviesByCategory(category);
   }, [handleGetMoviesByCategory, category]);
 
   return (
     <SafeView contentContainerStyle={styles.container}>
+      <Searchbar
+        placeholder="Search..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
+
       {/** categories */}
       <ScrollView
         style={styles.categoriesContainer}
@@ -62,8 +90,10 @@ const MoviesScreen = () => {
         {CATEGORIES.map(c => (
           <Chip
             key={c.id}
+            textStyle={styles.categoryText}
             selected={c === category}
-            onPress={() => handleCategoryChange(c)}>
+            onPress={() => handleCategoryChange(c)}
+            compact>
             {c.key}
           </Chip>
         ))}
@@ -106,6 +136,10 @@ const styles = StyleSheet.create({
   },
   categoriesContentContainer: {
     columnGap: 5,
+  },
+  categoryText: {
+    textAlign: 'center',
+    paddingVertical: 3,
   },
 
   marginBottomSpacer: {
