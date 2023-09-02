@@ -24,6 +24,20 @@ const getMoviesByCategory = async (category: MoviesCategory) => {
   }
 };
 
+const getMoviesBySearchQuery = async (searchQuery: string) => {
+  try {
+    const { data } = await tmdbClient.get<GetMoviesResponseData>(
+      `/search/movie?query=${searchQuery}&include_adult=false&language=en-US&page=1`
+    );
+
+    return data.results.map((m) => new Movie(m));
+  } catch (error) {
+    console.error(error instanceof AxiosError ? error.response?.data : error);
+
+    throw new Error(`Couldn't get movies for the search query: ${searchQuery}`);
+  }
+};
+
 const getMovieDetailsById = async (id: number | string) => {
   try {
     const { data } = await tmdbClient.get<MovieDetailsResponseData>(
@@ -40,6 +54,7 @@ const getMovieDetailsById = async (id: number | string) => {
 
 export default {
   getMoviesByCategory,
+  getMoviesBySearchQuery,
   getMovieDetailsById,
 };
 

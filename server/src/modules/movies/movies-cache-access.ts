@@ -24,6 +24,24 @@ const setMoviesForCategory = async (
   });
 };
 
+const getMoviesBySearchQuery = async (
+  searchQuery: string
+): Promise<Movie[] | null> => {
+  const jsonValue = await redisClient.get(`movies_${searchQuery}`);
+
+  return jsonValue ? JSON.parse(jsonValue) : null;
+};
+
+const setMoviesForSearchQuery = async (
+  searchQuery: string,
+  values: Movie[]
+) => {
+  await redisClient.set(`movies_${searchQuery}`, JSON.stringify(values), {
+    EX: ONE_HOUR_TTL,
+    NX: true,
+  });
+};
+
 const getMovieDetailsById = async (
   id: number | string
 ): Promise<MovieDetails | null> => {
@@ -42,6 +60,8 @@ const setMovieDetails = async (value: MovieDetails) => {
 export default {
   getMoviesByCategory,
   setMoviesForCategory,
+  getMoviesBySearchQuery,
+  setMoviesForSearchQuery,
   getMovieDetailsById,
   setMovieDetails,
 };

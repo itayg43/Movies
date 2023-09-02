@@ -8,6 +8,7 @@ import validateSchema from "../../middlewares/validate-schema";
 import {
   getMoviesByCategorySchema,
   getMovieDetailsByIdSchema,
+  getMoviesBySearchQuerySchema,
 } from "./movies-schemas";
 
 const moviesRouter = express.Router();
@@ -16,6 +17,12 @@ moviesRouter.get(
   "/",
   [validateAccessToken, validateSchema(getMoviesByCategorySchema)],
   asyncHandler(moviesController.getMoviesByCategory)
+);
+
+moviesRouter.get(
+  "/search",
+  [validateAccessToken, validateSchema(getMoviesBySearchQuerySchema)],
+  asyncHandler(moviesController.getMoviesBySearchQuery)
 );
 
 moviesRouter.get(

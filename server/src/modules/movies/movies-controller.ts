@@ -5,6 +5,7 @@ import moviesService from "./movies-service";
 import {
   GetMoviesByCategoryInput,
   GetMovieDetailsByIdInput,
+  GetMoviesBySearchQueryInput,
 } from "./movies-schemas";
 
 const getMoviesByCategory = async (
@@ -12,6 +13,15 @@ const getMoviesByCategory = async (
   res: Response
 ) => {
   const movies = await moviesService.getMoviesByCategory(req.query.category);
+
+  res.status(statusCode.ok).json(movies);
+};
+
+const getMoviesBySearchQuery = async (
+  req: Request<{}, {}, {}, GetMoviesBySearchQueryInput>,
+  res: Response
+) => {
+  const movies = await moviesService.getMoviesBySearchQuery(req.query.query);
 
   res.status(statusCode.ok).json(movies);
 };
@@ -27,5 +37,6 @@ const getMovieDetailsById = async (
 
 export default {
   getMoviesByCategory,
+  getMoviesBySearchQuery,
   getMovieDetailsById,
 };

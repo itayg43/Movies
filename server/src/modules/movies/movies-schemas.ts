@@ -10,6 +10,17 @@ export type GetMoviesByCategoryInput = TypeOf<
   typeof getMoviesByCategorySchema
 >["query"];
 
+export const getMoviesBySearchQuerySchema = object({
+  query: object({
+    query: z.string({
+      required_error: "Query is required",
+    }),
+  }),
+});
+export type GetMoviesBySearchQueryInput = TypeOf<
+  typeof getMoviesBySearchQuerySchema
+>["query"];
+
 export const getMovieDetailsByIdSchema = object({
   params: object({
     id: string({

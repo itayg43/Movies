@@ -15,6 +15,22 @@ const getMoviesByCategory = async (category: MoviesCategory) => {
   return movies;
 };
 
+const getMoviesBySearchQuery = async (searchQuery: string) => {
+  const cachedMovies = await moviesCacheAccess.getMoviesBySearchQuery(
+    searchQuery
+  );
+
+  if (cachedMovies) {
+    return cachedMovies;
+  }
+
+  const movies = await tmdbService.getMoviesBySearchQuery(searchQuery);
+
+  await moviesCacheAccess.setMoviesForSearchQuery(searchQuery, movies);
+
+  return movies;
+};
+
 const getMovieDetailsById = async (id: number | string) => {
   const cachedMovieDetails = await moviesCacheAccess.getMovieDetailsById(id);
 
@@ -31,5 +47,6 @@ const getMovieDetailsById = async (id: number | string) => {
 
 export default {
   getMoviesByCategory,
+  getMoviesBySearchQuery,
   getMovieDetailsById,
 };
