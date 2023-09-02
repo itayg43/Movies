@@ -3,9 +3,13 @@ import { AxiosError } from "axios";
 import tmdbClient from "./tmdb-client";
 import { Movie, MovieDetails } from "../movies-entities";
 
-const getMoviesByCategory = async (
-  category: "now_playing" | "popular" | "top_rated" | "upcoming"
-) => {
+export type MoviesCategory =
+  | "now_playing"
+  | "popular"
+  | "top_rated"
+  | "upcoming";
+
+const getMoviesByCategory = async (category: MoviesCategory) => {
   try {
     const { data } = await tmdbClient.get<GetMoviesResponseData>(
       `/movie/${category}?language=en-US&page=1`

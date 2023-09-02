@@ -1,25 +1,31 @@
 import { redisClient } from "../../app";
 
 import { Movie, MovieDetails } from "./movies-entities";
+import { MoviesCategory } from "./tmdb/tmdb-service";
 
 const FIFTEEN_MINUTES_TTL = 15 * 60;
 const ONE_HOUR_TTL = 60 * 60;
 
-const getMovies = async (): Promise<Movie[] | null> => {
-  const jsonValue = await redisClient.get("movies");
+const getMoviesByCategory = async (
+  category: MoviesCategory
+): Promise<Movie[] | null> => {
+  const jsonValue = await redisClient.get(`movies_${category}`);
 
   return jsonValue ? JSON.parse(jsonValue) : null;
 };
 
-const setMovies = async (values: Movie[]) => {
-  await redisClient.set("movies", JSON.stringify(values), {
+const setMoviesForCategory = async (
+  category: MoviesCategory,
+  values: Movie[]
+) => {
+  await redisClient.set(`movies_${category}`, JSON.stringify(values), {
     EX: ONE_HOUR_TTL,
     NX: true,
   });
 };
 
 const getMovieDetailsById = async (
-  id: string
+  id: number | string
 ): Promise<MovieDetails | null> => {
   const jsonValue = await redisClient.get(`movie_${id}`);
 
@@ -34,8 +40,8 @@ const setMovieDetails = async (value: MovieDetails) => {
 };
 
 export default {
-  getMovies,
-  setMovies,
+  getMoviesByCategory,
+  setMoviesForCategory,
   getMovieDetailsById,
   setMovieDetails,
 };
