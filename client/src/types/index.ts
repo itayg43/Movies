@@ -63,3 +63,9 @@ export type Watchlist = {
 export type WatchlistEntities = {
   [id: number]: Watchlist;
 };
+
+export type MoviesCategory = {
+  id: '0' | '1' | '2' | '3';
+  key: 'Now Playing' | 'Popular' | 'Top Rated' | 'Upcoming';
+  value: 'now_playing' | 'popular' | 'top_rated' | 'upcoming';
+};
