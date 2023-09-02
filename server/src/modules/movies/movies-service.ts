@@ -1,15 +1,22 @@
 import tmdbService from "./tmdb/tmdb-service";
 import moviesCacheAccess from "./movies-cache-access";
+import { MoviesCategory } from "./movies-schemas";
 
-const getMovies = async () => {
-  const movies = await tmdbService.getMoviesByCategory("popular");
+const getMoviesByCategory = async (category: MoviesCategory) => {
+  const cachedMovies = await moviesCacheAccess.getMoviesByCategory(category);
 
-  await moviesCacheAccess.setMovies(movies);
+  if (cachedMovies) {
+    return cachedMovies;
+  }
+
+  const movies = await tmdbService.getMoviesByCategory(category);
+
+  await moviesCacheAccess.setMoviesForCategory(category, movies);
 
   return movies;
 };
 
-const getMovieDetailsById = async (id: string) => {
+const getMovieDetailsById = async (id: number | string) => {
   const cachedMovieDetails = await moviesCacheAccess.getMovieDetailsById(id);
 
   if (cachedMovieDetails) {
@@ -24,6 +31,6 @@ const getMovieDetailsById = async (id: string) => {
 };
 
 export default {
-  getMovies,
+  getMoviesByCategory,
   getMovieDetailsById,
 };

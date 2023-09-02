@@ -1,7 +1,7 @@
 import { redisClient } from "../../app";
 
 import { Movie, MovieDetails } from "./movies-entities";
-import { MoviesCategory } from "./tmdb/tmdb-service";
+import { MoviesCategory } from "./movies-schemas";
 
 const FIFTEEN_MINUTES_TTL = 15 * 60;
 const ONE_HOUR_TTL = 60 * 60;

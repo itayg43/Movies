@@ -2,12 +2,7 @@ import { AxiosError } from "axios";
 
 import tmdbClient from "./tmdb-client";
 import { Movie, MovieDetails } from "../movies-entities";
-
-export type MoviesCategory =
-  | "now_playing"
-  | "popular"
-  | "top_rated"
-  | "upcoming";
+import { MoviesCategory } from "../movies-schemas";
 
 const getMoviesByCategory = async (category: MoviesCategory) => {
   try {
