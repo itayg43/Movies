@@ -1,11 +1,5 @@
 import z, { object, string, TypeOf } from "zod";
-
-export enum MoviesCategory {
-  nowPlaying = "now_playing",
-  popular = "popular",
-  topRated = "top_rated",
-  upcoming = "upcoming",
-}
+import { MoviesCategory } from "./tmdb/tmdb-service";
 
 export const getMoviesByCategorySchema = object({
   query: object({

@@ -1,6 +1,5 @@
-import tmdbService from "./tmdb/tmdb-service";
+import tmdbService, { MoviesCategory } from "./tmdb/tmdb-service";
 import moviesCacheAccess from "./movies-cache-access";
-import { MoviesCategory } from "./movies-schemas";
 
 const getMoviesByCategory = async (category: MoviesCategory) => {
   const cachedMovies = await moviesCacheAccess.getMoviesByCategory(category);
