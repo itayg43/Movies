@@ -1,9 +1,9 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   FlatList,
-  Pressable,
   ScrollView,
+  TouchableOpacity,
   Text,
   View,
   Image,
@@ -42,11 +42,18 @@ const MoviesScreen = () => {
   const [category, setCategory] = useState<MoviesCategory>(CATEGORIES[0]);
   const [movies, setMovies] = useState<Movie[]>([]);
 
+  const listRef = useRef<FlatList>(null);
+
   const handleGetMoviesByCategory = useCallback(async (c: MoviesCategory) => {
     try {
       setMovies(await moviesService.getMoviesByCategory(c));
     } catch (error) {}
   }, []);
+
+  const handleCategoryChange = (c: MoviesCategory) => {
+    setCategory(c);
+    listRef.current?.scrollToIndex({index: 0});
+  };
 
   useEffect(() => {
     handleGetMoviesByCategory(category);
@@ -64,7 +71,7 @@ const MoviesScreen = () => {
           <Chip
             key={c.id}
             selected={c === category}
-            onPress={() => setCategory(c)}>
+            onPress={() => handleCategoryChange(c)}>
             {c.key}
           </Chip>
         ))}
@@ -72,10 +79,13 @@ const MoviesScreen = () => {
 
       {/** movie list */}
       <FlatList
+        ref={listRef}
         data={movies}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
-          <Pressable style={styles.listItemContainer}>
+          <TouchableOpacity
+            style={styles.listItemContainer}
+            activeOpacity={0.7}>
             {/** image */}
             <Image
               style={styles.image}
@@ -85,7 +95,9 @@ const MoviesScreen = () => {
             {/** details */}
             <View style={styles.detailsContainer}>
               {/** title */}
-              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.title} numberOfLines={1}>
+                {item.title}
+              </Text>
 
               {/** year & rating */}
               <View style={styles.yearAndRatingContainer}>
@@ -112,7 +124,7 @@ const MoviesScreen = () => {
               {/** overview */}
               <Text numberOfLines={2}>{item.overview}</Text>
             </View>
-          </Pressable>
+          </TouchableOpacity>
         )}
         ItemSeparatorComponent={ListItemSeparator}
         ListFooterComponent={ListFooter}
