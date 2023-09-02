@@ -1,19 +1,11 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-  Text,
-  View,
-  Image,
-} from 'react-native';
+import {StyleSheet, FlatList, ScrollView, View} from 'react-native';
 import {Chip} from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Movie, MoviesCategory} from '../types';
 import moviesService from '../services/moviesService';
 import SafeView from '../components/SafeView';
+import MovieListItem from '../components/MovieListItem';
 
 const CATEGORIES: MoviesCategory[] = [
   {
@@ -83,48 +75,7 @@ const MoviesScreen = () => {
         data={movies}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
-          <TouchableOpacity
-            style={styles.listItemContainer}
-            activeOpacity={0.7}>
-            {/** image */}
-            <Image
-              style={styles.image}
-              source={{uri: item.backdropUrl ?? item.posterUrl}}
-            />
-
-            {/** details */}
-            <View style={styles.detailsContainer}>
-              {/** title */}
-              <Text style={styles.title} numberOfLines={1}>
-                {item.title}
-              </Text>
-
-              {/** year & rating */}
-              <View style={styles.yearAndRatingContainer}>
-                {/** year */}
-                <Text style={styles.year}>
-                  {new Date(item.releaseDate).getFullYear()}
-                </Text>
-
-                <MaterialCommunityIcons name="dots-vertical" />
-
-                {/** rating */}
-                <View style={styles.ratingContainer}>
-                  <Text style={styles.rating}>
-                    {item.voteAverage.toFixed(1)}
-                  </Text>
-
-                  <MaterialCommunityIcons name="star" color="orange" />
-
-                  {/** vote count */}
-                  <Text style={styles.voteCount}>({item.voteCount})</Text>
-                </View>
-              </View>
-
-              {/** overview */}
-              <Text numberOfLines={2}>{item.overview}</Text>
-            </View>
-          </TouchableOpacity>
+          <MovieListItem item={item} onPress={() => null} />
         )}
         ItemSeparatorComponent={ListItemSeparator}
         ListFooterComponent={ListFooter}
@@ -155,44 +106,6 @@ const styles = StyleSheet.create({
   },
   categoriesContentContainer: {
     columnGap: 5,
-  },
-
-  listItemContainer: {
-    width: '100%',
-    height: 300,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#ccc',
-  },
-  image: {
-    width: '100%',
-    height: '65%',
-  },
-  detailsContainer: {
-    padding: 10,
-    rowGap: 5,
-  },
-  title: {
-    fontWeight: 'bold',
-  },
-  yearAndRatingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    columnGap: 3,
-  },
-  year: {
-    color: 'gray',
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    columnGap: 2,
-  },
-  rating: {
-    color: 'gray',
-  },
-  voteCount: {
-    fontSize: 12,
   },
 
   marginBottomSpacer: {
