@@ -11,8 +11,7 @@ import {
 export class Movie {
   id: number;
   title: string;
-  backdropUrl: string | null;
-  posterUrl: string;
+  backdropUrl: string;
   overview: string;
   releaseDate: string;
   voteAverage: number;
@@ -21,12 +20,7 @@ export class Movie {
   constructor(data: MovieResponseData) {
     this.id = data.id;
     this.title = data.title;
-
-    this.backdropUrl = data.backdrop_path
-      ? `${TMDB_BACKDROP_BASE_URL}${data.backdrop_path}`
-      : null;
-
-    this.posterUrl = `${TMDB_POSTER_BASE_URL}${data.poster_path}`;
+    this.backdropUrl = `${TMDB_BACKDROP_BASE_URL}${data.backdrop_path}`;
     this.overview = data.overview;
     this.releaseDate = data.release_date;
     this.voteAverage = data.vote_average;
@@ -35,13 +29,14 @@ export class Movie {
 }
 
 export class MovieDetails extends Movie {
+  posterUrl: string;
   genres: string[];
   youTubeTrailerUrl: string | null;
   recommendations: Movie[];
 
   constructor(data: MovieDetailsResponseData) {
     super(data);
-
+    this.posterUrl = `${TMDB_POSTER_BASE_URL}${data.poster_path}`;
     this.genres = data.genres.map((g) => g.name);
     this.youTubeTrailerUrl = this.initYouTubeTrailerUrl(data.videos.results);
     this.recommendations = data.recommendations.results.map(
