@@ -1,6 +1,0 @@
-import {RootState} from '../store';
-
-export const selectMovies = (state: RootState) => state.movies.entities;
-
-export const selectMoviesErrorMessage = (state: RootState) =>
-  state.movies.errorMessage;

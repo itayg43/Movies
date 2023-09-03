@@ -2,11 +2,13 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import MoviesScreen from '../screens/MoviesScreen';
+import SearchScreen from '../screens/SearchScreen';
+import ExploreScreen from '../screens/ExploreScreen';
 import WatchListScreen from '../screens/WatchListScreen';
 
 type AppBottomTabsParams = {
-  moviesScreen: undefined;
+  searchScreen: undefined;
+  exploreScreen: undefined;
   watchListScreen: undefined;
 };
 
@@ -15,15 +17,31 @@ const Tab = createBottomTabNavigator<AppBottomTabsParams>();
 const AppBottomTabsNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName="moviesScreen"
+      initialRouteName="exploreScreen"
       screenOptions={{
         headerShown: false,
       }}>
       <Tab.Screen
-        name="moviesScreen"
-        component={MoviesScreen}
+        name="searchScreen"
+        component={SearchScreen}
         options={{
-          tabBarLabel: 'Movies',
+          tabBarLabel: 'Search',
+          // eslint-disable-next-line react/no-unstable-nested-components
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons
+              name="movie-search"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="exploreScreen"
+        component={ExploreScreen}
+        options={{
+          tabBarLabel: 'Explore',
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons
