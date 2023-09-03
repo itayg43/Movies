@@ -1,11 +1,10 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {StyleSheet, FlatList, ScrollView, View} from 'react-native';
+import {StyleSheet, FlatList, ScrollView, View, Text} from 'react-native';
 import {Chip, Searchbar} from 'react-native-paper';
 
-import {Movie, MoviesCategory} from '../types';
+import {Movie, MoviesCategory, RequestStatus} from '../types';
 import moviesService from '../services/moviesService';
 import useDebounce from '../hooks/useDebounce';
-import useIsFirstRender from '../hooks/useIsFirstRender';
 import SafeView from '../components/SafeView';
 import MovieListItem from '../components/MovieListItem';
 
@@ -33,20 +32,34 @@ const CATEGORIES: MoviesCategory[] = [
 ];
 
 const MoviesScreen = () => {
-  const isFirstRender = useIsFirstRender();
-
   const listRef = useRef<FlatList>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchQuery = useDebounce(searchQuery);
 
   const [category, setCategory] = useState<MoviesCategory>(CATEGORIES[0]);
+  const [disableCategories, setDisableCategories] = useState(false);
+
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [searchResults, setSearchResults] = useState<Movie[]>([]);
+
+  const [getBySearchQueryStatus, setGetBySearchQueryStatus] =
+    useState<RequestStatus>('idle');
 
   const handleGetMoviesByCategory = useCallback(async (c: MoviesCategory) => {
     try {
       setMovies(await moviesService.getMoviesByCategory(c));
     } catch (error) {}
+  }, []);
+
+  const handleGetMoviesBySearchQuery = useCallback(async (query: string) => {
+    try {
+      setGetBySearchQueryStatus('loading');
+      setSearchResults(await moviesService.getMoviesBySearchQuery(query));
+      setGetBySearchQueryStatus('succeded');
+    } catch (error) {
+      setGetBySearchQueryStatus('failed');
+    }
   }, []);
 
   const handleCategoryChange = (c: MoviesCategory) => {
@@ -55,23 +68,20 @@ const MoviesScreen = () => {
   };
 
   useEffect(() => {
-    if (isFirstRender) {
-      return;
-    }
-
-    if (debouncedSearchQuery !== '') {
-      console.log('Searching...');
-      return;
-    }
-
+    setDisableCategories(false);
     handleGetMoviesByCategory(category);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearchQuery]);
+  }, [category, handleGetMoviesByCategory]);
 
   useEffect(() => {
-    handleGetMoviesByCategory(category);
-  }, [handleGetMoviesByCategory, category]);
+    if (debouncedSearchQuery === '') {
+      setDisableCategories(false);
+      setSearchResults([]);
+      return;
+    }
+
+    setDisableCategories(true);
+    handleGetMoviesBySearchQuery(debouncedSearchQuery);
+  }, [debouncedSearchQuery, handleGetMoviesBySearchQuery]);
 
   return (
     <SafeView contentContainerStyle={styles.container}>
@@ -79,6 +89,7 @@ const MoviesScreen = () => {
         placeholder="Search..."
         value={searchQuery}
         onChangeText={setSearchQuery}
+        loading={getBySearchQueryStatus === 'loading'}
       />
 
       {/** categories */}
@@ -93,6 +104,7 @@ const MoviesScreen = () => {
             textStyle={styles.categoryText}
             selected={c === category}
             onPress={() => handleCategoryChange(c)}
+            disabled={disableCategories}
             compact>
             {c.key}
           </Chip>
@@ -102,18 +114,31 @@ const MoviesScreen = () => {
       {/** movie list */}
       <FlatList
         ref={listRef}
-        data={movies}
+        data={debouncedSearchQuery !== '' ? searchResults : movies}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
           <MovieListItem item={item} onPress={() => null} />
         )}
         ItemSeparatorComponent={ListItemSeparator}
         ListFooterComponent={ListFooter}
+        ListEmptyComponent={
+          debouncedSearchQuery !== '' && getBySearchQueryStatus === 'succeded'
+            ? ListEmptySearchResultsPlaceholder
+            : null
+        }
         showsVerticalScrollIndicator={false}
       />
     </SafeView>
   );
 };
+
+function ListEmptySearchResultsPlaceholder() {
+  return (
+    <View style={styles.listEmptySearchResultsPlaceholderContainer}>
+      <Text>No Results...</Text>
+    </View>
+  );
+}
 
 function ListItemSeparator() {
   return <View style={styles.marginBottomSpacer} />;
@@ -140,6 +165,11 @@ const styles = StyleSheet.create({
   categoryText: {
     textAlign: 'center',
     paddingVertical: 3,
+  },
+
+  listEmptySearchResultsPlaceholderContainer: {
+    alignItems: 'center',
+    marginTop: 30,
   },
 
   marginBottomSpacer: {

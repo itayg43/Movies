@@ -9,6 +9,14 @@ const getMoviesByCategory = async (category: MoviesCategory) => {
   return data;
 };
 
+const getMoviesBySearchQuery = async (searchQuery: string) => {
+  const {data} = await apiClient.get<Movie[]>(
+    `/movies/search?query=${searchQuery.trim().toLowerCase()}`,
+  );
+
+  return data;
+};
+
 const getMovieDetailsById = async (id: number) => {
   const {data} = await apiClient.get<MovieDetails>(`/movies/${id}`);
 
@@ -17,5 +25,6 @@ const getMovieDetailsById = async (id: number) => {
 
 export default {
   getMoviesByCategory,
+  getMoviesBySearchQuery,
   getMovieDetailsById,
 };
