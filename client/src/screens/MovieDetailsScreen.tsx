@@ -61,7 +61,11 @@ const MovieDetailsScreen = () => {
         <ScrollView
           style={styles.container}
           showsVerticalScrollIndicator={false}>
-          <Image style={styles.image} source={{uri: movieDetails.posterUrl}} />
+          <Image
+            style={styles.image}
+            source={{uri: movieDetails.posterUrl}}
+            resizeMode="stretch"
+          />
 
           {/** close button */}
           <TouchableOpacity
@@ -123,7 +127,7 @@ const styles = StyleSheet.create({
 
   image: {
     width: '100%',
-    height: 350,
+    height: 400,
   },
 
   closeButtonContainer: {
