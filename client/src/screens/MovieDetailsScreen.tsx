@@ -42,7 +42,7 @@ const MovieDetailsScreen = () => {
   }, []);
 
   const handleMovieListItemPress = (movieId: number) => {
-    navigation.replace('movieDetailsScreen', {
+    navigation.navigate('movieDetailsScreen', {
       id: movieId,
     });
   };
