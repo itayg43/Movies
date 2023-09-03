@@ -17,7 +17,7 @@ const getMoviesByCategory = async (category: MoviesCategory) => {
 
 const getMoviesBySearchQuery = async (searchQuery: string) => {
   const cachedMovies = await moviesCacheAccess.getMoviesBySearchQuery(
-    searchQuery
+    searchQuery.trim().toLowerCase()
   );
 
   if (cachedMovies) {
