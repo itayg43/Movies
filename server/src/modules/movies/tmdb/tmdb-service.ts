@@ -16,7 +16,12 @@ const getMoviesByCategory = async (category: MoviesCategory) => {
       `/movie/${category}?language=en-US&page=1`
     );
 
-    return data.results.map((m) => new Movie(m));
+    return data.results
+      .filter(
+        (m) =>
+          m.backdrop_path !== null && m.release_date !== "" && m.vote_count > 0
+      )
+      .map((m) => new Movie(m));
   } catch (error) {
     console.error(error instanceof AxiosError ? error.response?.data : error);
 
@@ -30,7 +35,12 @@ const getMoviesBySearchQuery = async (searchQuery: string) => {
       `/search/movie?query=${searchQuery}&include_adult=false&language=en-US&page=1`
     );
 
-    return data.results.map((m) => new Movie(m));
+    return data.results
+      .filter(
+        (m) =>
+          m.backdrop_path !== null && m.release_date !== "" && m.vote_count > 0
+      )
+      .map((m) => new Movie(m));
   } catch (error) {
     console.error(error instanceof AxiosError ? error.response?.data : error);
 
@@ -65,8 +75,7 @@ export type GetMoviesResponseData = {
 export type MovieResponseData = {
   id: number;
   title: string;
-  backdrop_path: string | null;
-  poster_path: string;
+  backdrop_path: string;
   overview: string;
   release_date: string;
   vote_average: number;
@@ -74,6 +83,7 @@ export type MovieResponseData = {
 };
 
 export type MovieDetailsResponseData = MovieResponseData & {
+  poster_path: string;
   genres: [
     {
       id: number;
