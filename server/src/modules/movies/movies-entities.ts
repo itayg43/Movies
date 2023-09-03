@@ -7,6 +7,7 @@ import {
   MovieDetailsResponseData,
   VideoResponseData,
 } from "./tmdb/tmdb-service";
+import tmdbUtils from "./tmdb/tmdb-utils";
 
 export class Movie {
   id: number;
@@ -39,9 +40,9 @@ export class MovieDetails extends Movie {
     this.posterUrl = `${TMDB_POSTER_BASE_URL}${data.poster_path}`;
     this.genres = data.genres.map((g) => g.name);
     this.youTubeTrailerUrl = this.initYouTubeTrailerUrl(data.videos.results);
-    this.recommendations = data.recommendations.results.map(
-      (r) => new Movie(r)
-    );
+    this.recommendations = data.recommendations.results
+      .filter(tmdbUtils.filterMoviesWithoutBackdropOrReleaseDateOrVoteCount)
+      .map((r) => new Movie(r));
   }
 
   private initYouTubeTrailerUrl(videos: VideoResponseData[]) {
