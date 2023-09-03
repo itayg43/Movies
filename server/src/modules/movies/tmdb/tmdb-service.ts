@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 
 import tmdbClient from "./tmdb-client";
 import { Movie, MovieDetails } from "../movies-entities";
+import tmdbUtils from "./tmdb-utils";
 
 export enum MoviesCategory {
   nowPlaying = "now_playing",
@@ -17,10 +18,7 @@ const getMoviesByCategory = async (category: MoviesCategory) => {
     );
 
     return data.results
-      .filter(
-        (m) =>
-          m.backdrop_path !== null && m.release_date !== "" && m.vote_count > 0
-      )
+      .filter(tmdbUtils.filterMoviesWithoutBackdropOrReleaseDateOrVoteCount)
       .map((m) => new Movie(m));
   } catch (error) {
     console.error(error instanceof AxiosError ? error.response?.data : error);
@@ -36,10 +34,7 @@ const getMoviesBySearchQuery = async (searchQuery: string) => {
     );
 
     return data.results
-      .filter(
-        (m) =>
-          m.backdrop_path !== null && m.release_date !== "" && m.vote_count > 0
-      )
+      .filter(tmdbUtils.filterMoviesWithoutBackdropOrReleaseDateOrVoteCount)
       .map((m) => new Movie(m));
   } catch (error) {
     console.error(error instanceof AxiosError ? error.response?.data : error);
