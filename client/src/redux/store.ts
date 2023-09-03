@@ -3,6 +3,7 @@ import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import authReducer from './auth/authSlice';
+import moviesReducer from './movies/moviesSlice';
 
 const additionalMiddlewares: any[] = [];
 
@@ -22,6 +23,7 @@ const authPersistedReducer = persistReducer(authPersistConfig, authReducer);
 const store = configureStore({
   reducer: {
     auth: authPersistedReducer,
+    movies: moviesReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

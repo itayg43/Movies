@@ -2,6 +2,10 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {StyleSheet, FlatList, ScrollView, View, Text} from 'react-native';
 import {Chip, Searchbar} from 'react-native-paper';
 
+import {useAppDispatch} from '../hooks/useAppDispatch';
+import moviesAsyncActions from '../redux/movies/moviesAsyncActions';
+import {useAppSelector} from '../hooks/useAppSelector';
+import {selectMovies} from '../redux/movies/moviesSelectors';
 import {Movie, MoviesCategory, RequestStatus} from '../types';
 import moviesService from '../services/moviesService';
 import useDebounce from '../hooks/useDebounce';
@@ -32,6 +36,8 @@ const CATEGORIES: MoviesCategory[] = [
 ];
 
 const MoviesScreen = () => {
+  const dispatch = useAppDispatch();
+
   const listRef = useRef<FlatList>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -40,17 +46,20 @@ const MoviesScreen = () => {
   const [category, setCategory] = useState<MoviesCategory>(CATEGORIES[0]);
   const [disableCategories, setDisableCategories] = useState(false);
 
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const movies = useAppSelector(selectMovies);
   const [searchResults, setSearchResults] = useState<Movie[]>([]);
 
   const [getBySearchQueryStatus, setGetBySearchQueryStatus] =
     useState<RequestStatus>('idle');
 
-  const handleGetMoviesByCategory = useCallback(async (c: MoviesCategory) => {
-    try {
-      setMovies(await moviesService.getMoviesByCategory(c));
-    } catch (error) {}
-  }, []);
+  const handleGetMoviesByCategory = useCallback(
+    async (c: MoviesCategory) => {
+      try {
+        dispatch(moviesAsyncActions.getMoviesByCategory(c)).unwrap();
+      } catch (error) {}
+    },
+    [dispatch],
+  );
 
   const handleGetMoviesBySearchQuery = useCallback(async (query: string) => {
     try {

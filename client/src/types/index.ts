@@ -50,10 +50,6 @@ export type MovieDetails = Movie & {
   recommendations: Movie[];
 };
 
-export type MovieEntities = {
-  [id: number]: Movie;
-};
-
 export type Watchlist = {
   id: number;
   createdAt: string;
@@ -65,7 +61,7 @@ export type WatchlistEntities = {
 };
 
 export type MoviesCategory = {
-  id: '0' | '1' | '2' | '3';
+  id: string;
   key: 'Now Playing' | 'Popular' | 'Top Rated' | 'Upcoming';
   value: 'now_playing' | 'popular' | 'top_rated' | 'upcoming';
 };
