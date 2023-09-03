@@ -16,10 +16,7 @@ const MovieListItem = ({item, onPress}: Props) => {
       activeOpacity={0.7}
       onPress={onPress}>
       {/** image */}
-      <Image
-        style={styles.image}
-        source={{uri: item.backdropUrl ?? item.posterUrl}}
-      />
+      <Image style={styles.image} source={{uri: item.backdropUrl}} />
 
       {/** details */}
       <View style={styles.detailsContainer}>

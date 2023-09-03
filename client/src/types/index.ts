@@ -36,8 +36,7 @@ export type ReissueUserAccessTokenResponseData = {
 export type Movie = {
   id: number;
   title: string;
-  backdropUrl: string | null;
-  posterUrl: string;
+  backdropUrl: string;
   overview: string;
   releaseDate: string;
   voteAverage: number;
@@ -45,6 +44,7 @@ export type Movie = {
 };
 
 export type MovieDetails = Movie & {
+  posterUrl: string;
   genres: string[];
   youTubeTrailerUrl: string | null;
   recommendations: Movie[];
