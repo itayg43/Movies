@@ -1,18 +1,19 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text, View, Image} from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Movie} from '../types';
+import MovieYearRatingTrailerSection from './MovieYearRatingTrailerSection';
 
 type Props = {
   item: Movie;
   onPress: () => void;
+  horizontal?: boolean;
 };
 
-const MovieListItem = ({item, onPress}: Props) => {
+const MovieListItem = ({item, onPress, horizontal}: Props) => {
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={[styles.container, horizontal ? styles.horizontalContainer : null]}
       activeOpacity={0.7}
       onPress={onPress}>
       {/** image */}
@@ -26,26 +27,11 @@ const MovieListItem = ({item, onPress}: Props) => {
         </Text>
 
         {/** year & rating */}
-        <View style={styles.yearAndRatingContainer}>
-          {/** year */}
-          <Text style={styles.year}>
-            {new Date(item.releaseDate).getFullYear()}
-          </Text>
-
-          {/** spacer icon */}
-          <MaterialCommunityIcons name="dots-vertical" />
-
-          {/** rating */}
-          <View style={styles.ratingContainer}>
-            <Text style={styles.rating}>{item.voteAverage.toFixed(1)}</Text>
-
-            {/** star icon */}
-            <MaterialCommunityIcons name="star" color="orange" />
-
-            {/** ratings count */}
-            <Text style={styles.ratingsCount}>({item.voteCount})</Text>
-          </View>
-        </View>
+        <MovieYearRatingTrailerSection
+          releaseDate={item.releaseDate}
+          voteAverage={item.voteAverage}
+          voteCount={item.voteCount}
+        />
 
         {/** overview */}
         <Text numberOfLines={2}>{item.overview}</Text>
@@ -64,6 +50,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
   },
+
+  horizontalContainer: {
+    width: 300,
+  },
+
   image: {
     width: '100%',
     height: '65%',
@@ -74,24 +65,5 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-  },
-  yearAndRatingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    columnGap: 3,
-  },
-  year: {
-    color: 'gray',
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    columnGap: 2,
-  },
-  rating: {
-    color: 'gray',
-  },
-  ratingsCount: {
-    fontSize: 12,
   },
 });

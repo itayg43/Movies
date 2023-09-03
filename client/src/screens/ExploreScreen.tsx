@@ -1,11 +1,13 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {StyleSheet, FlatList, ScrollView, View} from 'react-native';
 import {Chip} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 
 import {Movie, MoviesCategory, RequestStatus} from '../types';
 import SafeView from '../components/SafeView';
 import MovieListItem from '../components/MovieListItem';
 import moviesService from '../services/moviesService';
+import {ExploreScreenNavigationProp} from '../navigators/ExploreStackNavigator';
 
 const CATEGORIES: MoviesCategory[] = [
   {
@@ -31,6 +33,8 @@ const CATEGORIES: MoviesCategory[] = [
 ];
 
 const ExploreScreen = () => {
+  const navigation = useNavigation<ExploreScreenNavigationProp>();
+
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
   const [selectedCategory, setSelectedCategory] = useState<MoviesCategory>(
     CATEGORIES[0],
@@ -55,6 +59,12 @@ const ExploreScreen = () => {
   const handleCategoryChange = (category: MoviesCategory) => {
     setSelectedCategory(category);
     listRef.current?.scrollToIndex({index: 0});
+  };
+
+  const handleMovieListItemPress = (movieId: number) => {
+    navigation.navigate('movieDetailsScreen', {
+      id: movieId,
+    });
   };
 
   useEffect(() => {
@@ -87,7 +97,10 @@ const ExploreScreen = () => {
         data={movies}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
-          <MovieListItem item={item} onPress={() => null} />
+          <MovieListItem
+            item={item}
+            onPress={() => handleMovieListItemPress(item.id)}
+          />
         )}
         initialNumToRender={3}
         ItemSeparatorComponent={ListItemSeparator}

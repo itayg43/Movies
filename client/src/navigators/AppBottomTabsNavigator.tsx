@@ -3,12 +3,12 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import SearchScreen from '../screens/SearchScreen';
-import ExploreScreen from '../screens/ExploreScreen';
+import ExploreStackNavigator from './ExploreStackNavigator';
 import WatchListScreen from '../screens/WatchListScreen';
 
 type AppBottomTabsParams = {
   searchScreen: undefined;
-  exploreScreen: undefined;
+  exploreStackNavigator: undefined;
   watchListScreen: undefined;
 };
 
@@ -17,7 +17,7 @@ const Tab = createBottomTabNavigator<AppBottomTabsParams>();
 const AppBottomTabsNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName="exploreScreen"
+      initialRouteName="exploreStackNavigator"
       screenOptions={{
         headerShown: false,
       }}>
@@ -38,8 +38,8 @@ const AppBottomTabsNavigator = () => {
       />
 
       <Tab.Screen
-        name="exploreScreen"
-        component={ExploreScreen}
+        name="exploreStackNavigator"
+        component={ExploreStackNavigator}
         options={{
           tabBarLabel: 'Explore',
           // eslint-disable-next-line react/no-unstable-nested-components
