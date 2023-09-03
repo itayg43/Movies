@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {StyleSheet, FlatList, View} from 'react-native';
+import {StyleSheet, FlatList, View, Text} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 
 import {Movie, RequestStatus} from '../types';
@@ -26,6 +26,7 @@ const SearchScreen = () => {
 
   useEffect(() => {
     if (debouncedSearchQuery === '') {
+      setRequestStatus('idle');
       setMovies([]);
       return;
     }
@@ -51,11 +52,24 @@ const SearchScreen = () => {
         initialNumToRender={3}
         ItemSeparatorComponent={ListItemSeparator}
         ListFooterComponent={ListFooter}
+        ListEmptyComponent={
+          requestStatus === 'succeded' && movies.length === 0
+            ? ListEmptyPlaceholder
+            : null
+        }
         showsVerticalScrollIndicator={false}
       />
     </SafeView>
   );
 };
+
+function ListEmptyPlaceholder() {
+  return (
+    <View style={styles.listEmptyPlaceholderContainer}>
+      <Text>No Results</Text>
+    </View>
+  );
+}
 
 function ListItemSeparator() {
   return <View style={styles.marginBottomSpacer} />;
@@ -71,6 +85,11 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: 10,
     rowGap: 10,
+  },
+
+  listEmptyPlaceholderContainer: {
+    marginTop: 30,
+    alignItems: 'center',
   },
 
   marginBottomSpacer: {
