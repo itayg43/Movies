@@ -128,6 +128,7 @@ const MoviesScreen = () => {
         renderItem={({item}) => (
           <MovieListItem item={item} onPress={() => null} />
         )}
+        initialNumToRender={3}
         ItemSeparatorComponent={ListItemSeparator}
         ListFooterComponent={ListFooter}
         ListEmptyComponent={
