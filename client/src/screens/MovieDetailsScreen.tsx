@@ -4,12 +4,12 @@ import {
   ScrollView,
   View,
   Text,
-  Image,
   TouchableOpacity,
   FlatList,
 } from 'react-native';
 import {Chip} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FastImage from 'react-native-fast-image';
 
 import moviesService from '../services/moviesService';
 import {MovieDetails, RequestStatus} from '../types';
@@ -71,9 +71,12 @@ const MovieDetailsScreen = () => {
           ref={scrollViewRef}
           style={styles.container}
           showsVerticalScrollIndicator={false}>
-          <Image
+          <FastImage
             style={styles.image}
-            source={{uri: movieDetails.posterUrl}}
+            source={{
+              uri: movieDetails.posterUrl,
+              priority: 'high',
+            }}
             resizeMode="stretch"
           />
 

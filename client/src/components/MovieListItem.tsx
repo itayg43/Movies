@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text, View, Image} from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import {Movie} from '../types';
 import MovieYearRatingTrailerSection from './MovieYearRatingTrailerSection';
@@ -17,7 +18,7 @@ const MovieListItem = ({item, onPress, horizontal}: Props) => {
       activeOpacity={0.7}
       onPress={onPress}>
       {/** image */}
-      <Image style={styles.image} source={{uri: item.backdropUrl}} />
+      <FastImage style={styles.image} source={{uri: item.backdropUrl}} />
 
       {/** details */}
       <View style={styles.detailsContainer}>
