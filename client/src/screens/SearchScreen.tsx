@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {StyleSheet, FlatList, View, Text} from 'react-native';
-import {Searchbar} from 'react-native-paper';
+import {Searchbar, HelperText} from 'react-native-paper';
 
 import {Movie, RequestStatus} from '../types';
 import moviesService from '../services/moviesService';
@@ -31,17 +31,29 @@ const SearchScreen = () => {
       return;
     }
 
+    if (debouncedSearchQuery.length < 3) {
+      return;
+    }
+
     handleGetMoviesBySearchQuery(debouncedSearchQuery);
   }, [debouncedSearchQuery, handleGetMoviesBySearchQuery]);
 
   return (
     <SafeView contentContainerStyle={styles.container}>
-      <Searchbar
-        placeholder="Search..."
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-        loading={requestStatus === 'loading'}
-      />
+      <View>
+        <Searchbar
+          placeholder="Search..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          loading={requestStatus === 'loading'}
+        />
+
+        {debouncedSearchQuery.length < 3 && movies.length === 0 && (
+          <HelperText type="info" visible>
+            Search query should be at least 3 characters long
+          </HelperText>
+        )}
+      </View>
 
       <FlatList
         data={movies}
