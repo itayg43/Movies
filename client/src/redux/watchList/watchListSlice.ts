@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, createSelector} from '@reduxjs/toolkit';
 
 import {WatchListEntities} from '../../types';
 import watchListAsyncActions from './watchListAsyncActions';
@@ -38,7 +38,12 @@ const watchList = createSlice({
   },
 });
 
-export const selectWatchList = (state: RootState) =>
-  Object.values(state.watchList.entities);
+export const selectWatchListEntities = (state: RootState) =>
+  state.watchList.entities;
+
+export const selectWatchList = createSelector(
+  selectWatchListEntities,
+  watchListEntities => Object.values(watchListEntities),
+);
 
 export default watchList.reducer;
