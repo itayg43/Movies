@@ -40,6 +40,9 @@ const MovieDetailsScreen = () => {
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading');
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
 
+  const [watchListRequestStatus, setWatchListRequestStatus] =
+    useState<RequestStatus>('idle');
+
   const scrollViewRef = useRef<ScrollView>(null);
   const movieListRef = useRef<FlatList>(null);
 
@@ -59,7 +62,10 @@ const MovieDetailsScreen = () => {
             watchListAsyncActions.removeWatchList(currMovieWatchList.id),
           )
         : await dispatch(watchListAsyncActions.addWatchList(currMovieId));
-    } catch (error) {}
+      setWatchListRequestStatus('succeded');
+    } catch (error) {
+      setWatchListRequestStatus('failed');
+    }
   };
 
   const handleMovieListItemPress = (movieId: number) => {

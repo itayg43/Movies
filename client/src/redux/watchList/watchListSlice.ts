@@ -42,7 +42,7 @@ const watchList = createSlice({
         watchListAsyncActions.addWatchList.fulfilled,
         (state, {payload}) => {
           state.entities[payload.id] = payload;
-          state.message = '';
+          state.message = 'Successfully added movie';
         },
       )
       .addCase(
@@ -59,7 +59,7 @@ const watchList = createSlice({
         watchListAsyncActions.removeWatchList.fulfilled,
         (state, {payload}) => {
           delete state.entities[payload];
-          state.message = '';
+          state.message = 'Successfully removed movie';
         },
       )
       .addCase(
@@ -85,5 +85,8 @@ export const selectWatchListByMovieId = createSelector(
   [selectWatchList, (_, movieId: number) => movieId],
   (watchListArray, movieId) => watchListArray.find(w => w.movie.id === movieId),
 );
+
+export const selectWatchListMessage = (state: RootState) =>
+  state.watchList.message;
 
 export default watchList.reducer;
