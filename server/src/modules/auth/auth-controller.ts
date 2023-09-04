@@ -9,7 +9,7 @@ import {
 } from "./auth-schemas";
 
 const registerUser = async (
-  req: Request<{}, {}, RegisterUserInput>,
+  req: Request<{}, {}, RegisterUserInput["body"]>,
   res: Response
 ) => {
   const user = await authService.registerUser(req.body);
@@ -18,7 +18,7 @@ const registerUser = async (
 };
 
 const loginUser = async (
-  req: Request<{}, {}, LoginUserInput>,
+  req: Request<{}, {}, LoginUserInput["body"]>,
   res: Response
 ) => {
   const user = await authService.loginUser(req.body);
@@ -27,7 +27,7 @@ const loginUser = async (
 };
 
 const reissueUserAccessToken = async (
-  req: Request<{}, {}, ReissueUserAccessTokenInput>,
+  req: Request<{}, {}, ReissueUserAccessTokenInput["body"]>,
   res: Response
 ) => {
   const accessToken = authService.reissueUserAccessToken(req.body);

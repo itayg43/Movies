@@ -15,7 +15,7 @@ import bcryptUtils from "./utils/bcrypt-utils";
 import jwtUtils from "./utils/jwt-utils";
 import authUtils from "./auth-utils";
 
-const registerUser = async (registerInput: RegisterUserInput) => {
+const registerUser = async (registerInput: RegisterUserInput["body"]) => {
   const { name, email, password } = registerInput;
 
   const hashedPassword = await bcryptUtils.hashPassword(password);
@@ -29,7 +29,7 @@ const registerUser = async (registerInput: RegisterUserInput) => {
   };
 };
 
-const loginUser = async (loginInput: LoginUserInput) => {
+const loginUser = async (loginInput: LoginUserInput["body"]) => {
   const { email, password } = loginInput;
 
   const user = await authDataAccess.findUserByEmail(email);
@@ -55,7 +55,9 @@ const loginUser = async (loginInput: LoginUserInput) => {
   };
 };
 
-const reissueUserAccessToken = (reissueInput: ReissueUserAccessTokenInput) => {
+const reissueUserAccessToken = (
+  reissueInput: ReissueUserAccessTokenInput["body"]
+) => {
   const { refreshToken } = reissueInput;
 
   const { isValid, isExpired, payload } = jwtUtils.validateToken(

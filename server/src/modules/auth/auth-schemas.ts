@@ -22,7 +22,7 @@ export const registerUserSchema = object({
     message: "Password dont match",
   }),
 });
-export type RegisterUserInput = TypeOf<typeof registerUserSchema>["body"];
+export type RegisterUserInput = TypeOf<typeof registerUserSchema>;
 
 export const loginUserSchema = object({
   body: object({
@@ -35,7 +35,7 @@ export const loginUserSchema = object({
     }).min(4, "Password should be at least 4 characters long"),
   }),
 });
-export type LoginUserInput = TypeOf<typeof loginUserSchema>["body"];
+export type LoginUserInput = TypeOf<typeof loginUserSchema>;
 
 export const reissueUserAccessTokenSchema = object({
   body: object({
@@ -46,4 +46,4 @@ export const reissueUserAccessTokenSchema = object({
 });
 export type ReissueUserAccessTokenInput = TypeOf<
   typeof reissueUserAccessTokenSchema
->["body"];
+>;
