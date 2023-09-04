@@ -22,6 +22,16 @@ const isWatchListExist = async (userId: number, movieId: number) => {
   return !!watchList;
 };
 
+const isWatchListExistById = async (id: number) => {
+  const watchList = await prismaClient.watchList.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  return !!watchList;
+};
+
 const findWatchList = async (userId: number) => {
   return await prismaClient.watchList.findMany({
     where: {
@@ -31,8 +41,21 @@ const findWatchList = async (userId: number) => {
   });
 };
 
+const softDeleteWatchList = async (id: number) => {
+  await prismaClient.watchList.update({
+    where: {
+      id,
+    },
+    data: {
+      status: "DELETED",
+    },
+  });
+};
+
 export default {
   createWatchList,
   isWatchListExist,
+  isWatchListExistById,
   findWatchList,
+  softDeleteWatchList,
 };

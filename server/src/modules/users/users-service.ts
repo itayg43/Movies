@@ -2,7 +2,7 @@ import _ from "lodash";
 
 import watchListDataAccess from "./watch-list-data-access";
 import moviesService from "../movies/movies-service";
-import { ConflictError } from "../../errors";
+import { ConflictError, NotFoundError } from "../../errors";
 
 const detailsAttributesToOmit = [
   "posterUrl",
@@ -45,7 +45,18 @@ const getWatchList = async (userId: number) => {
   return await Promise.all(promises);
 };
 
+const softDeleteWatchList = async (id: number) => {
+  const isExist = await watchListDataAccess.isWatchListExistById(id);
+
+  if (!isExist) {
+    throw new NotFoundError("No watch list found");
+  }
+
+  await watchListDataAccess.softDeleteWatchList(id);
+};
+
 export default {
   addWatchList,
   getWatchList,
+  softDeleteWatchList,
 };

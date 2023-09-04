@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 
-import { AddWatchListInput } from "./watch-list-schemas";
+import {
+  AddWatchListInput,
+  SoftDeleteWatchListInput,
+} from "./watch-list-schemas";
 import usersService from "./users-service";
 import { statusCode } from "../../constants";
 
@@ -24,7 +27,19 @@ const getWatchList = async (_: Request, res: Response) => {
   res.status(statusCode.ok).json(watchList);
 };
 
+const softDeleteWatchList = async (
+  req: Request<SoftDeleteWatchListInput["params"]>,
+  res: Response
+) => {
+  const parsedId = parseInt(req.params.id);
+
+  await usersService.softDeleteWatchList(parsedId);
+
+  res.sendStatus(statusCode.ok);
+};
+
 export default {
   addWatchList,
   getWatchList,
+  softDeleteWatchList,
 };

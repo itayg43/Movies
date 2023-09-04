@@ -4,7 +4,10 @@ import asyncHandler from "express-async-handler";
 import validateAccessToken from "../../middlewares/validate-access-token";
 import usersController from "./users-controller";
 import validateSchema from "../../middlewares/validate-schema";
-import { addWatchListSchema } from "./watch-list-schemas";
+import {
+  addWatchListSchema,
+  softDeleteWatchListSchema,
+} from "./watch-list-schemas";
 
 const usersRouter = express.Router();
 
@@ -18,6 +21,12 @@ usersRouter.get(
   "/watch-list",
   [validateAccessToken],
   asyncHandler(usersController.getWatchList)
+);
+
+usersRouter.delete(
+  "/watch-list/:id",
+  [validateAccessToken, validateSchema(softDeleteWatchListSchema)],
+  asyncHandler(usersController.softDeleteWatchList)
 );
 
 export default usersRouter;
