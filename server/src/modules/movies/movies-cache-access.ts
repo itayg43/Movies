@@ -3,6 +3,8 @@ import { redisClient } from "../../app";
 import { Movie, MovieDetails } from "./movies-entities";
 import { MoviesCategory } from "./tmdb/tmdb-service";
 
+const SPACE_REGEX = /\s/g;
+
 const FIFTEEN_MINUTES_TTL = 15 * 60;
 const ONE_HOUR_TTL = 60 * 60;
 
@@ -27,7 +29,9 @@ const setMoviesForCategory = async (
 const getMoviesBySearchQuery = async (
   searchQuery: string
 ): Promise<Movie[] | null> => {
-  const jsonValue = await redisClient.get(`movies_${searchQuery}`);
+  const dashedSearchQuery = searchQuery.replace(SPACE_REGEX, "_");
+
+  const jsonValue = await redisClient.get(`movies_${dashedSearchQuery}`);
 
   return jsonValue ? JSON.parse(jsonValue) : null;
 };
@@ -36,8 +40,10 @@ const setMoviesForSearchQuery = async (
   searchQuery: string,
   values: Movie[]
 ) => {
-  await redisClient.set(`movies_${searchQuery}`, JSON.stringify(values), {
-    EX: ONE_HOUR_TTL,
+  const dashedSearchQuery = searchQuery.replace(SPACE_REGEX, "_");
+
+  await redisClient.set(`movies_${dashedSearchQuery}`, JSON.stringify(values), {
+    EX: FIFTEEN_MINUTES_TTL,
     NX: true,
   });
 };
