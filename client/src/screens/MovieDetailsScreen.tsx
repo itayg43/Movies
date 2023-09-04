@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -20,18 +20,21 @@ import {
 import errorHandlerUtil from '../utils/errorHandlerUtil';
 import MovieYearRatingTrailerSection from '../components/MovieYearRatingTrailerSection';
 import MovieListItem from '../components/MovieListItem';
+import LoadingView from '../components/LoadingView';
 
 const MovieDetailsScreen = () => {
   const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
   const route = useRoute<MovieDetailsScreenRouteProp>();
 
-  const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading');
   const [errorMessage, setErrorMessage] = useState('');
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
 
+  const scrollViewRef = useRef<ScrollView>(null);
+  const movieListRef = useRef<FlatList>(null);
+
   const handleGetMovieDetails = useCallback(async (id: number) => {
     try {
-      setRequestStatus('loading');
       setMovieDetails(await moviesService.getMovieDetailsById(id));
       setRequestStatus('succeded');
     } catch (error) {
@@ -45,6 +48,9 @@ const MovieDetailsScreen = () => {
     navigation.navigate('movieDetailsScreen', {
       id: movieId,
     });
+
+    scrollViewRef.current?.scrollTo({y: 0});
+    movieListRef.current?.scrollToIndex({index: 0});
   };
 
   const handleCloseButtonPress = () => {
@@ -57,8 +63,11 @@ const MovieDetailsScreen = () => {
 
   return (
     <>
+      {requestStatus === 'loading' && <LoadingView />}
+
       {requestStatus === 'succeded' && movieDetails && (
         <ScrollView
+          ref={scrollViewRef}
           style={styles.container}
           showsVerticalScrollIndicator={false}>
           <Image
@@ -94,6 +103,7 @@ const MovieDetailsScreen = () => {
             <Text style={styles.recommendationsTitle}>Recommendations</Text>
 
             <FlatList
+              ref={movieListRef}
               data={movieDetails.recommendations}
               keyExtractor={item => item.id.toString()}
               renderItem={({item}) => (
@@ -103,6 +113,7 @@ const MovieDetailsScreen = () => {
                   horizontal
                 />
               )}
+              initialNumToRender={3}
               horizontal
               showsHorizontalScrollIndicator={false}
               ItemSeparatorComponent={ListItemSeparator}

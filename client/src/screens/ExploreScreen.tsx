@@ -8,6 +8,7 @@ import SafeView from '../components/SafeView';
 import MovieListItem from '../components/MovieListItem';
 import moviesService from '../services/moviesService';
 import {ExploreScreenNavigationProp} from '../navigators/ExploreStackNavigator';
+import LoadingView from '../components/LoadingView';
 
 const CATEGORIES: MoviesCategory[] = [
   {
@@ -35,18 +36,17 @@ const CATEGORIES: MoviesCategory[] = [
 const ExploreScreen = () => {
   const navigation = useNavigation<ExploreScreenNavigationProp>();
 
-  const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading');
   const [selectedCategory, setSelectedCategory] = useState<MoviesCategory>(
     CATEGORIES[0],
   );
   const [movies, setMovies] = useState<Movie[]>([]);
 
-  const listRef = useRef<FlatList>(null);
+  const movieListRef = useRef<FlatList>(null);
 
   const handleGetMoviesByCategory = useCallback(
     async (category: MoviesCategory) => {
       try {
-        setRequestStatus('loading');
         setMovies(await moviesService.getMoviesByCategory(category));
         setRequestStatus('succeded');
       } catch (error) {
@@ -58,7 +58,8 @@ const ExploreScreen = () => {
 
   const handleCategoryChange = (category: MoviesCategory) => {
     setSelectedCategory(category);
-    listRef.current?.scrollToIndex({index: 0});
+
+    movieListRef.current?.scrollToIndex({index: 0});
   };
 
   const handleMovieListItemPress = (movieId: number) => {
@@ -72,42 +73,48 @@ const ExploreScreen = () => {
   }, [selectedCategory, handleGetMoviesByCategory]);
 
   return (
-    <SafeView contentContainerStyle={styles.container}>
-      {/** categories */}
-      <ScrollView
-        style={styles.categoriesContainer}
-        contentContainerStyle={styles.categoriesContentContainer}
-        horizontal
-        showsHorizontalScrollIndicator={false}>
-        {CATEGORIES.map(c => (
-          <Chip
-            key={c.id}
-            textStyle={styles.categoryText}
-            selected={c === selectedCategory}
-            onPress={() => handleCategoryChange(c)}
-            compact>
-            {c.key}
-          </Chip>
-        ))}
-      </ScrollView>
+    <>
+      {requestStatus === 'loading' && <LoadingView />}
 
-      {/** movie list */}
-      <FlatList
-        ref={listRef}
-        data={movies}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => (
-          <MovieListItem
-            item={item}
-            onPress={() => handleMovieListItemPress(item.id)}
+      {requestStatus === 'succeded' && (
+        <SafeView contentContainerStyle={styles.container}>
+          {/** categories */}
+          <ScrollView
+            style={styles.categoriesContainer}
+            contentContainerStyle={styles.categoriesContentContainer}
+            horizontal
+            showsHorizontalScrollIndicator={false}>
+            {CATEGORIES.map(c => (
+              <Chip
+                key={c.id}
+                textStyle={styles.categoryText}
+                selected={c === selectedCategory}
+                onPress={() => handleCategoryChange(c)}
+                compact>
+                {c.key}
+              </Chip>
+            ))}
+          </ScrollView>
+
+          {/** movie list */}
+          <FlatList
+            ref={movieListRef}
+            data={movies}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({item}) => (
+              <MovieListItem
+                item={item}
+                onPress={() => handleMovieListItemPress(item.id)}
+              />
+            )}
+            initialNumToRender={3}
+            ItemSeparatorComponent={ListItemSeparator}
+            ListFooterComponent={ListFooter}
+            showsVerticalScrollIndicator={false}
           />
-        )}
-        initialNumToRender={3}
-        ItemSeparatorComponent={ListItemSeparator}
-        ListFooterComponent={ListFooter}
-        showsVerticalScrollIndicator={false}
-      />
-    </SafeView>
+        </SafeView>
+      )}
+    </>
   );
 };
 
