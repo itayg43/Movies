@@ -7,6 +7,15 @@ const getWatchList = async () => {
   return data;
 };
 
+const addWatchList = async (movieId: number) => {
+  const {data} = await apiClient.post<WatchList>('/users/watch-list', {
+    movieId,
+  });
+
+  return data;
+};
+
 export default {
   getWatchList,
+  addWatchList,
 };
