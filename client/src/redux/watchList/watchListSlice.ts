@@ -1,17 +1,18 @@
-import {createSlice, createSelector} from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
-import {WatchListEntities} from '../../types';
+import {RequestStatus, WatchListEntities} from '../../types';
 import watchListAsyncActions from './watchListAsyncActions';
-import {RootState} from '../store';
 
 type WatchListState = {
   entities: WatchListEntities;
-  message: string;
+  initialGetRequestStatus: RequestStatus;
+  errorMessage: string;
 };
 
 const initialState: WatchListState = {
   entities: {},
-  message: '',
+  initialGetRequestStatus: 'idle',
+  errorMessage: '',
 };
 
 const watchList = createSlice({
@@ -25,14 +26,16 @@ const watchList = createSlice({
         watchListAsyncActions.getWatchList.fulfilled,
         (state, {payload}) => {
           state.entities = payload;
-          state.message = '';
+          state.initialGetRequestStatus = 'succeded';
+          state.errorMessage = '';
         },
       )
       .addCase(
         watchListAsyncActions.getWatchList.rejected,
         (state, {payload}) => {
           if (payload) {
-            state.message = payload;
+            state.initialGetRequestStatus = 'failed';
+            state.errorMessage = payload;
           }
         },
       )
@@ -42,14 +45,13 @@ const watchList = createSlice({
         watchListAsyncActions.addWatchList.fulfilled,
         (state, {payload}) => {
           state.entities[payload.id] = payload;
-          state.message = 'Successfully added movie';
         },
       )
       .addCase(
         watchListAsyncActions.addWatchList.rejected,
         (state, {payload}) => {
           if (payload) {
-            state.message = payload;
+            state.errorMessage = payload;
           }
         },
       )
@@ -59,34 +61,17 @@ const watchList = createSlice({
         watchListAsyncActions.removeWatchList.fulfilled,
         (state, {payload}) => {
           delete state.entities[payload];
-          state.message = 'Successfully removed movie';
         },
       )
       .addCase(
         watchListAsyncActions.removeWatchList.rejected,
         (state, {payload}) => {
           if (payload) {
-            state.message = payload;
+            state.errorMessage = payload;
           }
         },
       );
   },
 });
-
-export const selectWatchListEntities = (state: RootState) =>
-  state.watchList.entities;
-
-export const selectWatchList = createSelector(
-  selectWatchListEntities,
-  watchListEntities => Object.values(watchListEntities),
-);
-
-export const selectWatchListByMovieId = createSelector(
-  [selectWatchList, (_, movieId: number) => movieId],
-  (watchListArray, movieId) => watchListArray.find(w => w.movie.id === movieId),
-);
-
-export const selectWatchListMessage = (state: RootState) =>
-  state.watchList.message;
 
 export default watchList.reducer;

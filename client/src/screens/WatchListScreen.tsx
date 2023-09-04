@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, FlatList, View} from 'react-native';
 
 import {useAppSelector} from '../hooks/useAppSelector';
-import {selectWatchList} from '../redux/watchList/watchListSlice';
+import {selectWatchList} from '../redux/watchList/watchListSelectors';
 import SafeView from '../components/SafeView';
 import WatchListItem from '../components/WatchListItem';
 

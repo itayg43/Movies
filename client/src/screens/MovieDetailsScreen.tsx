@@ -10,6 +10,7 @@ import {
 import {Chip} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FastImage from 'react-native-fast-image';
+import Toast from 'react-native-toast-message';
 
 import moviesService from '../services/moviesService';
 import {MovieDetails, RequestStatus} from '../types';
@@ -24,47 +25,72 @@ import LoadingView from '../components/LoadingView';
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import watchListAsyncActions from '../redux/watchList/watchListAsyncActions';
 import {useAppSelector} from '../hooks/useAppSelector';
-import {selectWatchListByMovieId} from '../redux/watchList/watchListSlice';
+import {selectWatchListByMovieId} from '../redux/watchList/watchListSelectors';
 
 const MovieDetailsScreen = () => {
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
   const route = useRoute<MovieDetailsScreenRouteProp>();
 
-  const dispatch = useAppDispatch();
-
-  const currMovieId = route.params.id;
-  const currMovieWatchList = useAppSelector(state =>
-    selectWatchListByMovieId(state, currMovieId),
-  );
-
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading');
-  const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
-
-  const [watchListRequestStatus, setWatchListRequestStatus] =
-    useState<RequestStatus>('idle');
+  const movieIdParam = route.params.id;
+  const [movie, setMovie] = useState<MovieDetails | null>(null);
+  const movieWatchList = useAppSelector(state =>
+    selectWatchListByMovieId(state, movieIdParam),
+  );
+  const isMovieInWatchList = !!movieWatchList;
 
   const scrollViewRef = useRef<ScrollView>(null);
   const movieListRef = useRef<FlatList>(null);
 
   const handleGetMovieDetails = useCallback(async (movieId: number) => {
     try {
-      setMovieDetails(await moviesService.getMovieDetailsById(movieId));
+      setMovie(await moviesService.getMovieDetailsById(movieId));
       setRequestStatus('succeded');
     } catch (error) {
       setRequestStatus('failed');
     }
   }, []);
 
-  const handleWatchListAction = async () => {
+  const handleAddWatchList = async () => {
     try {
-      currMovieWatchList
-        ? await dispatch(
-            watchListAsyncActions.removeWatchList(currMovieWatchList.id),
-          )
-        : await dispatch(watchListAsyncActions.addWatchList(currMovieId));
-      setWatchListRequestStatus('succeded');
+      await dispatch(watchListAsyncActions.addWatchList(movieIdParam)).unwrap();
+
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: `Successfully added ${movie?.title}`,
+      });
     } catch (error) {
-      setWatchListRequestStatus('failed');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: `Couldn't add ${movie?.title}`,
+      });
+    }
+  };
+
+  const handleRemoveWatchList = async () => {
+    try {
+      if (!movieWatchList) {
+        return;
+      }
+
+      await dispatch(
+        watchListAsyncActions.removeWatchList(movieWatchList.id),
+      ).unwrap();
+
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: `Successfully removed ${movie?.title}`,
+      });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: `Couldn't remove ${movie?.title}`,
+      });
     }
   };
 
@@ -82,14 +108,14 @@ const MovieDetailsScreen = () => {
   };
 
   useEffect(() => {
-    handleGetMovieDetails(currMovieId);
-  }, [currMovieId, handleGetMovieDetails]);
+    handleGetMovieDetails(movieIdParam);
+  }, [movieIdParam, handleGetMovieDetails]);
 
   return (
     <>
       {requestStatus === 'loading' && <LoadingView />}
 
-      {requestStatus === 'succeded' && movieDetails && (
+      {requestStatus === 'succeded' && movie && (
         <ScrollView
           ref={scrollViewRef}
           style={styles.container}
@@ -97,7 +123,7 @@ const MovieDetailsScreen = () => {
           <FastImage
             style={styles.image}
             source={{
-              uri: movieDetails.posterUrl,
+              uri: movie.posterUrl,
               priority: 'high',
             }}
             resizeMode="stretch"
@@ -116,23 +142,27 @@ const MovieDetailsScreen = () => {
             <View style={styles.rowContainer}>
               {/** title & year & rating & trailer */}
               <View style={styles.rowLeftSectionContainer}>
-                <Text style={styles.title}>{movieDetails.title}</Text>
+                <Text style={styles.title}>{movie.title}</Text>
 
                 <MovieYearRatingTrailerSection
-                  releaseDate={movieDetails.releaseDate}
-                  voteAverage={movieDetails.voteAverage}
-                  voteCount={movieDetails.voteCount}
-                  trailerUrl={movieDetails.youTubeTrailerUrl}
+                  releaseDate={movie.releaseDate}
+                  voteAverage={movie.voteAverage}
+                  voteCount={movie.voteCount}
+                  trailerUrl={movie.youTubeTrailerUrl}
                 />
               </View>
 
               {/** watch list action */}
               <TouchableOpacity
                 style={styles.rowRightSectionContainer}
-                onPress={handleWatchListAction}>
+                onPress={
+                  isMovieInWatchList
+                    ? handleRemoveWatchList
+                    : handleAddWatchList
+                }>
                 <MaterialCommunityIcons
                   name={
-                    currMovieWatchList ? 'playlist-remove' : 'playlist-plus'
+                    isMovieInWatchList ? 'playlist-remove' : 'playlist-plus'
                   }
                   size={24}
                   color="gray"
@@ -145,36 +175,44 @@ const MovieDetailsScreen = () => {
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.genresContainer}>
-              {movieDetails.genres.map(g => (
+              {movie.genres.map(g => (
                 <Chip key={g}>{g}</Chip>
               ))}
             </ScrollView>
 
             {/** overview */}
-            <Text>{movieDetails.overview}</Text>
+            <Text>{movie.overview}</Text>
 
             {/** recommendations */}
-            <Text style={styles.recommendationsTitle}>Recommendations</Text>
+            {movie.recommendations.length > 0 && (
+              <>
+                <Text style={styles.recommendationsTitle}>Recommendations</Text>
 
-            <FlatList
-              ref={movieListRef}
-              data={movieDetails.recommendations}
-              keyExtractor={item => item.id.toString()}
-              renderItem={({item}) => (
-                <MovieListItem
-                  item={item}
-                  onPress={() => handleMovieListItemPress(item.id)}
+                <FlatList
+                  ref={movieListRef}
+                  data={movie.recommendations}
+                  keyExtractor={item => item.id.toString()}
+                  renderItem={({item}) => (
+                    <MovieListItem
+                      item={item}
+                      onPress={() => handleMovieListItemPress(item.id)}
+                      horizontal
+                    />
+                  )}
+                  initialNumToRender={3}
                   horizontal
+                  showsHorizontalScrollIndicator={false}
+                  ItemSeparatorComponent={ListItemSeparator}
                 />
-              )}
-              initialNumToRender={3}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              ItemSeparatorComponent={ListItemSeparator}
-            />
+              </>
+            )}
           </View>
+
+          <Toast />
         </ScrollView>
       )}
+
+      {requestStatus === 'failed' && <View />}
     </>
   );
 };
