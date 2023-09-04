@@ -34,6 +34,22 @@ const watchList = createSlice({
             state.message = payload;
           }
         },
+      )
+
+      .addCase(
+        watchListAsyncActions.addWatchList.fulfilled,
+        (state, {payload}) => {
+          state.entities[payload.id] = payload;
+          state.message = '';
+        },
+      )
+      .addCase(
+        watchListAsyncActions.addWatchList.rejected,
+        (state, {payload}) => {
+          if (payload) {
+            state.message = payload;
+          }
+        },
       );
   },
 });
@@ -44,6 +60,12 @@ export const selectWatchListEntities = (state: RootState) =>
 export const selectWatchList = createSelector(
   selectWatchListEntities,
   watchListEntities => Object.values(watchListEntities),
+);
+
+export const selectWatchListIdByMovieId = createSelector(
+  [selectWatchList, (_, movieId: number) => movieId],
+  (watchListArray, movieId) =>
+    watchListArray.find(w => w.movie.id === movieId)?.id,
 );
 
 export default watchList.reducer;
