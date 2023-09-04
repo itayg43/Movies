@@ -2,7 +2,7 @@ import _ from "lodash";
 
 import watchListDataAccess from "./watch-list-data-access";
 import moviesService from "../movies/movies-service";
-import { ConflictError, NotFoundError } from "../../errors";
+import { NotFoundError } from "../../errors";
 
 const detailsAttributesToOmit = [
   "posterUrl",
@@ -12,13 +12,17 @@ const detailsAttributesToOmit = [
 ];
 
 const addWatchList = async (userId: number, movieId: number) => {
-  const isExist = await watchListDataAccess.isWatchListExist(userId, movieId);
+  const existWatchList = await watchListDataAccess.findWatchList(
+    userId,
+    movieId
+  );
 
-  if (isExist) {
-    throw new ConflictError("Watch list already exist");
-  }
-
-  const watchList = await watchListDataAccess.createWatchList(userId, movieId);
+  const watchList = existWatchList
+    ? await watchListDataAccess.updateWatchListStatus(
+        existWatchList.id,
+        "ACTIVE"
+      )
+    : await watchListDataAccess.createWatchList(userId, movieId);
 
   const movie = await moviesService.getMovieDetailsById(movieId);
 
@@ -30,7 +34,7 @@ const addWatchList = async (userId: number, movieId: number) => {
 };
 
 const getWatchList = async (userId: number) => {
-  const watchList = await watchListDataAccess.findWatchList(userId);
+  const watchList = await watchListDataAccess.findWatchListByUserId(userId);
 
   const promises = watchList.map(async (w) => {
     const movie = await moviesService.getMovieDetailsById(w.movieId);
@@ -46,13 +50,13 @@ const getWatchList = async (userId: number) => {
 };
 
 const softDeleteWatchList = async (id: number) => {
-  const isExist = await watchListDataAccess.isWatchListExistById(id);
+  const watchList = await watchListDataAccess.findWatchListById(id);
 
-  if (!isExist) {
-    throw new NotFoundError("No watch list found");
+  if (!watchList) {
+    throw new NotFoundError("No watch list with given id");
   }
 
-  await watchListDataAccess.softDeleteWatchList(id);
+  await watchListDataAccess.updateWatchListStatus(id, "DELETED");
 };
 
 export default {
