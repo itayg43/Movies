@@ -9,7 +9,7 @@ import {
 } from "./movies-schemas";
 
 const getMoviesByCategory = async (
-  req: Request<{}, {}, {}, GetMoviesByCategoryInput>,
+  req: Request<{}, {}, {}, GetMoviesByCategoryInput["query"]>,
   res: Response
 ) => {
   const movies = await moviesService.getMoviesByCategory(req.query.category);
@@ -18,16 +18,18 @@ const getMoviesByCategory = async (
 };
 
 const getMoviesBySearchQuery = async (
-  req: Request<{}, {}, {}, GetMoviesBySearchQueryInput>,
+  req: Request<{}, {}, {}, GetMoviesBySearchQueryInput["query"]>,
   res: Response
 ) => {
-  const movies = await moviesService.getMoviesBySearchQuery(req.query.query);
+  const movies = await moviesService.getMoviesBySearchQuery(
+    req.query.query.trim().toLowerCase()
+  );
 
   res.status(statusCode.ok).json(movies);
 };
 
 const getMovieDetailsById = async (
-  req: Request<GetMovieDetailsByIdInput>,
+  req: Request<GetMovieDetailsByIdInput["params"]>,
   res: Response
 ) => {
   const movieDetails = await moviesService.getMovieDetailsById(req.params.id);

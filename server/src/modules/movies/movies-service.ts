@@ -2,12 +2,6 @@ import tmdbService, { MoviesCategory } from "./tmdb/tmdb-service";
 import moviesCacheAccess from "./movies-cache-access";
 
 const getMoviesByCategory = async (category: MoviesCategory) => {
-  const cachedMovies = await moviesCacheAccess.getMoviesByCategory(category);
-
-  if (cachedMovies) {
-    return cachedMovies;
-  }
-
   const movies = await tmdbService.getMoviesByCategory(category);
 
   await moviesCacheAccess.setMoviesForCategory(category, movies);
@@ -16,14 +10,6 @@ const getMoviesByCategory = async (category: MoviesCategory) => {
 };
 
 const getMoviesBySearchQuery = async (searchQuery: string) => {
-  const cachedMovies = await moviesCacheAccess.getMoviesBySearchQuery(
-    searchQuery.trim().toLowerCase()
-  );
-
-  if (cachedMovies) {
-    return cachedMovies;
-  }
-
   const movies = await tmdbService.getMoviesBySearchQuery(searchQuery);
 
   await moviesCacheAccess.setMoviesForSearchQuery(searchQuery, movies);
