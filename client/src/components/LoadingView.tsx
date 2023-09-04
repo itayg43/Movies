@@ -1,14 +1,16 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import {ActivityIndicator} from 'react-native-paper';
+
+import SafeView from './SafeView';
 
 const LoadingView = () => {
   return (
-    <View style={styles.container}>
+    <SafeView contentContainerStyle={styles.container}>
       <ActivityIndicator size="large" />
 
       <Text>Loading...</Text>
-    </View>
+    </SafeView>
   );
 };
 
@@ -16,7 +18,6 @@ export default LoadingView;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     rowGap: 30,

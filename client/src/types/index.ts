@@ -50,14 +50,14 @@ export type MovieDetails = Movie & {
   recommendations: Movie[];
 };
 
-export type Watchlist = {
+export type WatchList = {
   id: number;
   createdAt: string;
   movie: Movie;
 };
 
-export type WatchlistEntities = {
-  [id: number]: Watchlist;
+export type WatchListEntities = {
+  [id: number]: WatchList;
 };
 
 export type MoviesCategory = {
