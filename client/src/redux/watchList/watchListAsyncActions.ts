@@ -43,7 +43,22 @@ const addWatchList = definedCreateAsyncThunk<WatchList, number>(
   },
 );
 
+const removeWatchList = definedCreateAsyncThunk<number, number>(
+  'watchList/removeWatchList',
+  async (id, {rejectWithValue}) => {
+    try {
+      await watchListService.removeWatchList(id);
+
+      return id;
+    } catch (error) {
+      const message = errorHandlerUtil.extractMessage(error);
+      return rejectWithValue(message);
+    }
+  },
+);
+
 export default {
   getWatchList,
   addWatchList,
+  removeWatchList,
 };

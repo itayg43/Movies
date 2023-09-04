@@ -20,6 +20,7 @@ const watchList = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
+      // get
       .addCase(
         watchListAsyncActions.getWatchList.fulfilled,
         (state, {payload}) => {
@@ -36,6 +37,7 @@ const watchList = createSlice({
         },
       )
 
+      // add
       .addCase(
         watchListAsyncActions.addWatchList.fulfilled,
         (state, {payload}) => {
@@ -45,6 +47,23 @@ const watchList = createSlice({
       )
       .addCase(
         watchListAsyncActions.addWatchList.rejected,
+        (state, {payload}) => {
+          if (payload) {
+            state.message = payload;
+          }
+        },
+      )
+
+      // remove
+      .addCase(
+        watchListAsyncActions.removeWatchList.fulfilled,
+        (state, {payload}) => {
+          delete state.entities[payload];
+          state.message = '';
+        },
+      )
+      .addCase(
+        watchListAsyncActions.removeWatchList.rejected,
         (state, {payload}) => {
           if (payload) {
             state.message = payload;
@@ -62,10 +81,9 @@ export const selectWatchList = createSelector(
   watchListEntities => Object.values(watchListEntities),
 );
 
-export const selectWatchListIdByMovieId = createSelector(
+export const selectWatchListByMovieId = createSelector(
   [selectWatchList, (_, movieId: number) => movieId],
-  (watchListArray, movieId) =>
-    watchListArray.find(w => w.movie.id === movieId)?.id,
+  (watchListArray, movieId) => watchListArray.find(w => w.movie.id === movieId),
 );
 
 export default watchList.reducer;
