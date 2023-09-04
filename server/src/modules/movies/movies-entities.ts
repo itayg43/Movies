@@ -41,7 +41,7 @@ export class MovieDetails extends Movie {
     this.genres = data.genres.map((g) => g.name);
     this.youTubeTrailerUrl = this.initYouTubeTrailerUrl(data.videos.results);
     this.recommendations = data.recommendations.results
-      .filter(tmdbUtils.filterMoviesWithoutBackdropOrReleaseDateOrVoteCount)
+      .filter(tmdbUtils.filterMoviesWithoutData)
       .map((r) => new Movie(r));
   }
 

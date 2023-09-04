@@ -18,7 +18,7 @@ const getMoviesByCategory = async (category: MoviesCategory) => {
     );
 
     return data.results
-      .filter(tmdbUtils.filterMoviesWithoutBackdropOrReleaseDateOrVoteCount)
+      .filter(tmdbUtils.filterMoviesWithoutData)
       .map((m) => new Movie(m));
   } catch (error) {
     console.error(error instanceof AxiosError ? error.response?.data : error);
@@ -34,7 +34,7 @@ const getMoviesBySearchQuery = async (searchQuery: string) => {
     );
 
     return data.results
-      .filter(tmdbUtils.filterMoviesWithoutBackdropOrReleaseDateOrVoteCount)
+      .filter(tmdbUtils.filterMoviesWithoutData)
       .map((m) => new Movie(m));
   } catch (error) {
     console.error(error instanceof AxiosError ? error.response?.data : error);
