@@ -21,7 +21,9 @@ const WatchListItem = ({item}: Props) => {
       {/** details */}
       <View style={styles.detailsContainer}>
         {/** title */}
-        <Text style={styles.title}>{item.movie.title}</Text>
+        <Text style={styles.title} numberOfLines={1}>
+          {item.movie.title}
+        </Text>
 
         {/** overview */}
         <Text numberOfLines={2}>{item.movie.overview}</Text>
