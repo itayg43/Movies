@@ -21,10 +21,21 @@ import {
 import MovieYearRatingTrailerSection from '../components/MovieYearRatingTrailerSection';
 import MovieListItem from '../components/MovieListItem';
 import LoadingView from '../components/LoadingView';
+import {useAppDispatch} from '../hooks/useAppDispatch';
+import watchListAsyncActions from '../redux/watchList/watchListAsyncActions';
+import {useAppSelector} from '../hooks/useAppSelector';
+import {selectWatchListByMovieId} from '../redux/watchList/watchListSlice';
 
 const MovieDetailsScreen = () => {
   const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
   const route = useRoute<MovieDetailsScreenRouteProp>();
+
+  const dispatch = useAppDispatch();
+
+  const currMovieId = route.params.id;
+  const currMovieWatchList = useAppSelector(state =>
+    selectWatchListByMovieId(state, currMovieId),
+  );
 
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading');
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
@@ -32,14 +43,24 @@ const MovieDetailsScreen = () => {
   const scrollViewRef = useRef<ScrollView>(null);
   const movieListRef = useRef<FlatList>(null);
 
-  const handleGetMovieDetails = useCallback(async (id: number) => {
+  const handleGetMovieDetails = useCallback(async (movieId: number) => {
     try {
-      setMovieDetails(await moviesService.getMovieDetailsById(id));
+      setMovieDetails(await moviesService.getMovieDetailsById(movieId));
       setRequestStatus('succeded');
     } catch (error) {
       setRequestStatus('failed');
     }
   }, []);
+
+  const handleWatchListAction = async () => {
+    try {
+      currMovieWatchList
+        ? await dispatch(
+            watchListAsyncActions.removeWatchList(currMovieWatchList.id),
+          )
+        : await dispatch(watchListAsyncActions.addWatchList(currMovieId));
+    } catch (error) {}
+  };
 
   const handleMovieListItemPress = (movieId: number) => {
     navigation.navigate('movieDetailsScreen', {
@@ -55,8 +76,8 @@ const MovieDetailsScreen = () => {
   };
 
   useEffect(() => {
-    handleGetMovieDetails(route.params.id);
-  }, [route.params.id, handleGetMovieDetails]);
+    handleGetMovieDetails(currMovieId);
+  }, [currMovieId, handleGetMovieDetails]);
 
   return (
     <>
@@ -99,10 +120,14 @@ const MovieDetailsScreen = () => {
                 />
               </View>
 
-              {/** watch list actions */}
-              <TouchableOpacity style={styles.rowRightSectionContainer}>
+              {/** watch list action */}
+              <TouchableOpacity
+                style={styles.rowRightSectionContainer}
+                onPress={handleWatchListAction}>
                 <MaterialCommunityIcons
-                  name="playlist-plus"
+                  name={
+                    currMovieWatchList ? 'playlist-remove' : 'playlist-plus'
+                  }
                   size={24}
                   color="gray"
                 />
