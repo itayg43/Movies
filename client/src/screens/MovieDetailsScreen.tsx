@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
+import {Chip} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import moviesService from '../services/moviesService';
@@ -96,6 +97,16 @@ const MovieDetailsScreen = () => {
               trailerUrl={movieDetails.youTubeTrailerUrl}
             />
 
+            {/** genres */}
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.genresContainer}>
+              {movieDetails.genres.map(g => (
+                <Chip key={g}>{g}</Chip>
+              ))}
+            </ScrollView>
+
             {/** overview */}
             <Text>{movieDetails.overview}</Text>
 
@@ -159,6 +170,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
+  },
+  genresContainer: {
+    columnGap: 5,
   },
   recommendationsTitle: {
     fontWeight: 'bold',
