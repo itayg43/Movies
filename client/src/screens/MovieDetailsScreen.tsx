@@ -18,7 +18,6 @@ import {
   MovieDetailsScreenNavigationProp,
   MovieDetailsScreenRouteProp,
 } from '../navigators/ExploreStackNavigator';
-import errorHandlerUtil from '../utils/errorHandlerUtil';
 import MovieYearRatingTrailerSection from '../components/MovieYearRatingTrailerSection';
 import MovieListItem from '../components/MovieListItem';
 import LoadingView from '../components/LoadingView';
@@ -28,7 +27,6 @@ const MovieDetailsScreen = () => {
   const route = useRoute<MovieDetailsScreenRouteProp>();
 
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading');
-  const [errorMessage, setErrorMessage] = useState('');
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
 
   const scrollViewRef = useRef<ScrollView>(null);
@@ -39,8 +37,6 @@ const MovieDetailsScreen = () => {
       setMovieDetails(await moviesService.getMovieDetailsById(id));
       setRequestStatus('succeded');
     } catch (error) {
-      const message = errorHandlerUtil.extractMessage(error);
-      setErrorMessage(message);
       setRequestStatus('failed');
     }
   }, []);
@@ -90,15 +86,28 @@ const MovieDetailsScreen = () => {
 
           {/** details */}
           <View style={styles.detailsContainer}>
-            {/** title */}
-            <Text style={styles.title}>{movieDetails.title}</Text>
+            <View style={styles.rowContainer}>
+              {/** title & year & rating & trailer */}
+              <View style={styles.rowLeftSectionContainer}>
+                <Text style={styles.title}>{movieDetails.title}</Text>
 
-            <MovieYearRatingTrailerSection
-              releaseDate={movieDetails.releaseDate}
-              voteAverage={movieDetails.voteAverage}
-              voteCount={movieDetails.voteCount}
-              trailerUrl={movieDetails.youTubeTrailerUrl}
-            />
+                <MovieYearRatingTrailerSection
+                  releaseDate={movieDetails.releaseDate}
+                  voteAverage={movieDetails.voteAverage}
+                  voteCount={movieDetails.voteCount}
+                  trailerUrl={movieDetails.youTubeTrailerUrl}
+                />
+              </View>
+
+              {/** watch list actions */}
+              <TouchableOpacity style={styles.rowRightSectionContainer}>
+                <MaterialCommunityIcons
+                  name="playlist-plus"
+                  size={24}
+                  color="gray"
+                />
+              </TouchableOpacity>
+            </View>
 
             {/** genres */}
             <ScrollView
@@ -170,6 +179,16 @@ const styles = StyleSheet.create({
   detailsContainer: {
     padding: 10,
     rowGap: 10,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+  },
+  rowLeftSectionContainer: {
+    flex: 1,
+    rowGap: 5,
+  },
+  rowRightSectionContainer: {
+    justifyContent: 'center',
   },
   title: {
     fontWeight: 'bold',
