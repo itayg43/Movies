@@ -5,6 +5,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import SearchScreen from '../screens/SearchScreen';
 import ExploreStackNavigator from './ExploreStackNavigator';
 import WatchListScreen from '../screens/WatchListScreen';
+import {useAppSelector} from '../hooks/useAppSelector';
+import {selectWatchList} from '../redux/watchList/watchListSelectors';
 
 type AppBottomTabsParams = {
   searchScreen: undefined;
@@ -15,6 +17,8 @@ type AppBottomTabsParams = {
 const Tab = createBottomTabNavigator<AppBottomTabsParams>();
 
 const AppBottomTabsNavigator = () => {
+  const watchList = useAppSelector(selectWatchList);
+
   return (
     <Tab.Navigator
       initialRouteName="exploreStackNavigator"
@@ -66,6 +70,7 @@ const AppBottomTabsNavigator = () => {
               size={size}
             />
           ),
+          tabBarBadge: watchList.length,
         }}
       />
     </Tab.Navigator>
