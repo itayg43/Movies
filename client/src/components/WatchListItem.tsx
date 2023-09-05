@@ -45,6 +45,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     columnGap: 10,
     borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
   image: {
     width: 100,
