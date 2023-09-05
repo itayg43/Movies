@@ -5,7 +5,6 @@ import {PaperProvider, MD3LightTheme as DefaultTheme} from 'react-native-paper';
 import {Provider as StoreProvider} from 'react-redux';
 import FlipperAsyncStorage from 'rn-flipper-async-storage-advanced';
 import {PersistGate} from 'redux-persist/integration/react';
-import Toast from 'react-native-toast-message';
 
 import App from './src/App';
 import {name as appName} from './app.json';
@@ -28,7 +27,6 @@ const RootApp = () => {
             <FlipperAsyncStorage />
             <App />
           </NavigationContainer>
-          <Toast />
         </PersistGate>
       </StoreProvider>
     </PaperProvider>

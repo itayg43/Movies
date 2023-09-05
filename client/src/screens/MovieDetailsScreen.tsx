@@ -7,10 +7,9 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {Chip} from 'react-native-paper';
+import {Chip, Snackbar} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FastImage from 'react-native-fast-image';
-import Toast from 'react-native-toast-message';
 
 import moviesService from '../services/moviesService';
 import {MovieDetails, RequestStatus} from '../types';
@@ -26,47 +25,70 @@ import {useAppDispatch} from '../hooks/useAppDispatch';
 import watchListAsyncActions from '../redux/watchList/watchListAsyncActions';
 import {useAppSelector} from '../hooks/useAppSelector';
 import {selectWatchListByMovieId} from '../redux/watchList/watchListSelectors';
+import ErrorView from '../components/ErrorView';
 
 const MovieDetailsScreen = () => {
-  const dispatch = useAppDispatch();
-  const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
   const route = useRoute<MovieDetailsScreenRouteProp>();
 
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading');
-  const movieIdParam = route.params.id;
   const [movie, setMovie] = useState<MovieDetails | null>(null);
-  const movieWatchList = useAppSelector(state =>
-    selectWatchListByMovieId(state, movieIdParam),
-  );
-  const isMovieInWatchList = !!movieWatchList;
 
-  const scrollViewRef = useRef<ScrollView>(null);
-  const movieListRef = useRef<FlatList>(null);
-
-  const handleGetMovieDetails = useCallback(async (movieId: number) => {
+  const handleGetMovieDetails = useCallback(async (id: number) => {
     try {
-      setMovie(await moviesService.getMovieDetailsById(movieId));
+      setMovie(await moviesService.getMovieDetailsById(id));
       setRequestStatus('succeded');
     } catch (error) {
       setRequestStatus('failed');
     }
   }, []);
 
+  useEffect(() => {
+    handleGetMovieDetails(route.params.id);
+  }, [route.params.id, handleGetMovieDetails]);
+
+  return (
+    <>
+      {requestStatus === 'loading' && <LoadingView />}
+
+      {requestStatus === 'succeded' && movie && <ContentView movie={movie} />}
+
+      {requestStatus === 'failed' && (
+        <ErrorView
+          message="Couldn't get movie data"
+          onRetry={() => handleGetMovieDetails(route.params.id)}
+        />
+      )}
+    </>
+  );
+};
+
+type ContentViewProps = {
+  movie: MovieDetails;
+};
+
+function ContentView({movie}: ContentViewProps) {
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation<MovieDetailsScreenNavigationProp>();
+
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const movieWatchList = useAppSelector(state =>
+    selectWatchListByMovieId(state, movie.id),
+  );
+  const isMovieInWatchList = !!movieWatchList;
+
+  const scrollViewRef = useRef<ScrollView>(null);
+  const movieListRef = useRef<FlatList>(null);
+
   const handleAddWatchList = async () => {
     try {
-      await dispatch(watchListAsyncActions.addWatchList(movieIdParam)).unwrap();
-
-      Toast.show({
-        type: 'success',
-        text1: 'Success',
-        text2: `Successfully added ${movie?.title}`,
-      });
+      await dispatch(watchListAsyncActions.addWatchList(movie.id)).unwrap();
+      setSnackbarMessage('Movie successfully added');
+      setShowSnackbar(true);
     } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: `Couldn't add ${movie?.title}`,
-      });
+      setSnackbarMessage("Couldn't add movie");
+      setShowSnackbar(true);
     }
   };
 
@@ -79,22 +101,17 @@ const MovieDetailsScreen = () => {
       await dispatch(
         watchListAsyncActions.removeWatchList(movieWatchList.id),
       ).unwrap();
-
-      Toast.show({
-        type: 'success',
-        text1: 'Success',
-        text2: `Successfully removed ${movie?.title}`,
-      });
+      setSnackbarMessage('Movie successfully removed');
+      setShowSnackbar(true);
     } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: `Couldn't remove ${movie?.title}`,
-      });
+      setSnackbarMessage("Couldn't remove movie");
+      setShowSnackbar(true);
     }
   };
 
   const handleMovieListItemPress = (movieId: number) => {
+    setShowSnackbar(false);
+
     navigation.navigate('movieDetailsScreen', {
       id: movieId,
     });
@@ -107,115 +124,108 @@ const MovieDetailsScreen = () => {
     navigation.goBack();
   };
 
-  useEffect(() => {
-    handleGetMovieDetails(movieIdParam);
-  }, [movieIdParam, handleGetMovieDetails]);
-
   return (
     <>
-      {requestStatus === 'loading' && <LoadingView />}
+      <ScrollView
+        ref={scrollViewRef}
+        style={styles.container}
+        showsVerticalScrollIndicator={false}>
+        <FastImage
+          style={styles.image}
+          source={{
+            uri: movie.posterUrl,
+            priority: 'high',
+          }}
+          resizeMode="stretch"
+        />
 
-      {requestStatus === 'succeded' && movie && (
-        <ScrollView
-          ref={scrollViewRef}
-          style={styles.container}
-          showsVerticalScrollIndicator={false}>
-          <FastImage
-            style={styles.image}
-            source={{
-              uri: movie.posterUrl,
-              priority: 'high',
-            }}
-            resizeMode="stretch"
-          />
+        {/** close button */}
+        <TouchableOpacity
+          style={styles.closeButtonContainer}
+          activeOpacity={0.8}
+          onPress={handleCloseButtonPress}>
+          <MaterialCommunityIcons name="close" size={18} color="#333" />
+        </TouchableOpacity>
 
-          {/** close button */}
-          <TouchableOpacity
-            style={styles.closeButtonContainer}
-            activeOpacity={0.8}
-            onPress={handleCloseButtonPress}>
-            <MaterialCommunityIcons name="close" size={18} color="#333" />
-          </TouchableOpacity>
+        {/** details */}
+        <View style={styles.detailsContainer}>
+          <View style={styles.rowContainer}>
+            {/** title & year & rating & trailer */}
+            <View style={styles.rowLeftSectionContainer}>
+              {/** title */}
+              <Text style={styles.title}>{movie.title}</Text>
 
-          {/** details */}
-          <View style={styles.detailsContainer}>
-            <View style={styles.rowContainer}>
-              {/** title & year & rating & trailer */}
-              <View style={styles.rowLeftSectionContainer}>
-                <Text style={styles.title}>{movie.title}</Text>
-
-                <MovieYearRatingTrailerSection
-                  releaseDate={movie.releaseDate}
-                  voteAverage={movie.voteAverage}
-                  voteCount={movie.voteCount}
-                  trailerUrl={movie.youTubeTrailerUrl}
-                />
-              </View>
-
-              {/** watch list action */}
-              <TouchableOpacity
-                style={styles.rowRightSectionContainer}
-                onPress={
-                  isMovieInWatchList
-                    ? handleRemoveWatchList
-                    : handleAddWatchList
-                }>
-                <MaterialCommunityIcons
-                  name={
-                    isMovieInWatchList ? 'playlist-remove' : 'playlist-plus'
-                  }
-                  size={24}
-                  color="gray"
-                />
-              </TouchableOpacity>
+              {/** year & rating & trailer */}
+              <MovieYearRatingTrailerSection
+                releaseDate={movie.releaseDate}
+                voteAverage={movie.voteAverage}
+                voteCount={movie.voteCount}
+                trailerUrl={movie.youTubeTrailerUrl}
+              />
             </View>
 
-            {/** genres */}
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.genresContainer}>
-              {movie.genres.map(g => (
-                <Chip key={g}>{g}</Chip>
-              ))}
-            </ScrollView>
-
-            {/** overview */}
-            <Text>{movie.overview}</Text>
-
-            {/** recommendations */}
-            {movie.recommendations.length > 0 && (
-              <>
-                <Text style={styles.recommendationsTitle}>Recommendations</Text>
-
-                <FlatList
-                  ref={movieListRef}
-                  data={movie.recommendations}
-                  keyExtractor={item => item.id.toString()}
-                  renderItem={({item}) => (
-                    <MovieListItem
-                      item={item}
-                      onPress={() => handleMovieListItemPress(item.id)}
-                      horizontal
-                    />
-                  )}
-                  initialNumToRender={3}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  ItemSeparatorComponent={ListItemSeparator}
-                />
-              </>
-            )}
+            {/** watch list - add / remove */}
+            <TouchableOpacity
+              style={styles.rowRightSectionContainer}
+              onPress={
+                isMovieInWatchList ? handleRemoveWatchList : handleAddWatchList
+              }
+              disabled={showSnackbar}>
+              <MaterialCommunityIcons
+                name={isMovieInWatchList ? 'playlist-remove' : 'playlist-plus'}
+                size={28}
+                color="#333"
+              />
+            </TouchableOpacity>
           </View>
 
-          <Toast />
-        </ScrollView>
-      )}
+          {/** genres */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.genresContainer}>
+            {movie.genres.map(g => (
+              <Chip key={g}>{g}</Chip>
+            ))}
+          </ScrollView>
 
-      {requestStatus === 'failed' && <View />}
+          {/** overview */}
+          <Text>{movie.overview}</Text>
+
+          {/** recommendations */}
+          {movie.recommendations.length > 0 && (
+            <>
+              <Text style={styles.recommendationsTitle}>Recommendations</Text>
+
+              <FlatList
+                ref={movieListRef}
+                data={movie.recommendations}
+                keyExtractor={item => item.id.toString()}
+                renderItem={({item}) => (
+                  <MovieListItem
+                    item={item}
+                    onPress={() => handleMovieListItemPress(item.id)}
+                    horizontal
+                  />
+                )}
+                initialNumToRender={3}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                ItemSeparatorComponent={ListItemSeparator}
+              />
+            </>
+          )}
+        </View>
+      </ScrollView>
+
+      {showSnackbar && (
+        <Snackbar visible onDismiss={() => setShowSnackbar(false)}>
+          {snackbarMessage}
+        </Snackbar>
+      )}
     </>
   );
-};
+}
 
 function ListItemSeparator() {
   return <View style={styles.listItemSeparatorContainer} />;
@@ -258,6 +268,7 @@ const styles = StyleSheet.create({
   },
   rowRightSectionContainer: {
     justifyContent: 'center',
+    padding: 5,
   },
   title: {
     fontWeight: 'bold',
