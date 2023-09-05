@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
-import {StyleSheet, TouchableOpacity, Text, View, Alert} from 'react-native';
+import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
+import {Snackbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import authAsyncActions from '../redux/auth/authAsyncActions';
 import {useAppSelector} from '../hooks/useAppSelector';
 import {selectAuthErrorMessage} from '../redux/auth/authSelectors';
-import {RegisterFormData, RequestStatus} from '../types';
+import {RegisterFormData} from '../types';
 import SafeView from '../components/SafeView';
 import RegisterForm from '../components/RegisterForm';
 import {RegisterScreenNavigationProp} from '../navigators/AuthStackNavigator';
@@ -15,16 +16,14 @@ const RegisterScreen = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<RegisterScreenNavigationProp>();
 
-  const [authStatus, setAuthStatus] = useState<RequestStatus>('idle');
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const authErrorMessage = useAppSelector(selectAuthErrorMessage);
 
   const handleSubmitForm = async (formData: RegisterFormData) => {
     try {
-      setAuthStatus('loading');
       await dispatch(authAsyncActions.registerUser(formData)).unwrap();
-      setAuthStatus('succeded');
     } catch (error) {
-      setAuthStatus('failed');
+      setShowErrorMessage(true);
     }
   };
 
@@ -33,19 +32,25 @@ const RegisterScreen = () => {
   };
 
   return (
-    <SafeView contentContainerStyle={styles.container}>
-      <RegisterForm onSubmit={handleSubmitForm} />
+    <>
+      <SafeView contentContainerStyle={styles.container}>
+        <RegisterForm onSubmit={handleSubmitForm} />
 
-      <View style={styles.navigationLinkContainer}>
-        <Text>Already have an account?</Text>
+        <View style={styles.navigationLinkContainer}>
+          <Text>Already have an account?</Text>
 
-        <TouchableOpacity onPress={handleNavigationLinkPress}>
-          <Text style={styles.navigationLinkText}>Log In!</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity onPress={handleNavigationLinkPress}>
+            <Text style={styles.navigationLinkText}>Log In!</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeView>
 
-      {authStatus === 'failed' && <>{Alert.alert('Error', authErrorMessage)}</>}
-    </SafeView>
+      {showErrorMessage && (
+        <Snackbar visible onDismiss={() => setShowErrorMessage(false)}>
+          {authErrorMessage}
+        </Snackbar>
+      )}
+    </>
   );
 };
 
