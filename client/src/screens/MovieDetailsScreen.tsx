@@ -85,9 +85,9 @@ function ContentView({movie}: ContentViewProps) {
     try {
       await dispatch(watchListAsyncActions.addWatchList(movie.id)).unwrap();
       setSnackbarMessage('Movie successfully added');
-      setShowSnackbar(true);
     } catch (error) {
       setSnackbarMessage("Couldn't add movie");
+    } finally {
       setShowSnackbar(true);
     }
   };
@@ -102,9 +102,9 @@ function ContentView({movie}: ContentViewProps) {
         watchListAsyncActions.removeWatchList(movieWatchList.id),
       ).unwrap();
       setSnackbarMessage('Movie successfully removed');
-      setShowSnackbar(true);
     } catch (error) {
       setSnackbarMessage("Couldn't remove movie");
+    } finally {
       setShowSnackbar(true);
     }
   };
