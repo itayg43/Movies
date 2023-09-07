@@ -4,14 +4,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import SearchScreen from '../screens/SearchScreen';
 import ExploreStackNavigator from './ExploreStackNavigator';
-import WatchListScreen from '../screens/WatchListScreen';
+import WatchListStackNavigator from './WatchListStackNavigator';
 import {useAppSelector} from '../hooks/useAppSelector';
 import {selectWatchList} from '../redux/watchList/watchListSelectors';
 
 type AppBottomTabsParams = {
   searchScreen: undefined;
   exploreStackNavigator: undefined;
-  watchListScreen: undefined;
+  watchListStackNavigator: undefined;
 };
 
 const Tab = createBottomTabNavigator<AppBottomTabsParams>();
@@ -58,8 +58,8 @@ const AppBottomTabsNavigator = () => {
       />
 
       <Tab.Screen
-        name="watchListScreen"
-        component={WatchListScreen}
+        name="watchListStackNavigator"
+        component={WatchListStackNavigator}
         options={{
           tabBarLabel: 'Watch List',
           // eslint-disable-next-line react/no-unstable-nested-components

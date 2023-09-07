@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, Text, View, Image} from 'react-native';
+import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import {Movie} from '../types';

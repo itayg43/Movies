@@ -1,16 +1,20 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import {WatchList} from '../types';
 
 type Props = {
   item: WatchList;
+  onPress: () => void;
 };
 
-const WatchListItem = ({item}: Props) => {
+const WatchListItem = ({item, onPress}: Props) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      activeOpacity={0.7}
+      onPress={onPress}>
       <FastImage
         style={styles.image}
         source={{
@@ -32,7 +36,7 @@ const WatchListItem = ({item}: Props) => {
           Added On: {new Date(item.createdAt).toLocaleDateString()}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
