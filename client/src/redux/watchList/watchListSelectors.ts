@@ -14,8 +14,5 @@ export const selectWatchListByMovieId = createSelector(
   (watchList, movieId) => watchList.find(w => w.movie.id === movieId),
 );
 
-export const selectWatchListGetInitialRequestStatus = (state: RootState) =>
-  state.watchList.initialGetRequestStatus;
-
 export const selectWatchListErrorMessage = (state: RootState) =>
   state.watchList.errorMessage;

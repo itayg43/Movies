@@ -1,17 +1,15 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-import {RequestStatus, WatchListEntities} from '../../types';
+import {WatchListEntities} from '../../types';
 import watchListAsyncActions from './watchListAsyncActions';
 
 type WatchListState = {
   entities: WatchListEntities;
-  initialGetRequestStatus: RequestStatus;
   errorMessage: string;
 };
 
 const initialState: WatchListState = {
   entities: {},
-  initialGetRequestStatus: 'idle',
   errorMessage: '',
 };
 
@@ -26,7 +24,6 @@ const watchList = createSlice({
         watchListAsyncActions.getWatchList.fulfilled,
         (state, {payload}) => {
           state.entities = payload;
-          state.initialGetRequestStatus = 'succeded';
           state.errorMessage = '';
         },
       )
@@ -34,7 +31,6 @@ const watchList = createSlice({
         watchListAsyncActions.getWatchList.rejected,
         (state, {payload}) => {
           if (payload) {
-            state.initialGetRequestStatus = 'failed';
             state.errorMessage = payload;
           }
         },

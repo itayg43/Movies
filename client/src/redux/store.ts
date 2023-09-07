@@ -20,10 +20,21 @@ const authPersistConfig = {
 
 const authPersistedReducer = persistReducer(authPersistConfig, authReducer);
 
+const watchListPersistConfig = {
+  key: 'watchList',
+  storage: AsyncStorage,
+  blacklist: ['errorMessage'],
+};
+
+const watchListPersistedReducer = persistReducer(
+  watchListPersistConfig,
+  watchListReducer,
+);
+
 const store = configureStore({
   reducer: {
     auth: authPersistedReducer,
-    watchList: watchListReducer,
+    watchList: watchListPersistedReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
