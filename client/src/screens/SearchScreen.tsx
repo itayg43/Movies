@@ -1,14 +1,18 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {StyleSheet, FlatList, View, Text} from 'react-native';
 import {Searchbar, HelperText} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 
 import {Movie, RequestStatus} from '../types';
 import moviesService from '../services/moviesService';
 import useDebounce from '../hooks/useDebounce';
 import SafeView from '../components/SafeView';
 import MovieListItem from '../components/MovieListItem';
+import {SearchScreenNavigationProp} from '../navigators/SearchStackNavigator';
 
 const SearchScreen = () => {
+  const navigation = useNavigation<SearchScreenNavigationProp>();
+
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle');
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchQuery = useDebounce(searchQuery);
@@ -23,6 +27,12 @@ const SearchScreen = () => {
       setRequestStatus('failed');
     }
   }, []);
+
+  const handleSearchResultItemPress = (id: number) => {
+    navigation.navigate('movieDetailsScreen', {
+      id,
+    });
+  };
 
   useEffect(() => {
     if (debouncedSearchQuery === '') {
@@ -59,7 +69,10 @@ const SearchScreen = () => {
         data={movies}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
-          <MovieListItem item={item} onPress={() => null} />
+          <MovieListItem
+            item={item}
+            onPress={() => handleSearchResultItemPress(item.id)}
+          />
         )}
         initialNumToRender={3}
         ItemSeparatorComponent={ListItemSeparator}

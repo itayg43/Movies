@@ -2,14 +2,14 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import SearchScreen from '../screens/SearchScreen';
+import SearchStackNavigator from './SearchStackNavigator';
 import ExploreStackNavigator from './ExploreStackNavigator';
 import WatchListStackNavigator from './WatchListStackNavigator';
 import {useAppSelector} from '../hooks/useAppSelector';
 import {selectWatchList} from '../redux/watchList/watchListSelectors';
 
 type AppBottomTabsParams = {
-  searchScreen: undefined;
+  searchStackNavigator: undefined;
   exploreStackNavigator: undefined;
   watchListStackNavigator: undefined;
 };
@@ -26,8 +26,8 @@ const AppBottomTabsNavigator = () => {
         headerShown: false,
       }}>
       <Tab.Screen
-        name="searchScreen"
-        component={SearchScreen}
+        name="searchStackNavigator"
+        component={SearchStackNavigator}
         options={{
           tabBarLabel: 'Search',
           // eslint-disable-next-line react/no-unstable-nested-components
