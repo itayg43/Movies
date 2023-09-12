@@ -1,7 +1,8 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {StyleSheet, FlatList, ScrollView, View} from 'react-native';
+import {StyleSheet, ScrollView, View} from 'react-native';
 import {Chip} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
+import {FlashList} from '@shopify/flash-list';
 
 import {Movie, MoviesCategory, RequestStatus} from '../types';
 import SafeView from '../components/SafeView';
@@ -42,7 +43,7 @@ const ExploreScreen = () => {
   );
   const [movies, setMovies] = useState<Movie[]>([]);
 
-  const movieListRef = useRef<FlatList>(null);
+  const movieListRef = useRef<FlashList<Movie> | null>(null);
 
   const handleGetMoviesByCategory = useCallback(
     async (category: MoviesCategory) => {
@@ -59,7 +60,10 @@ const ExploreScreen = () => {
   const handleCategoryChange = (category: MoviesCategory) => {
     setSelectedCategory(category);
 
-    movieListRef.current?.scrollToIndex({index: 0});
+    movieListRef.current?.scrollToIndex({
+      index: 0,
+      animated: true,
+    });
   };
 
   const handleMovieListItemPress = (movieId: number) => {
@@ -97,7 +101,7 @@ const ExploreScreen = () => {
           </ScrollView>
 
           {/** movie list */}
-          <FlatList
+          <FlashList
             ref={movieListRef}
             data={movies}
             keyExtractor={item => item.id.toString()}
@@ -107,7 +111,7 @@ const ExploreScreen = () => {
                 onPress={() => handleMovieListItemPress(item.id)}
               />
             )}
-            initialNumToRender={3}
+            estimatedItemSize={300}
             ItemSeparatorComponent={ListItemSeparator}
             ListFooterComponent={ListFooter}
             showsVerticalScrollIndicator={false}

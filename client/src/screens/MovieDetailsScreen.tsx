@@ -5,14 +5,14 @@ import {
   View,
   Text,
   TouchableOpacity,
-  FlatList,
 } from 'react-native';
 import {Chip, Snackbar} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FastImage from 'react-native-fast-image';
+import {FlashList} from '@shopify/flash-list';
 
 import moviesService from '../services/moviesService';
-import {MovieDetails, RequestStatus} from '../types';
+import {Movie, MovieDetails, RequestStatus} from '../types';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {
   MovieDetailsScreenNavigationProp,
@@ -79,7 +79,7 @@ function ContentView({movie}: ContentViewProps) {
   const isMovieInWatchList = !!movieWatchList;
 
   const scrollViewRef = useRef<ScrollView>(null);
-  const movieListRef = useRef<FlatList>(null);
+  const movieListRef = useRef<FlashList<Movie> | null>(null);
 
   const handleAddWatchList = async () => {
     try {
@@ -117,7 +117,10 @@ function ContentView({movie}: ContentViewProps) {
     });
 
     scrollViewRef.current?.scrollTo({y: 0});
-    movieListRef.current?.scrollToIndex({index: 0});
+    movieListRef.current?.scrollToIndex({
+      index: 0,
+      animated: true,
+    });
   };
 
   const handleCloseButtonPress = () => {
@@ -197,7 +200,7 @@ function ContentView({movie}: ContentViewProps) {
             <>
               <Text style={styles.recommendationsTitle}>Recommendations</Text>
 
-              <FlatList
+              <FlashList
                 ref={movieListRef}
                 data={movie.recommendations}
                 keyExtractor={item => item.id.toString()}
@@ -208,7 +211,7 @@ function ContentView({movie}: ContentViewProps) {
                     horizontal
                   />
                 )}
-                initialNumToRender={3}
+                estimatedItemSize={304}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 ItemSeparatorComponent={ListItemSeparator}

@@ -1,6 +1,7 @@
 import React from 'react';
-import {StyleSheet, FlatList, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {FlashList} from '@shopify/flash-list';
 
 import {useAppSelector} from '../hooks/useAppSelector';
 import {selectWatchList} from '../redux/watchList/watchListSelectors';
@@ -21,7 +22,7 @@ const WatchListScreen = () => {
 
   return (
     <SafeView contentContainerStyle={styles.container}>
-      <FlatList
+      <FlashList
         data={watchList}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
@@ -30,6 +31,7 @@ const WatchListScreen = () => {
             onPress={() => handleWatchListItemPress(item.movie.id)}
           />
         )}
+        estimatedItemSize={101}
         ItemSeparatorComponent={ListItemSeparator}
         ListFooterComponent={ListFooter}
         showsVerticalScrollIndicator={false}
