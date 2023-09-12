@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {StyleSheet, FlatList, View, Text} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import {Searchbar, HelperText} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
+import {FlashList} from '@shopify/flash-list';
 
 import {Movie, RequestStatus} from '../types';
 import moviesService from '../services/moviesService';
@@ -65,7 +66,7 @@ const SearchScreen = () => {
         )}
       </View>
 
-      <FlatList
+      <FlashList
         data={movies}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
@@ -74,7 +75,7 @@ const SearchScreen = () => {
             onPress={() => handleSearchResultItemPress(item.id)}
           />
         )}
-        initialNumToRender={3}
+        estimatedItemSize={100}
         ItemSeparatorComponent={ListItemSeparator}
         ListFooterComponent={ListFooter}
         ListEmptyComponent={
