@@ -2,6 +2,8 @@
 
 A cross-platform mobile app that allows users to get details about a movie including trailers, and recommendations using TMDB API. Users can search for a specific movie or explore from various categories. Also, users can manage their watch list.
 
+## Screenshots
+
 <div align="center">
   <img src="https://github.com/itayg43/Movies/assets/93944494/1b5c3240-6158-4f9c-86d2-02f1a04a7ab9" width="225" alt="Search Screen">
 
@@ -15,6 +17,8 @@ A cross-platform mobile app that allows users to get details about a movie inclu
 
   <img src="https://github.com/itayg43/Movies/assets/93944494/17a4a41b-c625-4c08-9cd8-ad3e56471ba9" width="225" alt="Register Screen">
 </div>
+
+## Stack
 
 ### Frontend: React Native (TypeScript)
 
@@ -37,3 +41,27 @@ A cross-platform mobile app that allows users to get details about a movie inclu
 * React Native Fast Image & Flash List - For better performance.
 
 * React Native Flipper - For debugging.
+
+### Backend: Node.js & Express (TypeScript)
+
+* Prisma (MySQL) - Running MySQL server locally in a docker container.
+
+* Redis - Running locally in a docker container.
+
+* Zod - Request validation.
+
+* JWT - Generate and validate tokens (access, and refresh) using RSA256 (private, and public keys).
+
+* Bcryptjs - Hash and validate password.
+
+  #### Modules:
+    
+    * Each module is separated into layers: router, controller, service, data access, and cache access if necessary.
+    
+    1. Auth - handle login, register, and reissue access token.
+    
+    2. Movies - handle get movies by category, get movies by search query, and get movie details by id.
+         * In order to minimize calls to the TMDB API the data is stored in the cache with TTL, and when a request is received there is a middleware that            checks if the requested data already exists in the cache, if yes - return it immediately, otherwise get it from the API, store it, and then                 return it.
+    
+    3. Users - handle get watch list, add to watch list, and soft delete from watch list.
+ 
