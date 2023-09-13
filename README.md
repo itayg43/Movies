@@ -23,3 +23,5 @@ A cross-platform mobile app that allows users to get details about a movie inclu
 * React Hook Form & Zod: Manage Login, and Register forms.
 
 * React Native Fast Image & Flash List - For better performance.
+
+* React Native Flipper - For debugging.
