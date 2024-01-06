@@ -1,6 +1,6 @@
 # Movies
 
-A cross-platform mobile app that allows users to get details about a movie including trailers, and recommendations using TMDB API. Users can search for a specific movie or explore from various categories. Also, users can manage their watch list.
+A cross-platform mobile app that offers movie details, trailers, and recommendations using TMDB API, with search and watchlist features.
 
 ## Screenshots
 
